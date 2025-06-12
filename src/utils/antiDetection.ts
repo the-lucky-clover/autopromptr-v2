@@ -1,3 +1,4 @@
+
 import { faker } from '@faker-js/faker';
 import UserAgent from 'user-agents';
 
@@ -44,7 +45,7 @@ export class AntiDetectionUtil {
 
   async humanLikeTypePuppeteer(page: any, selector: string, text: string): Promise<void> {
     await page.click(selector);
-    await page.evaluate((sel: string) => {
+    await page.evaluate((sel) => {
       const element = document.querySelector(sel) as HTMLInputElement;
       if (element) element.value = '';
     }, selector);
@@ -108,7 +109,7 @@ export class AntiDetectionUtil {
     const scrollCount = faker.number.int({ min: 1, max: 3 });
     for (let i = 0; i < scrollCount; i++) {
       const scrollDistance = faker.number.int({ min: 100, max: 500 });
-      await page.evaluate((distance: number) => {
+      await page.evaluate((distance) => {
         window.scrollBy(0, distance);
       }, scrollDistance);
       await page.waitForTimeout(await this.getRandomDelay(300, 800));

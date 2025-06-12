@@ -1,73 +1,26 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+
 import { BrowserConfig } from './browserEngineManager';
-import { AntiDetectionUtil } from '../utils/antiDetection';
+import { PuppeteerBrowserFactory } from './puppeteer/puppeteerBrowserFactory';
+import { PuppeteerOperationHandlers } from './puppeteer/puppeteerOperationHandlers';
+import { PuppeteerSessionManager } from './puppeteer/puppeteerSessionManager';
 
 export class PuppeteerService {
-  private browsers: Map<string, Browser> = new Map();
-  private pages: Map<string, Page> = new Map();
-  private antiDetection: AntiDetectionUtil;
+  private browserFactory: PuppeteerBrowserFactory;
+  private operationHandlers: PuppeteerOperationHandlers;
+  private sessionManager: PuppeteerSessionManager;
 
   constructor() {
-    this.antiDetection = new AntiDetectionUtil();
+    this.browserFactory = new PuppeteerBrowserFactory();
+    this.operationHandlers = new PuppeteerOperationHandlers();
+    this.sessionManager = new PuppeteerSessionManager();
   }
 
   async createBrowser(sessionId: string, config: BrowserConfig): Promise<void> {
     try {
-      const launchOptions = {
-        headless: config.headless,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu'
-        ]
-      };
-
-      if (config.antiDetection) {
-        launchOptions.args.push(
-          '--disable-blink-features=AutomationControlled',
-          '--disable-features=VizDisplayCompositor'
-        );
-      }
-
-      const browser = await puppeteer.launch(launchOptions);
-      this.browsers.set(sessionId, browser);
-
-      const page = await browser.newPage();
+      const browser = await this.browserFactory.createBrowser(config);
+      const page = await this.browserFactory.setupPage(browser, config);
       
-      if (config.viewport) {
-        await page.setViewport(config.viewport);
-      }
-
-      if (config.userAgent) {
-        await page.setUserAgent(config.userAgent);
-      } else if (config.antiDetection) {
-        const userAgent = await this.antiDetection.getRandomUserAgent();
-        await page.setUserAgent(userAgent);
-      }
-
-      if (config.antiDetection) {
-        await page.evaluateOnNewDocument(() => {
-          // Remove webdriver property
-          delete (window as any).webdriver;
-          
-          // Override plugins
-          Object.defineProperty(navigator, 'plugins', {
-            get: () => [1, 2, 3, 4, 5]
-          });
-
-          // Override languages
-          Object.defineProperty(navigator, 'languages', {
-            get: () => ['en-US', 'en']
-          });
-        });
-      }
-
-      this.pages.set(sessionId, page);
-      console.log(`Puppeteer browser created for session ${sessionId}`);
+      this.sessionManager.addSession(sessionId, browser, page);
     } catch (error) {
       console.error(`Failed to create Puppeteer browser:`, error);
       throw error;
@@ -75,128 +28,52 @@ export class PuppeteerService {
   }
 
   async executeOperation(sessionId: string, operation: string, params: any = {}): Promise<any> {
-    const page = this.pages.get(sessionId);
-    if (!page) {
-      throw new Error(`No page found for session ${sessionId}`);
+    const session = this.sessionManager.getSession(sessionId);
+    if (!session) {
+      throw new Error(`No session found for session ${sessionId}`);
     }
 
     console.log(`Executing operation ${operation} with Puppeteer`);
 
     switch (operation) {
       case 'navigate':
-        await page.goto(params.url, { waitUntil: 'networkidle0' });
-        return { url: page.url() };
-
+        return await this.operationHandlers.handleNavigation(session.page, params);
       case 'waitForSelector':
-        await page.waitForSelector(params.selector, { timeout: params.timeout || 30000 });
-        return true;
-
+        return await this.operationHandlers.handleWaitForSelector(session.page, params);
       case 'click':
-        if (params.humanLike) {
-          await this.antiDetection.humanLikeClickPuppeteer(page, params.selector);
-        } else {
-          await page.click(params.selector);
-        }
-        return true;
-
+        return await this.operationHandlers.handleClick(session.page, params);
       case 'type':
-        if (params.humanLike) {
-          await this.antiDetection.humanLikeTypePuppeteer(page, params.selector, params.text);
-        } else {
-          await page.type(params.selector, params.text);
-        }
-        return true;
-
+        return await this.operationHandlers.handleType(session.page, params);
       case 'screenshot':
-        const screenshot = await page.screenshot({ 
-          fullPage: params.fullPage || false,
-          path: params.path 
-        });
-        return { screenshot: screenshot.toString('base64') };
-
+        return await this.operationHandlers.handleScreenshot(session.page, params);
       case 'extractText':
-        const text = await page.$eval(params.selector, (el) => el.textContent);
-        return { text };
-
+        return await this.operationHandlers.handleExtractText(session.page, params);
       case 'extractAttribute':
-        const attr = await page.$eval(params.selector, (el, attribute) => 
-          el.getAttribute(attribute), params.attribute);
-        return { attribute: attr };
-
+        return await this.operationHandlers.handleExtractAttribute(session.page, params);
       case 'waitForNavigation':
-        await page.waitForNavigation({ timeout: params.timeout || 30000 });
-        return { url: page.url() };
-
+        return await this.operationHandlers.handleWaitForNavigation(session.page, params);
       case 'executeScript':
-        const result = await page.evaluate(params.script);
-        return { result };
-
+        return await this.operationHandlers.handleExecuteScript(session.page, params);
       case 'interceptRequests':
-        await page.setRequestInterception(true);
-        page.on('request', request => {
-          if (params.block && params.block.includes(request.resourceType())) {
-            request.abort();
-          } else {
-            request.continue();
-          }
-        });
-        return true;
-
+        return await this.operationHandlers.handleInterceptRequests(session.page, params);
       case 'setViewport':
-        await page.setViewport(params.viewport);
-        return true;
-
+        return await this.operationHandlers.handleSetViewport(session.page, params);
       case 'emulateDevice':
-        // Use built-in device configurations
-        const deviceConfig = this.getDeviceConfig(params.device);
-        if (deviceConfig) {
-          await page.setViewport(deviceConfig.viewport);
-          await page.setUserAgent(deviceConfig.userAgent);
-        }
-        return true;
-
+        return await this.operationHandlers.handleEmulateDevice(session.page, params);
       default:
         throw new Error(`Unknown operation: ${operation}`);
     }
   }
 
-  private getDeviceConfig(deviceName: string): any {
-    const devices: { [key: string]: any } = {
-      'iPhone 13': {
-        viewport: { width: 390, height: 844, deviceScaleFactor: 3, isMobile: true, hasTouch: true },
-        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15'
-      },
-      'iPad': {
-        viewport: { width: 768, height: 1024, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
-        userAgent: 'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15'
-      }
-    };
-    return devices[deviceName];
-  }
-
   async closeBrowser(sessionId: string): Promise<void> {
-    const page = this.pages.get(sessionId);
-    const browser = this.browsers.get(sessionId);
-
-    if (page) {
-      await page.close();
-      this.pages.delete(sessionId);
-    }
-
-    if (browser) {
-      await browser.close();
-      this.browsers.delete(sessionId);
-    }
+    await this.sessionManager.closeSession(sessionId);
   }
 
   async getBrowserInfo(sessionId: string): Promise<any> {
-    const browser = this.browsers.get(sessionId);
-    if (!browser) return null;
+    return await this.sessionManager.getBrowserInfo(sessionId);
+  }
 
-    return {
-      version: await browser.version(),
-      connected: browser.isConnected(),
-      pages: (await browser.pages()).length
-    };
+  async cleanup(): Promise<void> {
+    await this.sessionManager.cleanup();
   }
 }
