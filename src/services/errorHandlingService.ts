@@ -79,7 +79,7 @@ export class ErrorHandlingService {
       resolutionSteps: this.getResolutionSteps(category, error)
     };
 
-    // Log to system logs
+    // Log to system logs with proper JSON serialization
     await this.logError(errorReport);
 
     // Send to monitoring service if critical
@@ -155,17 +155,20 @@ export class ErrorHandlingService {
 
   private async logError(errorReport: ErrorReport): Promise<void> {
     try {
+      // Convert ErrorContext and other complex objects to JSON-compatible format
+      const serializedMetadata = {
+        correlationId: errorReport.context.correlationId,
+        severity: errorReport.severity,
+        context: JSON.stringify(errorReport.context),
+        stackTrace: errorReport.stackTrace || null
+      };
+
       await supabase.from('system_logs').insert({
         level: 'error',
         category: errorReport.category,
         message: errorReport.message,
-        user_id: errorReport.context.userId,
-        metadata: {
-          correlationId: errorReport.context.correlationId,
-          severity: errorReport.severity,
-          context: errorReport.context,
-          stackTrace: errorReport.stackTrace
-        }
+        user_id: errorReport.context.userId || null,
+        metadata: serializedMetadata
       });
     } catch (logError) {
       console.error('Failed to log error to database:', logError);
@@ -238,7 +241,9 @@ export class ErrorHandlingService {
     errors.forEach(error => {
       const metadata = error.metadata || {};
       const category = error.category || 'UNKNOWN';
-      const severity = metadata.severity || 'MEDIUM';
+      const severity = typeof metadata === 'string' ? 
+        JSON.parse(metadata).severity || 'MEDIUM' : 
+        metadata.severity || 'MEDIUM';
       const hour = new Date(error.created_at).getHours();
 
       trends.errorsByCategory[category] = (trends.errorsByCategory[category] || 0) + 1;
