@@ -56,6 +56,44 @@ export const getUsageLimitsForPlan = (planName: string): UsageLimits => {
   }
 };
 
+export const parseUsageLimits = (limits: any): UsageLimits => {
+  if (!limits) return getUsageLimitsForPlan('free');
+  
+  return {
+    prompts: limits.prompts || 0,
+    ai_optimizations: limits.ai_optimizations || 0,
+    batch_extraction_chars: limits.batch_extraction_chars || 0,
+    batch_extractions: limits.batch_extractions || 0,
+    api_calls: limits.api_calls || 0,
+    executions: limits.executions || 0,
+    tokens: limits.tokens || 0,
+  };
+};
+
+export const parseCurrentUsage = (usage: any): CurrentUsage => {
+  if (!usage) {
+    return {
+      prompts: 0,
+      ai_optimizations: 0,
+      batch_extraction_chars: 0,
+      batch_extractions: 0,
+      api_calls: 0,
+      executions_count: 0,
+      tokens_used: 0,
+    };
+  }
+  
+  return {
+    prompts: usage.prompts || 0,
+    ai_optimizations: usage.ai_optimizations || 0,
+    batch_extraction_chars: usage.batch_extraction_chars || 0,
+    batch_extractions: usage.batch_extractions || 0,
+    api_calls: usage.api_calls || 0,
+    executions_count: usage.executions_count || 0,
+    tokens_used: usage.tokens_used || 0,
+  };
+};
+
 export const formatUsageValue = (value: number, isUnlimited: boolean = false): string => {
   if (isUnlimited || value === -1) {
     return 'Unlimited';

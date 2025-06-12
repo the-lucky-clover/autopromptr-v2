@@ -1,6 +1,5 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
 
 export interface SubscriptionPlan {
   id: string;
@@ -29,7 +28,15 @@ export class SubscriptionService {
         .order('price_monthly', { ascending: true });
 
       if (error) throw error;
-      return data || [];
+      
+      return (data || []).map(plan => ({
+        id: plan.id,
+        name: plan.name,
+        price_monthly: plan.price_monthly,
+        features: (plan.features as any) || {},
+        limits: (plan.limits as any) || {},
+        stripe_price_id: plan.stripe_price_id
+      }));
     } catch (error) {
       console.error('Failed to get subscription plans:', error);
       return [];
@@ -46,7 +53,17 @@ export class SubscriptionService {
       });
 
       if (error) throw error;
-      return data?.[0] || null;
+      
+      const subscription = data?.[0];
+      if (!subscription) return null;
+      
+      return {
+        plan_name: subscription.plan_name,
+        status: subscription.status,
+        features: (subscription.features as any) || {},
+        limits: (subscription.limits as any) || {},
+        current_period_end: subscription.current_period_end
+      };
     } catch (error) {
       console.error('Failed to get user subscription:', error);
       return null;

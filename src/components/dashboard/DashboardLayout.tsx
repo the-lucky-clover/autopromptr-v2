@@ -6,7 +6,7 @@ import { BatchManagement } from "./BatchManagement";
 import { BatchExtractor } from "./BatchExtractor";
 import { TemplateLibrary } from "./TemplateLibrary";
 import { Analytics } from "./Analytics";
-import { DashboardSettings } from "./DashboardSettings";
+import DashboardSettings from "./DashboardSettings";
 
 export const DashboardLayout = () => {
   const [activeTab, setActiveTab] = useState("dashboard");

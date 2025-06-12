@@ -5,18 +5,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ProfileSettings } from "@/components/profile/ProfileSettings";
 import { ApiKeyManagement } from "./ApiKeyManagement";
 import { UsageDashboard } from "@/components/subscription/UsageDashboard";
-import { Settings, Key, BarChart3, CreditCard } from "lucide-react";
+import { SystemHealthDashboard } from "@/components/monitoring/SystemHealthDashboard";
+import { ErrorAnalytics } from "@/components/monitoring/ErrorAnalytics";
+import { Settings, Key, BarChart3, CreditCard, Activity, AlertTriangle } from "lucide-react";
 
 const DashboardSettings = () => {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center gap-2 mb-6">
         <Settings className="w-6 h-6" />
-        <h1 className="text-3xl font-bold">Settings</h1>
+        <h1 className="text-3xl font-bold">Settings & Monitoring</h1>
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <Settings className="w-4 h-4" />
             Profile
@@ -32,6 +34,14 @@ const DashboardSettings = () => {
           <TabsTrigger value="subscription" className="flex items-center gap-2">
             <CreditCard className="w-4 h-4" />
             Subscription
+          </TabsTrigger>
+          <TabsTrigger value="health" className="flex items-center gap-2">
+            <Activity className="w-4 h-4" />
+            System Health
+          </TabsTrigger>
+          <TabsTrigger value="errors" className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Error Analytics
           </TabsTrigger>
         </TabsList>
 
@@ -86,6 +96,14 @@ const DashboardSettings = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="health" className="space-y-6">
+          <SystemHealthDashboard />
+        </TabsContent>
+
+        <TabsContent value="errors" className="space-y-6">
+          <ErrorAnalytics />
         </TabsContent>
       </Tabs>
     </div>
