@@ -50,6 +50,121 @@ export type Database = {
           },
         ]
       }
+      batch_execution_state: {
+        Row: {
+          batch_id: string | null
+          cancelled_at: string | null
+          created_at: string | null
+          current_step: number | null
+          estimated_completion: string | null
+          execution_end: string | null
+          execution_mode: string | null
+          execution_start: string | null
+          id: string
+          paused_at: string | null
+          progress_percentage: number | null
+          state_data: Json | null
+          total_steps: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          cancelled_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          estimated_completion?: string | null
+          execution_end?: string | null
+          execution_mode?: string | null
+          execution_start?: string | null
+          id?: string
+          paused_at?: string | null
+          progress_percentage?: number | null
+          state_data?: Json | null
+          total_steps?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          cancelled_at?: string | null
+          created_at?: string | null
+          current_step?: number | null
+          estimated_completion?: string | null
+          execution_end?: string | null
+          execution_mode?: string | null
+          execution_start?: string | null
+          id?: string
+          paused_at?: string | null
+          progress_percentage?: number | null
+          state_data?: Json | null
+          total_steps?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "batch_execution_state_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: true
+            referencedRelation: "prompt_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      batch_schedules: {
+        Row: {
+          batch_id: string | null
+          created_at: string | null
+          cron_expression: string | null
+          id: string
+          is_active: boolean | null
+          last_run: string | null
+          max_runs: number | null
+          next_run: string | null
+          run_count: number | null
+          schedule_type: string | null
+          scheduled_time: string | null
+          timezone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string | null
+          cron_expression?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_run?: string | null
+          max_runs?: number | null
+          next_run?: string | null
+          run_count?: number | null
+          schedule_type?: string | null
+          scheduled_time?: string | null
+          timezone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string | null
+          cron_expression?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_run?: string | null
+          max_runs?: number | null
+          next_run?: string | null
+          run_count?: number | null
+          schedule_type?: string | null
+          scheduled_time?: string | null
+          timezone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "batch_schedules_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "prompt_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       execution_logs: {
         Row: {
           batch_id: string | null
@@ -94,6 +209,135 @@ export type Database = {
           },
           {
             foreignKeyName: "execution_logs_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      execution_metrics: {
+        Row: {
+          batch_id: string | null
+          cost_estimate: number | null
+          created_at: string | null
+          error_category: string | null
+          execution_time_ms: number | null
+          id: string
+          platform_name: string
+          prompt_id: string | null
+          queue_time_ms: number | null
+          retry_count: number | null
+          success_rate: number | null
+          tokens_consumed: number | null
+        }
+        Insert: {
+          batch_id?: string | null
+          cost_estimate?: number | null
+          created_at?: string | null
+          error_category?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          platform_name: string
+          prompt_id?: string | null
+          queue_time_ms?: number | null
+          retry_count?: number | null
+          success_rate?: number | null
+          tokens_consumed?: number | null
+        }
+        Update: {
+          batch_id?: string | null
+          cost_estimate?: number | null
+          created_at?: string | null
+          error_category?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          platform_name?: string
+          prompt_id?: string | null
+          queue_time_ms?: number | null
+          retry_count?: number | null
+          success_rate?: number | null
+          tokens_consumed?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "execution_metrics_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "prompt_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "execution_metrics_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_queue: {
+        Row: {
+          batch_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          job_type: string
+          max_retries: number | null
+          metadata: Json | null
+          priority: number | null
+          prompt_id: string | null
+          retry_attempts: number | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          job_type: string
+          max_retries?: number | null
+          metadata?: Json | null
+          priority?: number | null
+          prompt_id?: string | null
+          retry_attempts?: number | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          job_type?: string
+          max_retries?: number | null
+          metadata?: Json | null
+          priority?: number | null
+          prompt_id?: string | null
+          retry_attempts?: number | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_queue_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "prompt_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_queue_prompt_id_fkey"
             columns: ["prompt_id"]
             isOneToOne: false
             referencedRelation: "prompts"
@@ -181,6 +425,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      platform_health: {
+        Row: {
+          circuit_breaker_open: boolean | null
+          created_at: string | null
+          error_count: number | null
+          id: string
+          last_check: string | null
+          next_reset_time: string | null
+          platform_name: string
+          rate_limit_remaining: number | null
+          response_time_ms: number | null
+          status: string | null
+          success_rate: number | null
+        }
+        Insert: {
+          circuit_breaker_open?: boolean | null
+          created_at?: string | null
+          error_count?: number | null
+          id?: string
+          last_check?: string | null
+          next_reset_time?: string | null
+          platform_name: string
+          rate_limit_remaining?: number | null
+          response_time_ms?: number | null
+          status?: string | null
+          success_rate?: number | null
+        }
+        Update: {
+          circuit_breaker_open?: boolean | null
+          created_at?: string | null
+          error_count?: number | null
+          id?: string
+          last_check?: string | null
+          next_reset_time?: string | null
+          platform_name?: string
+          rate_limit_remaining?: number | null
+          response_time_ms?: number | null
+          status?: string | null
+          success_rate?: number | null
+        }
+        Relationships: []
       }
       platform_selectors: {
         Row: {
@@ -679,6 +965,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_next_job: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          job_id: string
+          batch_id: string
+          prompt_id: string
+          job_type: string
+          metadata: Json
+        }[]
+      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -696,6 +992,14 @@ export type Database = {
           p_api_calls?: number
           p_executions?: number
           p_tokens?: number
+        }
+        Returns: undefined
+      }
+      update_execution_progress: {
+        Args: {
+          p_batch_id: string
+          p_current_step: number
+          p_total_steps: number
         }
         Returns: undefined
       }

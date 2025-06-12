@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,8 @@ import {
   CheckCircle,
   AlertCircle
 } from "lucide-react";
+import { textExtractionService } from "@/services/textExtractionService";
+import { batchExecutionService } from "@/services/batchExecutionService";
 
 const CHARACTER_LIMIT = 50000;
 
@@ -38,42 +39,86 @@ export const BatchExtractor = () => {
   const [extractedPrompts, setExtractedPrompts] = useState<ExtractedPrompt[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
+  const [extractionType, setExtractionType] = useState<'auto' | 'intelligent' | 'manual'>('intelligent');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [textAnalysis, setTextAnalysis] = useState<any>(null);
+  const [extractionQuality, setExtractionQuality] = useState<any>(null);
   const { toast } = useToast();
+
+  const handleAnalyzeText = async () => {
+    if (!inputText.trim()) return;
+
+    setIsAnalyzing(true);
+    try {
+      const analysis = await textExtractionService.analyzeTextComplexity(inputText);
+      setTextAnalysis(analysis);
+      setExtractionType(analysis.recommendedExtractionType);
+      
+      toast({
+        title: "Text Analysis Complete",
+        description: `Detected ${analysis.complexity} complexity text with ~${analysis.estimatedPromptCount} potential prompts.`
+      });
+    } catch (error) {
+      toast({
+        title: "Analysis Failed",
+        description: "Could not analyze text complexity.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handleExtractPrompts = async () => {
     if (!inputText.trim()) {
       toast({
         title: "Error",
         description: "Please enter some text to extract prompts from.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
 
     setIsProcessing(true);
-    
     try {
-      // Simulate processing delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const extracted = extractPromptsFromText(inputText);
-      setExtractedPrompts(extracted);
-      
+      const extractedPrompts = await textExtractionService.extractPrompts({
+        text: inputText,
+        extractionType,
+        options: {
+          minPromptLength: 30,
+          maxPromptLength: 2000,
+          preserveContext: true,
+          removeDuplicates: true,
+          qualityThreshold: 0.6
+        }
+      });
+
+      setExtractedPrompts(extractedPrompts.map((prompt, index) => ({
+        ...prompt,
+        position: index,
+        platform: targetUrl
+      })));
+
+      // Validate extraction quality
+      const quality = await textExtractionService.validateExtractionQuality(extractedPrompts);
+      setExtractionQuality(quality);
+
       // Auto-generate batch name if empty
       if (!batchName.trim()) {
         const timestamp = new Date().toLocaleDateString();
         setBatchName(`Extracted Batch - ${timestamp}`);
       }
-      
+
       toast({
-        title: "Success",
-        description: `Extracted ${extracted.length} prompts from the text.`,
+        title: "Extraction Complete",
+        description: `Extracted ${extractedPrompts.length} prompts (${quality.overallQuality} quality).`
       });
+
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to extract prompts. Please try again.",
-        variant: "destructive",
+        title: "Extraction Failed",
+        description: "Could not extract prompts from text.",
+        variant: "destructive"
       });
     } finally {
       setIsProcessing(false);
@@ -133,7 +178,7 @@ export const BatchExtractor = () => {
       toast({
         title: "Error",
         description: "No prompts to create batch with.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
@@ -142,22 +187,42 @@ export const BatchExtractor = () => {
       toast({
         title: "Error",
         description: "Please enter a batch name.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
 
-    // Here you would implement the actual batch creation logic
-    // For now, we'll just show a success message
-    toast({
-      title: "Batch Created",
-      description: `Successfully created "${batchName}" with ${extractedPrompts.length} prompts.`,
-    });
+    try {
+      const result = await textExtractionService.createBatchFromExtracted({
+        batchName,
+        description: `Batch created from text extraction with ${extractedPrompts.length} prompts`,
+        prompts: extractedPrompts.map((prompt, index) => ({
+          content: prompt.content,
+          platform_target: prompt.platform,
+          execution_order: index
+        })),
+        tags: ['extracted', 'auto-generated']
+      });
 
-    // Reset form
-    setInputText("");
-    setBatchName("");
-    setExtractedPrompts([]);
+      toast({
+        title: "Batch Created Successfully",
+        description: `Created "${batchName}" with ${extractedPrompts.length} prompts.`
+      });
+
+      // Reset form
+      setInputText("");
+      setBatchName("");
+      setExtractedPrompts([]);
+      setExtractionQuality(null);
+      setTextAnalysis(null);
+
+    } catch (error) {
+      toast({
+        title: "Creation Failed",
+        description: "Could not create batch from extracted prompts.",
+        variant: "destructive"
+      });
+    }
   };
 
   const totalTokens = extractedPrompts.reduce((sum, prompt) => sum + prompt.estimatedTokens, 0);
@@ -186,36 +251,84 @@ export const BatchExtractor = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-sm font-medium">Input Text</label>
-                <span className={`text-xs ${inputText.length > CHARACTER_LIMIT * 0.9 ? 'text-red-500' : 'text-gray-500'}`}>
-                  {inputText.length.toLocaleString()} / {CHARACTER_LIMIT.toLocaleString()} characters
-                </span>
+            {/* Text Analysis Section */}
+            {!textAnalysis && (
+              <div className="flex gap-2">
+                <Button 
+                  onClick={handleAnalyzeText}
+                  disabled={!inputText.trim() || isAnalyzing}
+                  variant="outline"
+                  size="sm"
+                >
+                  <Wand2 className="w-4 h-4 mr-2" />
+                  {isAnalyzing ? "Analyzing..." : "Analyze Text"}
+                </Button>
+              </div>
+            )}
+
+            {textAnalysis && (
+              <div className="p-3 bg-blue-50 rounded-lg border">
+                <h4 className="font-medium text-blue-900 mb-2">Text Analysis</h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>Complexity: <Badge variant="secondary">{textAnalysis.complexity}</Badge></div>
+                  <div>Est. Prompts: <Badge variant="outline">{textAnalysis.estimatedPromptCount}</Badge></div>
+                  <div>Words: {textAnalysis.textStatistics.wordCount.toLocaleString()}</div>
+                  <div>Paragraphs: {textAnalysis.textStatistics.paragraphCount}</div>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium">Input Text</label>
+                  <Badge variant="outline" className="text-xs">
+                    {inputText.length.toLocaleString()}/{CHARACTER_LIMIT.toLocaleString()}
+                  </Badge>
+                </div>
               </div>
               <Textarea
-                placeholder="Paste your text content here..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value.slice(0, CHARACTER_LIMIT))}
-                className="min-h-[300px] resize-none"
+                placeholder="Paste your text content here... The AI will automatically identify and extract individual prompts from your text."
+                className="min-h-[300px] text-sm"
               />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Batch Name</label>
-                <Input
-                  placeholder="Enter batch name..."
-                  value={batchName}
-                  onChange={(e) => setBatchName(e.target.value)}
-                />
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Extraction Method</label>
+                <div className="flex gap-2">
+                  {[
+                    { value: 'intelligent', label: 'Intelligent', desc: 'AI-powered pattern recognition' },
+                    { value: 'auto', label: 'Automatic', desc: 'Simple paragraph detection' },
+                    { value: 'manual', label: 'Manual', desc: 'Line-by-line extraction' }
+                  ].map((method) => (
+                    <Button
+                      key={method.value}
+                      variant={extractionType === method.value ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setExtractionType(method.value as any)}
+                      title={method.desc}
+                    >
+                      {method.label}
+                    </Button>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Target Platform</label>
+
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Input
+                    placeholder="Batch Name"
+                    value={batchName}
+                    onChange={(e) => setBatchName(e.target.value)}
+                  />
+                </div>
                 <select
                   value={targetUrl}
                   onChange={(e) => setTargetUrl(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {PLATFORM_OPTIONS.map((platform) => (
                     <option key={platform.value} value={platform.value}>
@@ -224,174 +337,184 @@ export const BatchExtractor = () => {
                   ))}
                 </select>
               </div>
-            </div>
 
-            <Button
-              onClick={handleExtractPrompts}
-              disabled={!inputText.trim() || isProcessing}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-            >
-              {isProcessing ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  Extract Prompts
-                </>
-              )}
-            </Button>
+              <Button 
+                onClick={handleExtractPrompts}
+                disabled={!inputText.trim() || isProcessing}
+                className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Extracting Prompts...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="w-4 h-4 mr-2" />
+                    Extract Prompts
+                  </>
+                )}
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
-        {/* Preview Section */}
+        {/* Results Section */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <FileText className="w-5 h-5" />
-                Extracted Prompts
+                Extracted Prompts ({extractedPrompts.length})
               </div>
               {extractedPrompts.length > 0 && (
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">
-                    {extractedPrompts.length} prompts
-                  </Badge>
-                  <Badge variant="outline">
-                    ~{totalTokens.toLocaleString()} tokens
-                  </Badge>
-                  {selectedPlatform && (
-                    <Badge className={`text-white ${selectedPlatform.color}`}>
-                      {selectedPlatform.label}
-                    </Badge>
-                  )}
-                </div>
+                <Badge variant="outline" className="flex items-center gap-1">
+                  <span className={`w-2 h-2 rounded-full $${totalTokens < 5000 ? 'bg-green-500' : totalTokens < 10000 ? 'bg-yellow-500' : 'bg-red-500'}`}></span>
+                  ~{totalTokens.toLocaleString()} tokens
+                </Badge>
               )}
             </CardTitle>
+            <CardDescription>
+              Review and edit extracted prompts before creating the batch.
+            </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Quality Assessment */}
+            {extractionQuality && (
+              <div className={`p-3 rounded-lg border mb-4 ${
+                extractionQuality.overallQuality === 'excellent' ? 'bg-green-50 border-green-200' :
+                extractionQuality.overallQuality === 'good' ? 'bg-blue-50 border-blue-200' :
+                extractionQuality.overallQuality === 'fair' ? 'bg-yellow-50 border-yellow-200' :
+                'bg-red-50 border-red-200'
+              }`}>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium">Quality Assessment</h4>
+                  <Badge variant={
+                    extractionQuality.overallQuality === 'excellent' ? 'default' :
+                    extractionQuality.overallQuality === 'good' ? 'secondary' : 'destructive'
+                  }>
+                    {extractionQuality.overallQuality}
+                  </Badge>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Average quality score: {(extractionQuality.averageQualityScore * 100).toFixed(1)}%
+                </p>
+                {extractionQuality.issues.length > 0 && (
+                  <div className="mt-2">
+                    <p className="text-sm font-medium">Issues:</p>
+                    <ul className="text-xs text-gray-600 ml-2">
+                      {extractionQuality.issues.map((issue: string, index: number) => (
+                        <li key={index}>• {issue}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
             {extractedPrompts.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <FileText className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                 <p className="text-lg font-medium mb-2">No prompts extracted yet</p>
-                <p className="text-sm">
-                  Add some text and click "Extract Prompts" to get started
-                </p>
+                <p className="text-sm">Paste some text and click "Extract Prompts" to get started.</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                <div className="space-y-3">
-                  {extractedPrompts.map((prompt, index) => (
-                    <div key={prompt.id} className="border rounded-lg p-4 bg-white shadow-sm">
-                      <div className="flex items-start gap-3">
-                        <div className="flex flex-col gap-1">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => movePrompt(index, 'up')}
-                            disabled={index === 0}
-                            className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
+              <div className="space-y-3 max-h-[500px] overflow-y-auto">
+                {extractedPrompts.map((prompt, index) => (
+                  <div key={prompt.id} className="border rounded-lg p-4 bg-gray-50">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant="outline" className="text-xs">
+                            #{index + 1}
+                          </Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            {prompt.estimatedTokens} tokens
+                          </Badge>
+                          <Badge 
+                            variant={prompt.qualityScore > 0.8 ? 'default' : prompt.qualityScore > 0.6 ? 'secondary' : 'destructive'}
+                            className="text-xs"
                           >
-                            <ChevronUp className="w-3 h-3" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => movePrompt(index, 'down')}
-                            disabled={index === extractedPrompts.length - 1}
-                            className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
-                          >
-                            <ChevronDown className="w-3 h-3" />
-                          </Button>
+                            {(prompt.qualityScore * 100).toFixed(0)}% quality
+                          </Badge>
                         </div>
-                        <div className="flex-1 space-y-2">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-gray-600">
-                                Prompt {index + 1}
-                              </span>
-                              <Badge variant="outline" className="text-xs">
-                                ~{prompt.estimatedTokens} tokens
-                              </Badge>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => handleOptimizePrompt(prompt.id)}
-                                className="h-7 w-7 p-0"
-                              >
-                                <Wand2 className="w-3 h-3" />
+                        {editingPrompt === prompt.id ? (
+                          <div className="space-y-2">
+                            <Textarea
+                              value={prompt.content}
+                              onChange={(e) => handlePromptEdit(prompt.id, e.target.value)}
+                              className="text-sm"
+                              rows={3}
+                            />
+                            <div className="flex gap-2">
+                              <Button size="sm" onClick={() => setEditingPrompt(null)}>
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                Save
                               </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => setEditingPrompt(prompt.id)}
-                                className="h-7 w-7 p-0"
-                              >
-                                <Edit3 className="w-3 h-3" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => handlePromptDelete(prompt.id)}
-                                className="h-7 w-7 p-0 text-red-500 hover:text-red-700"
-                              >
-                                <Trash2 className="w-3 h-3" />
+                              <Button size="sm" variant="outline" onClick={() => setEditingPrompt(null)}>
+                                Cancel
                               </Button>
                             </div>
                           </div>
-                          {editingPrompt === prompt.id ? (
-                            <div className="space-y-2">
-                              <Textarea
-                                value={prompt.content}
-                                onChange={(e) => handlePromptEdit(prompt.id, e.target.value)}
-                                className="text-sm"
-                                rows={4}
-                              />
-                              <div className="flex gap-2">
-                                <Button
-                                  size="sm"
-                                  onClick={() => setEditingPrompt(null)}
-                                >
-                                  <CheckCircle className="w-3 h-3 mr-1" />
-                                  Save
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => setEditingPrompt(null)}
-                                >
-                                  Cancel
-                                </Button>
-                              </div>
-                            </div>
-                          ) : (
-                            <p className="text-sm text-gray-700 leading-relaxed">
-                              {prompt.content.length > 200
-                                ? `${prompt.content.substring(0, 200)}...`
-                                : prompt.content
-                              }
-                            </p>
-                          )}
-                        </div>
+                        ) : (
+                          <p className="text-sm text-gray-700 line-clamp-3">
+                            {prompt.content}
+                          </p>
+                        )}
+                        {prompt.suggestions && prompt.suggestions.length > 0 && (
+                          <div className="mt-2">
+                            <p className="text-xs font-medium text-gray-600 mb-1">Suggestions:</p>
+                            <ul className="text-xs text-gray-500">
+                              {prompt.suggestions.slice(0, 2).map((suggestion, idx) => (
+                                <li key={idx}>• {suggestion}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setEditingPrompt(prompt.id)}
+                          disabled={editingPrompt === prompt.id}
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleOptimizePrompt(prompt.id)}
+                        >
+                          <Wand2 className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handlePromptDelete(prompt.id)}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                <Button
-                  onClick={handleCreateBatch}
-                  className="w-full bg-green-600 hover:bg-green-700"
-                  disabled={!batchName.trim()}
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Batch ({extractedPrompts.length} prompts)
-                </Button>
+                  </div>
+                ))}
               </div>
             )}
+
+            <div className="flex justify-between items-center pt-4 border-t">
+              <div className="text-sm text-gray-600">
+                {extractedPrompts.length} prompts • ~{totalTokens.toLocaleString()} tokens
+              </div>
+              <Button 
+                onClick={handleCreateBatch}
+                disabled={extractedPrompts.length === 0 || !batchName.trim()}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Batch
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
