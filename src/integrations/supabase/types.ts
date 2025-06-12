@@ -9,6 +9,69 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_optimization_settings: {
+        Row: {
+          auto_apply_suggestions: boolean | null
+          created_at: string | null
+          id: string
+          optimization_level: string | null
+          platform_specific_optimization: boolean | null
+          preferred_ai_model: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          auto_apply_suggestions?: boolean | null
+          created_at?: string | null
+          id?: string
+          optimization_level?: string | null
+          platform_specific_optimization?: boolean | null
+          preferred_ai_model?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          auto_apply_suggestions?: boolean | null
+          created_at?: string | null
+          id?: string
+          optimization_level?: string | null
+          platform_specific_optimization?: boolean | null
+          preferred_ai_model?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_usage_tracking: {
+        Row: {
+          cost_estimate: number | null
+          created_at: string | null
+          id: string
+          operation_type: string
+          success: boolean | null
+          tokens_consumed: number | null
+          user_id: string
+        }
+        Insert: {
+          cost_estimate?: number | null
+          created_at?: string | null
+          id?: string
+          operation_type: string
+          success?: boolean | null
+          tokens_consumed?: number | null
+          user_id: string
+        }
+        Update: {
+          cost_estimate?: number | null
+          created_at?: string | null
+          id?: string
+          operation_type?: string
+          success?: boolean | null
+          tokens_consumed?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       api_credentials: {
         Row: {
           api_key: string
@@ -426,6 +489,51 @@ export type Database = {
           },
         ]
       }
+      optimization_templates: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_public: boolean | null
+          optimized_pattern: string
+          original_pattern: string
+          platform_target: string | null
+          success_rate: number | null
+          template_description: string | null
+          template_name: string
+          updated_at: string | null
+          usage_count: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          optimized_pattern: string
+          original_pattern: string
+          platform_target?: string | null
+          success_rate?: number | null
+          template_description?: string | null
+          template_name: string
+          updated_at?: string | null
+          usage_count?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          optimized_pattern?: string
+          original_pattern?: string
+          platform_target?: string | null
+          success_rate?: number | null
+          template_description?: string | null
+          template_name?: string
+          updated_at?: string | null
+          usage_count?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       platform_health: {
         Row: {
           circuit_breaker_open: boolean | null
@@ -559,6 +667,9 @@ export type Database = {
       }
       profiles: {
         Row: {
+          ai_features_enabled: boolean | null
+          ai_usage_quota: number | null
+          ai_usage_remaining: number | null
           api_usage_count: number | null
           avatar_url: string | null
           created_at: string | null
@@ -572,6 +683,9 @@ export type Database = {
           usage_limits: Json | null
         }
         Insert: {
+          ai_features_enabled?: boolean | null
+          ai_usage_quota?: number | null
+          ai_usage_remaining?: number | null
           api_usage_count?: number | null
           avatar_url?: string | null
           created_at?: string | null
@@ -585,6 +699,9 @@ export type Database = {
           usage_limits?: Json | null
         }
         Update: {
+          ai_features_enabled?: boolean | null
+          ai_usage_quota?: number | null
+          ai_usage_remaining?: number | null
           api_usage_count?: number | null
           avatar_url?: string | null
           created_at?: string | null
@@ -644,6 +761,48 @@ export type Database = {
           tags?: string[] | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      prompt_optimization_history: {
+        Row: {
+          created_at: string | null
+          execution_success: boolean | null
+          id: string
+          optimization_type: string
+          optimized_prompt: string
+          original_prompt: string
+          platform_target: string | null
+          quality_score_after: number | null
+          quality_score_before: number | null
+          user_id: string
+          was_applied: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          execution_success?: boolean | null
+          id?: string
+          optimization_type: string
+          optimized_prompt: string
+          original_prompt: string
+          platform_target?: string | null
+          quality_score_after?: number | null
+          quality_score_before?: number | null
+          user_id: string
+          was_applied?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          execution_success?: boolean | null
+          id?: string
+          optimization_type?: string
+          optimized_prompt?: string
+          original_prompt?: string
+          platform_target?: string | null
+          quality_score_after?: number | null
+          quality_score_before?: number | null
+          user_id?: string
+          was_applied?: boolean | null
         }
         Relationships: []
       }
@@ -965,6 +1124,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_use_ai_features: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
       get_next_job: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -985,6 +1148,16 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      track_ai_usage: {
+        Args: {
+          p_user_id: string
+          p_operation_type: string
+          p_tokens_consumed?: number
+          p_cost_estimate?: number
+          p_success?: boolean
+        }
+        Returns: undefined
       }
       track_user_usage: {
         Args: {
