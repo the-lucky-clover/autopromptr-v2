@@ -7,7 +7,8 @@ import { ApiKeyManagement } from "./ApiKeyManagement";
 import { UsageDashboard } from "@/components/subscription/UsageDashboard";
 import { SystemHealthDashboard } from "@/components/monitoring/SystemHealthDashboard";
 import { ErrorAnalytics } from "@/components/monitoring/ErrorAnalytics";
-import { Settings, Key, BarChart3, CreditCard, Activity, AlertTriangle } from "lucide-react";
+import { PerformanceDashboard } from "@/components/performance/PerformanceDashboard";
+import { Settings, Key, BarChart3, CreditCard, Activity, AlertTriangle, Zap } from "lucide-react";
 
 const DashboardSettings = () => {
   return (
@@ -18,7 +19,7 @@ const DashboardSettings = () => {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <Settings className="w-4 h-4" />
             Profile
@@ -34,6 +35,10 @@ const DashboardSettings = () => {
           <TabsTrigger value="subscription" className="flex items-center gap-2">
             <CreditCard className="w-4 h-4" />
             Subscription
+          </TabsTrigger>
+          <TabsTrigger value="performance" className="flex items-center gap-2">
+            <Zap className="w-4 h-4" />
+            Performance
           </TabsTrigger>
           <TabsTrigger value="health" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
@@ -96,6 +101,10 @@ const DashboardSettings = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="performance" className="space-y-6">
+          <PerformanceDashboard />
         </TabsContent>
 
         <TabsContent value="health" className="space-y-6">

@@ -196,8 +196,7 @@ export const ErrorAnalytics = () => {
                             className={`h-2 rounded-full ${
                               severity === 'CRITICAL' ? 'bg-red-500' :
                               severity === 'HIGH' ? 'bg-orange-500' :
-                              severity === 'MEDIUM' ? 'bg-yellow-500' : '
-                              bg-green-500'
+                              severity === 'MEDIUM' ? 'bg-yellow-500' : 'bg-green-500'
                             }`}
                             style={{ 
                               width: `${Math.min(((count as number) / trends.totalErrors) * 100, 100)}%` 
