@@ -13,12 +13,12 @@ import {
   Plus, 
   Trash2, 
   Edit3, 
-  GripVertical,
+  ChevronUp,
+  ChevronDown,
   Wand2,
   CheckCircle,
   AlertCircle
 } from "lucide-react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const CHARACTER_LIMIT = 50000;
 
@@ -106,20 +106,26 @@ export const BatchExtractor = () => {
     });
   };
 
-  const handleDragEnd = (result: any) => {
-    if (!result.destination) return;
+  const movePrompt = (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) || 
+      (direction === 'down' && index === extractedPrompts.length - 1)
+    ) {
+      return;
+    }
 
-    const items = Array.from(extractedPrompts);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
+    const newPrompts = [...extractedPrompts];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    [newPrompts[index], newPrompts[targetIndex]] = [newPrompts[targetIndex], newPrompts[index]];
+    
     // Update positions
-    const updatedItems = items.map((item, index) => ({
-      ...item,
-      position: index
+    const updatedPrompts = newPrompts.map((prompt, i) => ({
+      ...prompt,
+      position: i
     }));
-
-    setExtractedPrompts(updatedItems);
+    
+    setExtractedPrompts(updatedPrompts);
   };
 
   const handleCreateBatch = async () => {
@@ -276,108 +282,105 @@ export const BatchExtractor = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                <DragDropContext onDragEnd={handleDragEnd}>
-                  <Droppable droppableId="prompts">
-                    {(provided) => (
-                      <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-3">
-                        {extractedPrompts.map((prompt, index) => (
-                          <Draggable key={prompt.id} draggableId={prompt.id} index={index}>
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                className={`border rounded-lg p-4 bg-white ${
-                                  snapshot.isDragging ? 'shadow-lg' : 'shadow-sm'
-                                }`}
+                <div className="space-y-3">
+                  {extractedPrompts.map((prompt, index) => (
+                    <div key={prompt.id} className="border rounded-lg p-4 bg-white shadow-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="flex flex-col gap-1">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => movePrompt(index, 'up')}
+                            disabled={index === 0}
+                            className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
+                          >
+                            <ChevronUp className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => movePrompt(index, 'down')}
+                            disabled={index === extractedPrompts.length - 1}
+                            className="h-6 w-6 p-0 text-gray-400 hover:text-gray-600"
+                          >
+                            <ChevronDown className="w-3 h-3" />
+                          </Button>
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-gray-600">
+                                Prompt {index + 1}
+                              </span>
+                              <Badge variant="outline" className="text-xs">
+                                ~{prompt.estimatedTokens} tokens
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleOptimizePrompt(prompt.id)}
+                                className="h-7 w-7 p-0"
                               >
-                                <div className="flex items-start gap-3">
-                                  <div
-                                    {...provided.dragHandleProps}
-                                    className="mt-1 text-gray-400 hover:text-gray-600 cursor-grab"
-                                  >
-                                    <GripVertical className="w-4 h-4" />
-                                  </div>
-                                  <div className="flex-1 space-y-2">
-                                    <div className="flex items-center justify-between">
-                                      <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-gray-600">
-                                          Prompt {index + 1}
-                                        </span>
-                                        <Badge variant="outline" className="text-xs">
-                                          ~{prompt.estimatedTokens} tokens
-                                        </Badge>
-                                      </div>
-                                      <div className="flex items-center gap-1">
-                                        <Button
-                                          size="sm"
-                                          variant="ghost"
-                                          onClick={() => handleOptimizePrompt(prompt.id)}
-                                          className="h-7 w-7 p-0"
-                                        >
-                                          <Wand2 className="w-3 h-3" />
-                                        </Button>
-                                        <Button
-                                          size="sm"
-                                          variant="ghost"
-                                          onClick={() => setEditingPrompt(prompt.id)}
-                                          className="h-7 w-7 p-0"
-                                        >
-                                          <Edit3 className="w-3 h-3" />
-                                        </Button>
-                                        <Button
-                                          size="sm"
-                                          variant="ghost"
-                                          onClick={() => handlePromptDelete(prompt.id)}
-                                          className="h-7 w-7 p-0 text-red-500 hover:text-red-700"
-                                        >
-                                          <Trash2 className="w-3 h-3" />
-                                        </Button>
-                                      </div>
-                                    </div>
-                                    {editingPrompt === prompt.id ? (
-                                      <div className="space-y-2">
-                                        <Textarea
-                                          value={prompt.content}
-                                          onChange={(e) => handlePromptEdit(prompt.id, e.target.value)}
-                                          className="text-sm"
-                                          rows={4}
-                                        />
-                                        <div className="flex gap-2">
-                                          <Button
-                                            size="sm"
-                                            onClick={() => setEditingPrompt(null)}
-                                          >
-                                            <CheckCircle className="w-3 h-3 mr-1" />
-                                            Save
-                                          </Button>
-                                          <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() => setEditingPrompt(null)}
-                                          >
-                                            Cancel
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <p className="text-sm text-gray-700 leading-relaxed">
-                                        {prompt.content.length > 200
-                                          ? `${prompt.content.substring(0, 200)}...`
-                                          : prompt.content
-                                        }
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
+                                <Wand2 className="w-3 h-3" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => setEditingPrompt(prompt.id)}
+                                className="h-7 w-7 p-0"
+                              >
+                                <Edit3 className="w-3 h-3" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handlePromptDelete(prompt.id)}
+                                className="h-7 w-7 p-0 text-red-500 hover:text-red-700"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </div>
+                          {editingPrompt === prompt.id ? (
+                            <div className="space-y-2">
+                              <Textarea
+                                value={prompt.content}
+                                onChange={(e) => handlePromptEdit(prompt.id, e.target.value)}
+                                className="text-sm"
+                                rows={4}
+                              />
+                              <div className="flex gap-2">
+                                <Button
+                                  size="sm"
+                                  onClick={() => setEditingPrompt(null)}
+                                >
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  Save
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setEditingPrompt(null)}
+                                >
+                                  Cancel
+                                </Button>
                               </div>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-700 leading-relaxed">
+                              {prompt.content.length > 200
+                                ? `${prompt.content.substring(0, 200)}...`
+                                : prompt.content
+                              }
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+                    </div>
+                  ))}
+                </div>
 
                 <Button
                   onClick={handleCreateBatch}
