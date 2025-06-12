@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles } from "lucide-react";
+import { Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
@@ -72,25 +72,25 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-8 border border-white/20">
         {/* Logo */}
         <div className="flex items-center justify-center space-x-2 mb-8">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <Zap className="w-6 h-6 text-white" />
           </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            AutoPrompt.us
+          <span className="text-2xl font-bold text-white">
+            AutoPromptr
           </span>
         </div>
 
         {/* Auth Form */}
         <div className="space-y-6">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-white">
               {isLogin ? "Welcome back" : "Create account"}
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-white/70 mt-2">
               {isLogin 
                 ? "Sign in to access your prompts" 
                 : "Join thousands of AI enthusiasts"
@@ -100,7 +100,7 @@ const Auth = () => {
 
           <form onSubmit={handleAuth} className="space-y-4">
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-white">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -108,12 +108,12 @@ const Auth = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                className="mt-1"
+                className="mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
               />
             </div>
 
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-white">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -121,14 +121,14 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
-                className="mt-1"
+                className="mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
               />
             </div>
 
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full h-12"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full h-12"
             >
               {loading ? "Loading..." : (isLogin ? "Sign In" : "Sign Up")}
             </Button>
@@ -137,7 +137,7 @@ const Auth = () => {
           <div className="text-center">
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-blue-300 hover:text-blue-200 font-medium"
             >
               {isLogin 
                 ? "Don't have an account? Sign up" 
