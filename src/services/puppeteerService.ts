@@ -1,4 +1,3 @@
-
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { BrowserConfig } from './browserEngineManager';
 import { AntiDetectionUtil } from '../utils/antiDetection';
@@ -116,11 +115,11 @@ export class PuppeteerService {
         return { screenshot: screenshot.toString('base64') };
 
       case 'extractText':
-        const text = await page.$eval(params.selector, el => el.textContent);
+        const text = await page.$eval(params.selector, (el: Element) => el.textContent);
         return { text };
 
       case 'extractAttribute':
-        const attr = await page.$eval(params.selector, (el, attribute) => 
+        const attr = await page.$eval(params.selector, (el: Element, attribute: string) => 
           el.getAttribute(attribute), params.attribute);
         return { attribute: attr };
 
@@ -148,16 +147,31 @@ export class PuppeteerService {
         return true;
 
       case 'emulateDevice':
-        const devices = puppeteer.devices;
-        const device = devices[params.device];
-        if (device) {
-          await page.emulate(device);
+        // Use built-in device configurations
+        const deviceConfig = this.getDeviceConfig(params.device);
+        if (deviceConfig) {
+          await page.setViewport(deviceConfig.viewport);
+          await page.setUserAgent(deviceConfig.userAgent);
         }
         return true;
 
       default:
         throw new Error(`Unknown operation: ${operation}`);
     }
+  }
+
+  private getDeviceConfig(deviceName: string): any {
+    const devices: { [key: string]: any } = {
+      'iPhone 13': {
+        viewport: { width: 390, height: 844, deviceScaleFactor: 3, isMobile: true, hasTouch: true },
+        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15'
+      },
+      'iPad': {
+        viewport: { width: 768, height: 1024, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
+        userAgent: 'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15'
+      }
+    };
+    return devices[deviceName];
   }
 
   async closeBrowser(sessionId: string): Promise<void> {

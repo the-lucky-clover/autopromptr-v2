@@ -1,4 +1,3 @@
-
 import { Browser, BrowserContext, Page, chromium, firefox, webkit } from 'playwright';
 import { BrowserConfig } from './browserEngineManager';
 import { AntiDetectionUtil } from '../utils/antiDetection';
@@ -154,16 +153,35 @@ export class PlaywrightService {
         return true;
 
       case 'emulateDevice':
-        const devices = require('playwright').devices;
-        const device = devices[params.device];
-        if (device) {
-          await page.emulate(device);
+        // Use proper device emulation for Playwright
+        const context = this.contexts.get(sessionId);
+        if (context && params.device) {
+          // Set viewport and user agent based on device
+          const deviceConfig = this.getDeviceConfig(params.device);
+          if (deviceConfig) {
+            await page.setViewportSize(deviceConfig.viewport);
+            await context.setExtraHTTPHeaders(deviceConfig.headers || {});
+          }
         }
         return true;
 
       default:
         throw new Error(`Unknown operation: ${operation}`);
     }
+  }
+
+  private getDeviceConfig(deviceName: string): any {
+    const devices: { [key: string]: any } = {
+      'iPhone 13': {
+        viewport: { width: 390, height: 844 },
+        headers: { 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15' }
+      },
+      'iPad': {
+        viewport: { width: 768, height: 1024 },
+        headers: { 'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15' }
+      }
+    };
+    return devices[deviceName];
   }
 
   async closeBrowser(sessionId: string): Promise<void> {
