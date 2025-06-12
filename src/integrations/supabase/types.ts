@@ -50,6 +50,57 @@ export type Database = {
           },
         ]
       }
+      execution_logs: {
+        Row: {
+          batch_id: string | null
+          created_at: string | null
+          error_message: string | null
+          executed_at: string | null
+          id: string
+          platform_response_time: number | null
+          prompt_id: string | null
+          result_url: string | null
+          success_status: boolean | null
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          executed_at?: string | null
+          id?: string
+          platform_response_time?: number | null
+          prompt_id?: string | null
+          result_url?: string | null
+          success_status?: boolean | null
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          executed_at?: string | null
+          id?: string
+          platform_response_time?: number | null
+          prompt_id?: string | null
+          result_url?: string | null
+          success_status?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "execution_logs_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "prompt_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "execution_logs_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_templates: {
         Row: {
           body_template: string
@@ -174,67 +225,91 @@ export type Database = {
       }
       platforms: {
         Row: {
+          avg_response_time: number | null
+          base_url: string | null
           created_at: string | null
           default_endpoint: string | null
           description: string | null
           id: string
           is_active: boolean | null
           name: string
+          rate_limit_per_hour: number | null
           requires_api_key: boolean | null
           slug: string
+          success_rate: number | null
           supports_custom_endpoint: boolean | null
         }
         Insert: {
+          avg_response_time?: number | null
+          base_url?: string | null
           created_at?: string | null
           default_endpoint?: string | null
           description?: string | null
           id?: string
           is_active?: boolean | null
           name: string
+          rate_limit_per_hour?: number | null
           requires_api_key?: boolean | null
           slug: string
+          success_rate?: number | null
           supports_custom_endpoint?: boolean | null
         }
         Update: {
+          avg_response_time?: number | null
+          base_url?: string | null
           created_at?: string | null
           default_endpoint?: string | null
           description?: string | null
           id?: string
           is_active?: boolean | null
           name?: string
+          rate_limit_per_hour?: number | null
           requires_api_key?: boolean | null
           slug?: string
+          success_rate?: number | null
           supports_custom_endpoint?: boolean | null
         }
         Relationships: []
       }
       profiles: {
         Row: {
+          api_usage_count: number | null
           avatar_url: string | null
           created_at: string | null
           display_name: string | null
           email: string | null
           id: string
+          last_login: string | null
           preferences: Json | null
+          subscription_plan: string | null
           updated_at: string | null
+          usage_limits: Json | null
         }
         Insert: {
+          api_usage_count?: number | null
           avatar_url?: string | null
           created_at?: string | null
           display_name?: string | null
           email?: string | null
           id: string
+          last_login?: string | null
           preferences?: Json | null
+          subscription_plan?: string | null
           updated_at?: string | null
+          usage_limits?: Json | null
         }
         Update: {
+          api_usage_count?: number | null
           avatar_url?: string | null
           created_at?: string | null
           display_name?: string | null
           email?: string | null
           id?: string
+          last_login?: string | null
           preferences?: Json | null
+          subscription_plan?: string | null
           updated_at?: string | null
+          usage_limits?: Json | null
         }
         Relationships: []
       }
@@ -244,9 +319,13 @@ export type Database = {
           batch_name: string | null
           created_at: string
           description: string | null
+          execution_count: number | null
           id: string
+          is_template: boolean | null
+          platform_targets: string[] | null
           project_url: string | null
           status: string
+          tags: string[] | null
           updated_at: string
           user_id: string
         }
@@ -255,9 +334,13 @@ export type Database = {
           batch_name?: string | null
           created_at?: string
           description?: string | null
+          execution_count?: number | null
           id?: string
+          is_template?: boolean | null
+          platform_targets?: string[] | null
           project_url?: string | null
           status?: string
+          tags?: string[] | null
           updated_at?: string
           user_id: string
         }
@@ -266,9 +349,13 @@ export type Database = {
           batch_name?: string | null
           created_at?: string
           description?: string | null
+          execution_count?: number | null
           id?: string
+          is_template?: boolean | null
+          platform_targets?: string[] | null
           project_url?: string | null
           status?: string
+          tags?: string[] | null
           updated_at?: string
           user_id?: string
         }
@@ -333,10 +420,14 @@ export type Database = {
       prompts: {
         Row: {
           batch_id: string
+          content: string
           created_at: string
           error_message: string | null
+          estimated_tokens: number | null
+          execution_order: number | null
           id: string
           improved_prompt: string | null
+          optimization_score: number | null
           original_prompt: string
           output_data: Json | null
           platform_target: string
@@ -344,14 +435,19 @@ export type Database = {
           project_url: string | null
           retry_attempts: number
           status: string
+          target_platform: string | null
           updated_at: string
         }
         Insert: {
           batch_id: string
+          content: string
           created_at?: string
           error_message?: string | null
+          estimated_tokens?: number | null
+          execution_order?: number | null
           id?: string
           improved_prompt?: string | null
+          optimization_score?: number | null
           original_prompt: string
           output_data?: Json | null
           platform_target?: string
@@ -359,14 +455,19 @@ export type Database = {
           project_url?: string | null
           retry_attempts?: number
           status?: string
+          target_platform?: string | null
           updated_at?: string
         }
         Update: {
           batch_id?: string
+          content?: string
           created_at?: string
           error_message?: string | null
+          estimated_tokens?: number | null
+          execution_order?: number | null
           id?: string
           improved_prompt?: string | null
+          optimization_score?: number | null
           original_prompt?: string
           output_data?: Json | null
           platform_target?: string
@@ -374,6 +475,7 @@ export type Database = {
           project_url?: string | null
           retry_attempts?: number
           status?: string
+          target_platform?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -449,6 +551,45 @@ export type Database = {
         }
         Relationships: []
       }
+      templates: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          id: string
+          is_public: boolean | null
+          name: string
+          prompts_json: Json
+          updated_at: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          prompts_json: Json
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          prompts_json?: Json
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       user_notifications: {
         Row: {
           created_at: string | null
@@ -503,6 +644,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_usage: {
+        Row: {
+          api_calls: number | null
+          created_at: string | null
+          date: string
+          executions_count: number | null
+          id: string
+          tokens_used: number | null
+          user_id: string
+        }
+        Insert: {
+          api_calls?: number | null
+          created_at?: string | null
+          date?: string
+          executions_count?: number | null
+          id?: string
+          tokens_used?: number | null
+          user_id: string
+        }
+        Update: {
+          api_calls?: number | null
+          created_at?: string | null
+          date?: string
+          executions_count?: number | null
+          id?: string
+          tokens_used?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -518,6 +689,15 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      track_user_usage: {
+        Args: {
+          p_user_id: string
+          p_api_calls?: number
+          p_executions?: number
+          p_tokens?: number
+        }
+        Returns: undefined
       }
     }
     Enums: {

@@ -1,12 +1,13 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Zap, User, LogOut } from "lucide-react";
+import { Zap, User, LogOut, BarChart3, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -55,7 +56,7 @@ const DynamicHeader = () => {
               </span>
             </div>
             
-            {/* CTA */}
+            {/* Navigation */}
             <div className="flex items-center space-x-4">
               {user ? (
                 <DropdownMenu>
@@ -66,6 +67,19 @@ const DynamicHeader = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-gray-900/90 backdrop-blur-md border-white/20">
+                    <DropdownMenuItem asChild>
+                      <a href="/dashboard" className="text-white hover:bg-white/10 cursor-pointer">
+                        <BarChart3 className="w-4 h-4 mr-2" />
+                        Dashboard
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <a href="/profile" className="text-white hover:bg-white/10 cursor-pointer">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Profile
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-white/20" />
                     <DropdownMenuItem onClick={signOut} className="text-white hover:bg-white/10">
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out

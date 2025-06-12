@@ -1,8 +1,11 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight, Play, BarChart3 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AutoPromptHero = () => {
+  const { user } = useAuth();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
       {/* Animated background elements */}
@@ -26,14 +29,35 @@ const AutoPromptHero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
-            Start Free Trial
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
-          <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-full backdrop-blur-sm transition-all duration-300">
-            <Play className="w-5 h-5 mr-2" />
-            Watch Demo
-          </Button>
+          {user ? (
+            <>
+              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg" asChild>
+                <a href="/dashboard">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  Go to Dashboard
+                </a>
+              </Button>
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-full backdrop-blur-sm transition-all duration-300" asChild>
+                <a href="/profile">
+                  Manage Profile
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg" asChild>
+                <a href="/auth">
+                  Start Free Trial
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </a>
+              </Button>
+              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-full backdrop-blur-sm transition-all duration-300">
+                <Play className="w-5 h-5 mr-2" />
+                Watch Demo
+              </Button>
+            </>
+          )}
         </div>
         
         {/* Hero Image */}
