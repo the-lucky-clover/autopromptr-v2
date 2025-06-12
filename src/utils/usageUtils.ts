@@ -1,58 +1,91 @@
 
-// Type definitions for usage limits and current usage
 export interface UsageLimits {
+  prompts: number;
+  ai_optimizations: number;
+  batch_extraction_chars: number;
+  batch_extractions: number;
   api_calls: number;
   executions: number;
   tokens: number;
 }
 
 export interface CurrentUsage {
+  prompts: number;
+  ai_optimizations: number;
+  batch_extraction_chars: number;
+  batch_extractions: number;
   api_calls: number;
   executions_count: number;
   tokens_used: number;
 }
 
-// Safely parse usage limits with proper type checking
-export const parseUsageLimits = (limits: any): UsageLimits => {
-  const defaultLimits = { api_calls: 1000, executions: 100, tokens: 10000 };
-  
-  if (!limits) return defaultLimits;
-  
-  try {
-    // Check if usage_limits is already an object
-    if (typeof limits === 'object' && limits !== null && !Array.isArray(limits)) {
+export const getUsageLimitsForPlan = (planName: string): UsageLimits => {
+  switch (planName.toLowerCase()) {
+    case 'free':
       return {
-        api_calls: typeof limits.api_calls === 'number' ? limits.api_calls : defaultLimits.api_calls,
-        executions: typeof limits.executions === 'number' ? limits.executions : defaultLimits.executions,
-        tokens: typeof limits.tokens === 'number' ? limits.tokens : defaultLimits.tokens,
+        prompts: 10,
+        ai_optimizations: 0,
+        batch_extraction_chars: 1000,
+        batch_extractions: 5,
+        api_calls: 100,
+        executions: 10,
+        tokens: 1000,
       };
-    }
-    
-    // If it's a string, try to parse it as JSON
-    if (typeof limits === 'string') {
-      const parsed = JSON.parse(limits);
+    case 'pro':
       return {
-        api_calls: typeof parsed.api_calls === 'number' ? parsed.api_calls : defaultLimits.api_calls,
-        executions: typeof parsed.executions === 'number' ? parsed.executions : defaultLimits.executions,
-        tokens: typeof parsed.tokens === 'number' ? parsed.tokens : defaultLimits.tokens,
+        prompts: 500,
+        ai_optimizations: 100,
+        batch_extraction_chars: 50000,
+        batch_extractions: 100,
+        api_calls: 5000,
+        executions: 500,
+        tokens: 100000,
       };
-    }
-    
-    return defaultLimits;
-  } catch {
-    return defaultLimits;
+    case 'enterprise':
+      return {
+        prompts: -1, // unlimited
+        ai_optimizations: -1,
+        batch_extraction_chars: -1,
+        batch_extractions: -1,
+        api_calls: -1,
+        executions: -1,
+        tokens: -1,
+      };
+    default:
+      return getUsageLimitsForPlan('free');
   }
 };
 
-// Safely parse current usage
-export const parseCurrentUsage = (usage: any): CurrentUsage => {
-  const defaultUsage = { api_calls: 0, executions_count: 0, tokens_used: 0 };
+export const formatUsageValue = (value: number, isUnlimited: boolean = false): string => {
+  if (isUnlimited || value === -1) {
+    return 'Unlimited';
+  }
   
-  if (!usage) return defaultUsage;
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(1)}M`;
+  }
   
-  return {
-    api_calls: typeof usage.api_calls === 'number' ? usage.api_calls : 0,
-    executions_count: typeof usage.executions_count === 'number' ? usage.executions_count : 0,
-    tokens_used: typeof usage.tokens_used === 'number' ? usage.tokens_used : 0,
-  };
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(1)}K`;
+  }
+  
+  return value.toString();
+};
+
+export const calculateUsagePercentage = (current: number, limit: number): number => {
+  if (limit === -1) return 0; // unlimited
+  if (limit === 0) return 100;
+  return Math.min((current / limit) * 100, 100);
+};
+
+export const getUsageColor = (percentage: number): string => {
+  if (percentage >= 90) return 'text-red-600';
+  if (percentage >= 75) return 'text-yellow-600';
+  return 'text-green-600';
+};
+
+export const getProgressColor = (percentage: number): string => {
+  if (percentage >= 90) return 'bg-red-500';
+  if (percentage >= 75) return 'bg-yellow-500';
+  return 'bg-blue-500';
 };

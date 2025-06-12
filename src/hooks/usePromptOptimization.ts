@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface OptimizationResult {
   optimized_prompt: string;
@@ -19,6 +20,7 @@ interface OptimizationOptions {
 export const usePromptOptimization = () => {
   const [isOptimizing, setIsOptimizing] = useState(false);
   const { toast } = useToast();
+  const { checkFeatureAccess, checkUsageLimit, incrementUsage } = useSubscription();
 
   const optimizePrompt = async (
     prompt: string,
@@ -28,6 +30,27 @@ export const usePromptOptimization = () => {
       toast({
         title: "Empty Prompt",
         description: "Please provide a prompt to optimize",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    // Check if user has access to AI optimization feature
+    if (!checkFeatureAccess('ai_optimization')) {
+      toast({
+        title: "Feature Unavailable",
+        description: "AI optimization is not available on your current plan. Please upgrade to Pro or Enterprise.",
+        variant: "destructive",
+      });
+      return null;
+    }
+
+    // Check usage limits
+    const canUseOptimization = await checkUsageLimit('ai_optimizations_per_month', 1);
+    if (!canUseOptimization) {
+      toast({
+        title: "Usage Limit Reached",
+        description: "You've reached your AI optimization limit for this month. Consider upgrading your plan.",
         variant: "destructive",
       });
       return null;
@@ -60,6 +83,9 @@ export const usePromptOptimization = () => {
           quality_improvement: 0.1,
         };
       }
+
+      // Increment usage counter
+      await incrementUsage('ai_optimizations_per_month', 1);
 
       toast({
         title: "Optimization Complete",

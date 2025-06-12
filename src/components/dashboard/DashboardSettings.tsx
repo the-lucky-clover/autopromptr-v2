@@ -1,249 +1,87 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { Settings, Key, Bell, Shield, Download, Trash2, Zap } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProfileSettings } from "@/components/profile/ProfileSettings";
 import { ApiKeyManagement } from "./ApiKeyManagement";
+import { UsageDashboard } from "@/components/subscription/UsageDashboard";
+import { Settings, Key, BarChart3, CreditCard } from "lucide-react";
 
-export const DashboardSettings = () => {
-  const [notifications, setNotifications] = useState({
-    emailOnSuccess: true,
-    emailOnFailure: true,
-    pushNotifications: false,
-    weeklyReports: true
-  });
-
-  const [apiSettings, setApiSettings] = useState({
-    autoRetry: true,
-    maxRetries: 3,
-    timeout: 30
-  });
-
-  const [aiSettings, setAiSettings] = useState({
-    enableOptimization: false,
-    autoApplyOptimizations: false,
-    optimizationLevel: 'balanced'
-  });
-
+const DashboardSettings = () => {
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-1">Manage your dashboard preferences and account settings</p>
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="flex items-center gap-2 mb-6">
+        <Settings className="w-6 h-6" />
+        <h1 className="text-3xl font-bold">Settings</h1>
       </div>
 
-      <Tabs defaultValue="general" className="space-y-6">
+      <Tabs defaultValue="profile" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="ai">AI Features</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="data">Data</TabsTrigger>
+          <TabsTrigger value="profile" className="flex items-center gap-2">
+            <Settings className="w-4 h-4" />
+            Profile
+          </TabsTrigger>
+          <TabsTrigger value="usage" className="flex items-center gap-2">
+            <BarChart3 className="w-4 h-4" />
+            Usage & Billing
+          </TabsTrigger>
+          <TabsTrigger value="ai-features" className="flex items-center gap-2">
+            <Key className="w-4 h-4" />
+            AI Features
+          </TabsTrigger>
+          <TabsTrigger value="subscription" className="flex items-center gap-2">
+            <CreditCard className="w-4 h-4" />
+            Subscription
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="general" className="space-y-6">
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* API Configuration */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="w-5 h-5" />
-                  API Configuration
-                </CardTitle>
-                <CardDescription>
-                  Configure default behavior for prompt executions
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Auto Retry</p>
-                    <p className="text-sm text-gray-600">Automatically retry failed executions</p>
-                  </div>
-                  <Switch
-                    checked={apiSettings.autoRetry}
-                    onCheckedChange={(checked) => 
-                      setApiSettings(prev => ({ ...prev, autoRetry: checked }))
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Max Retries</label>
-                  <Input
-                    type="number"
-                    value={apiSettings.maxRetries}
-                    onChange={(e) => 
-                      setApiSettings(prev => ({ ...prev, maxRetries: parseInt(e.target.value) || 0 }))
-                    }
-                    min="0"
-                    max="10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Timeout (seconds)</label>
-                  <Input
-                    type="number"
-                    value={apiSettings.timeout}
-                    onChange={(e) => 
-                      setApiSettings(prev => ({ ...prev, timeout: parseInt(e.target.value) || 0 }))
-                    }
-                    min="5"
-                    max="300"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Basic AI Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="w-5 h-5" />
-                  AI Optimization
-                </CardTitle>
-                <CardDescription>
-                  Enable AI-powered prompt optimization features
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Enable AI Optimization</p>
-                    <p className="text-sm text-gray-600">Use AI to improve prompt quality</p>
-                  </div>
-                  <Switch
-                    checked={aiSettings.enableOptimization}
-                    onCheckedChange={(checked) => 
-                      setAiSettings(prev => ({ ...prev, enableOptimization: checked }))
-                    }
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Auto-Apply Optimizations</p>
-                    <p className="text-sm text-gray-600">Automatically apply AI suggestions</p>
-                  </div>
-                  <Switch
-                    checked={aiSettings.autoApplyOptimizations}
-                    onCheckedChange={(checked) => 
-                      setAiSettings(prev => ({ ...prev, autoApplyOptimizations: checked }))
-                    }
-                  />
-                </div>
-                <p className="text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
-                  Add your own API keys in the AI Features tab for enhanced optimization capabilities and to control your costs.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="ai" className="space-y-6">
-          <ApiKeyManagement />
-        </TabsContent>
-
-        <TabsContent value="notifications" className="space-y-6">
+        <TabsContent value="profile" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="w-5 h-5" />
-                Notifications
-              </CardTitle>
+              <CardTitle>Profile Settings</CardTitle>
               <CardDescription>
-                Configure how you want to be notified about batch executions
+                Manage your account information and preferences
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Email on Success</p>
-                  <p className="text-sm text-gray-600">Get notified when batches complete successfully</p>
-                </div>
-                <Switch
-                  checked={notifications.emailOnSuccess}
-                  onCheckedChange={(checked) => 
-                    setNotifications(prev => ({ ...prev, emailOnSuccess: checked }))
-                  }
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Email on Failure</p>
-                  <p className="text-sm text-gray-600">Get notified when batches fail</p>
-                </div>
-                <Switch
-                  checked={notifications.emailOnFailure}
-                  onCheckedChange={(checked) => 
-                    setNotifications(prev => ({ ...prev, emailOnFailure: checked }))
-                  }
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Push Notifications</p>
-                  <p className="text-sm text-gray-600">Real-time browser notifications</p>
-                </div>
-                <Switch
-                  checked={notifications.pushNotifications}
-                  onCheckedChange={(checked) => 
-                    setNotifications(prev => ({ ...prev, pushNotifications: checked }))
-                  }
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Weekly Reports</p>
-                  <p className="text-sm text-gray-600">Summary of your weekly activity</p>
-                </div>
-                <Switch
-                  checked={notifications.weeklyReports}
-                  onCheckedChange={(checked) => 
-                    setNotifications(prev => ({ ...prev, weeklyReports: checked }))
-                  }
-                />
-              </div>
+            <CardContent>
+              <ProfileSettings />
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="data" className="space-y-6">
+        <TabsContent value="usage" className="space-y-6">
+          <UsageDashboard />
+        </TabsContent>
+
+        <TabsContent value="ai-features" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="w-5 h-5" />
-                Data Management
-              </CardTitle>
+              <CardTitle>AI Features & API Keys</CardTitle>
               <CardDescription>
-                Export your data or delete your account
+                Manage your AI optimization settings and API keys for various providers
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Button variant="outline" className="w-full justify-start">
-                <Download className="w-4 h-4 mr-2" />
-                Export All Data
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Download className="w-4 h-4 mr-2" />
-                Export Batches Only
-              </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Download className="w-4 h-4 mr-2" />
-                Export Templates Only
-              </Button>
-              <Separator />
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-red-600">Danger Zone</p>
-                <Button variant="destructive" className="w-full">
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete Account
-                </Button>
-                <p className="text-xs text-gray-500">
-                  This action cannot be undone. All your data will be permanently deleted.
+            <CardContent>
+              <ApiKeyManagement />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="subscription" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Subscription Management</CardTitle>
+              <CardDescription>
+                Manage your subscription, billing, and plan details
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">
+                  Subscription management will be available here.
+                </p>
+                <p className="text-sm text-gray-500">
+                  View billing history, change plans, and manage payment methods.
                 </p>
               </div>
             </CardContent>
@@ -253,3 +91,5 @@ export const DashboardSettings = () => {
     </div>
   );
 };
+
+export default DashboardSettings;
