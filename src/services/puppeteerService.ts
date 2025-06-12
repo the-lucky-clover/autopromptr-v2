@@ -115,11 +115,11 @@ export class PuppeteerService {
         return { screenshot: screenshot.toString('base64') };
 
       case 'extractText':
-        const text = await page.$eval(params.selector, (el: Element) => el.textContent);
+        const text = await page.$eval(params.selector, (el) => el.textContent);
         return { text };
 
       case 'extractAttribute':
-        const attr = await page.$eval(params.selector, (el: Element, attribute: string) => 
+        const attr = await page.$eval(params.selector, (el, attribute) => 
           el.getAttribute(attribute), params.attribute);
         return { attribute: attr };
 
