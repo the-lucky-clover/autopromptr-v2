@@ -161,9 +161,11 @@ export class BatchExecutionService {
         .eq('id', batchId)
         .single();
 
+      const batchStatus = batch?.status as ExecutionState['status'] || 'pending';
+
       const state: ExecutionState = {
         batchId,
-        status: batch?.status || 'pending',
+        status: batchStatus,
         progress: {
           currentStep: executionState.current_step || 0,
           totalSteps: executionState.total_steps || 0,
