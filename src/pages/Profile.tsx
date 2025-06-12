@@ -14,6 +14,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { User, Settings, BarChart3, Crown, Zap } from "lucide-react";
 
+// Type definitions for usage limits and current usage
+interface UsageLimits {
+  api_calls: number;
+  executions: number;
+  tokens: number;
+}
+
+interface CurrentUsage {
+  api_calls: number;
+  executions_count: number;
+  tokens_used: number;
+}
+
 const Profile = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -98,8 +111,54 @@ const Profile = () => {
     );
   }
 
-  const usageLimits = profile?.usage_limits || { api_calls: 1000, executions: 100, tokens: 10000 };
-  const currentUsage = usage || { api_calls: 0, executions_count: 0, tokens_used: 0 };
+  // Safely parse usage limits with proper type checking
+  const getUsageLimits = (): UsageLimits => {
+    const defaultLimits = { api_calls: 1000, executions: 100, tokens: 10000 };
+    
+    if (!profile?.usage_limits) return defaultLimits;
+    
+    try {
+      // Check if usage_limits is already an object
+      if (typeof profile.usage_limits === 'object' && profile.usage_limits !== null && !Array.isArray(profile.usage_limits)) {
+        const limits = profile.usage_limits as Record<string, any>;
+        return {
+          api_calls: typeof limits.api_calls === 'number' ? limits.api_calls : defaultLimits.api_calls,
+          executions: typeof limits.executions === 'number' ? limits.executions : defaultLimits.executions,
+          tokens: typeof limits.tokens === 'number' ? limits.tokens : defaultLimits.tokens,
+        };
+      }
+      
+      // If it's a string, try to parse it as JSON
+      if (typeof profile.usage_limits === 'string') {
+        const parsed = JSON.parse(profile.usage_limits);
+        return {
+          api_calls: typeof parsed.api_calls === 'number' ? parsed.api_calls : defaultLimits.api_calls,
+          executions: typeof parsed.executions === 'number' ? parsed.executions : defaultLimits.executions,
+          tokens: typeof parsed.tokens === 'number' ? parsed.tokens : defaultLimits.tokens,
+        };
+      }
+      
+      return defaultLimits;
+    } catch {
+      return defaultLimits;
+    }
+  };
+
+  // Safely parse current usage
+  const getCurrentUsage = (): CurrentUsage => {
+    const defaultUsage = { api_calls: 0, executions_count: 0, tokens_used: 0 };
+    
+    if (!usage) return defaultUsage;
+    
+    return {
+      api_calls: typeof usage.api_calls === 'number' ? usage.api_calls : 0,
+      executions_count: typeof usage.executions_count === 'number' ? usage.executions_count : 0,
+      tokens_used: typeof usage.tokens_used === 'number' ? usage.tokens_used : 0,
+    };
+  };
+
+  const usageLimits = getUsageLimits();
+  const currentUsage = getCurrentUsage();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
