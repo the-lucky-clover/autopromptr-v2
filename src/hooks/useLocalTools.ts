@@ -170,9 +170,9 @@ export const useLocalExecutionQueue = () => {
         exec.id === executionId ? { 
           ...exec, 
           status: 'pending' as const,
-          error_message: null,
-          started_at: null,
-          completed_at: null
+          error_message: undefined,
+          started_at: undefined,
+          completed_at: undefined
         } : exec
       ));
       toast.success('Execution queued for retry');

@@ -37,7 +37,7 @@ const Header = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo with Zap icon - clickable link to home */}
-            <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity relative z-50">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
               </div>
@@ -47,7 +47,7 @@ const Header = () => {
             </a>
             
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex items-center space-x-8 relative z-50">
               <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">Templates</a>
               <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">Courses</a>
               <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">Community</a>
@@ -56,7 +56,7 @@ const Header = () => {
             </nav>
             
             {/* Desktop CTA */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-4 relative z-50">
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -84,7 +84,7 @@ const Header = () => {
             
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2 text-white hover:text-white/80 transition-colors"
+              className="md:hidden p-2 text-white hover:text-white/80 transition-colors relative z-50"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -93,7 +93,7 @@ const Header = () => {
           
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden py-4 border-t border-white/20">
+            <div className="md:hidden py-4 border-t border-white/20 relative z-50">
               <nav className="flex flex-col space-y-4">
                 <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">Templates</a>
                 <a href="#" className="text-white/80 hover:text-white transition-colors font-medium">Courses</a>
