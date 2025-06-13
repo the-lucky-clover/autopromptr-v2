@@ -35,7 +35,7 @@ const Speedometers = () => {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-gray-900 via-blue-900/20 to-purple-900/20">
+    <section className="py-20 px-4 bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -48,7 +48,7 @@ const Speedometers = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {metrics.map((metric, index) => (
-            <Card key={index} className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2 bg-gray-900/50 backdrop-blur-sm border border-white/10">
+            <Card key={index} className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2 bg-gray-800/50 backdrop-blur-sm border border-white/10">
               <CardHeader className="pb-4 text-center">
                 <div className={`w-16 h-16 bg-gradient-to-r ${metric.color} rounded-full flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300`}>
                   <metric.icon className="w-8 h-8 text-white" />

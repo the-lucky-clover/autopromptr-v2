@@ -1,14 +1,34 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import AuthModal from "@/components/AuthModal";
 
 const Hero = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-16 px-4">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-12 px-4">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -23,7 +43,7 @@ const Hero = () => {
             <span className="text-xs sm:text-sm text-white/90">AI-Powered Prompt Engineering</span>
           </div>
           
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight">
             <span className="bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent">
               Supercharge
             </span>{" "}
@@ -52,19 +72,24 @@ const Hero = () => {
             </Button>
           </div>
           
-          <div className="mt-8 sm:mt-12 flex items-center justify-center gap-2 sm:gap-8 text-white/60 px-2">
-            <div className="text-center">
-              <div className="text-sm sm:text-lg md:text-xl font-bold text-white">10K+</div>
+          <div 
+            ref={statsRef}
+            className={`mt-8 sm:mt-12 flex items-center justify-center gap-2 sm:gap-8 text-white/60 px-2 transition-all duration-1000 ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <div className={`text-center transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="text-lg sm:text-2xl md:text-3xl font-bold text-white">10K+</div>
               <div className="text-xs sm:text-sm">Premium Prompts</div>
             </div>
             <div className="w-px h-4 sm:h-8 bg-white/20"></div>
-            <div className="text-center">
-              <div className="text-sm sm:text-lg md:text-xl font-bold text-white">50K+</div>
+            <div className={`text-center transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="text-lg sm:text-2xl md:text-3xl font-bold text-white">50K+</div>
               <div className="text-xs sm:text-sm">Happy Users</div>
             </div>
             <div className="w-px h-4 sm:h-8 bg-white/20"></div>
-            <div className="text-center">
-              <div className="text-sm sm:text-lg md:text-xl font-bold text-white">99%</div>
+            <div className={`text-center transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="text-lg sm:text-2xl md:text-3xl font-bold text-white">99%</div>
               <div className="text-xs sm:text-sm">Success Rate</div>
             </div>
           </div>

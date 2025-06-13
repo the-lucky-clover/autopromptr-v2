@@ -58,62 +58,62 @@ const Templates = () => {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      Marketing: "bg-red-100 text-red-800",
-      Development: "bg-blue-100 text-blue-800",
-      Creative: "bg-purple-100 text-purple-800",
-      Business: "bg-green-100 text-green-800",
-      Education: "bg-yellow-100 text-yellow-800"
+      Marketing: "bg-red-500/10 text-red-300 border-red-500/20",
+      Development: "bg-blue-500/10 text-blue-300 border-blue-500/20",
+      Creative: "bg-purple-500/10 text-purple-300 border-purple-500/20",
+      Business: "bg-green-500/10 text-green-300 border-green-500/20",
+      Education: "bg-yellow-500/10 text-yellow-300 border-yellow-500/20"
     };
-    return colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800";
+    return colors[category as keyof typeof colors] || "bg-gray-500/10 text-gray-300 border-gray-500/20";
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-blue-50 to-purple-50">
+    <section className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Premium Prompt Templates
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Professionally crafted prompts that deliver exceptional results across various use cases
           </p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {templates.map((template, index) => (
-            <Card key={index} className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-1 bg-white">
+            <Card key={index} className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-1 bg-gray-800/50 backdrop-blur-sm border border-white/10">
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between mb-2">
-                  <Badge className={getCategoryColor(template.category)}>
+                  <Badge className={`${getCategoryColor(template.category)} border`}>
                     {template.category}
                   </Badge>
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                  <div className="flex items-center gap-1 text-sm text-gray-400">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     {template.rating}
                   </div>
                 </div>
-                <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <CardTitle className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
                   {template.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <CardDescription className="text-gray-600 leading-relaxed">
+                <CardDescription className="text-gray-300 leading-relaxed">
                   {template.description}
                 </CardDescription>
                 
-                <div className="p-3 bg-gray-50 rounded-lg border-l-4 border-blue-500">
-                  <p className="text-sm text-gray-700 italic">
+                <div className="p-3 bg-gray-700/50 rounded-lg border-l-4 border-blue-500">
+                  <p className="text-sm text-gray-300 italic">
                     "{template.preview}"
                   </p>
                 </div>
                 
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                  <div className="flex items-center gap-1 text-sm text-gray-400">
                     <Download className="w-4 h-4" />
                     {template.downloads} downloads
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="hover:bg-blue-50">
+                    <Button size="sm" variant="outline" className="hover:bg-blue-500/10 border-gray-600 text-gray-300">
                       <Eye className="w-4 h-4 mr-1" />
                       Preview
                     </Button>

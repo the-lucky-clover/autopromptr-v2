@@ -77,17 +77,17 @@ const UseCases = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-6xl mx-auto px-4">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-200 mb-6">
-            <Zap className="w-4 h-4 text-blue-600 mr-2" />
-            <span className="text-sm text-blue-700 font-medium">Real-World Applications</span>
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/10 backdrop-blur-sm border border-blue-400/20 mb-6">
+            <Zap className="w-4 h-4 text-blue-400 mr-2" />
+            <span className="text-sm text-blue-300 font-medium">Real-World Applications</span>
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-white mb-4">
             Use Cases That Drive Results
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             From solo developers to enterprise teams, see how AutoPromptr transforms development workflows across different scenarios and scales
           </p>
         </div>
@@ -98,24 +98,24 @@ const UseCases = () => {
             return (
               <Card 
                 key={index} 
-                className={`transition-all duration-1000 hover:shadow-lg hover:-translate-y-1 ${useCase.delay} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                className={`transition-all duration-1000 hover:shadow-lg hover:-translate-y-1 bg-gray-800/50 backdrop-blur-sm border border-white/10 ${useCase.delay} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               >
                 <CardHeader>
                   <div className={`w-12 h-12 bg-gradient-to-r ${useCase.color} rounded-lg flex items-center justify-center mb-4`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <CardTitle className="text-xl mb-2">{useCase.title}</CardTitle>
-                  <CardDescription className="text-base leading-relaxed">
+                  <CardTitle className="text-xl mb-2 text-white">{useCase.title}</CardTitle>
+                  <CardDescription className="text-base leading-relaxed text-gray-300">
                     {useCase.description}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <h5 className="font-medium text-gray-900 mb-3">Key Benefits:</h5>
+                    <h5 className="font-medium text-white mb-3">Key Benefits:</h5>
                     {useCase.benefits.map((benefit, benefitIndex) => (
                       <div key={benefitIndex} className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                        <span className="text-sm text-gray-600">{benefit}</span>
+                        <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                        <span className="text-sm text-gray-300">{benefit}</span>
                       </div>
                     ))}
                   </div>
@@ -126,18 +126,18 @@ const UseCases = () => {
         </div>
 
         <div className={`mt-16 text-center transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-2xl p-8 border border-white/10 backdrop-blur-sm">
+            <h3 className="text-2xl font-bold text-white mb-4">
               Ready to Transform Your Workflow?
             </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
               Join thousands of developers who have already streamlined their AI-assisted development process with AutoPromptr
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary" className="px-4 py-2">10,000+ Active Users</Badge>
-              <Badge variant="secondary" className="px-4 py-2">50+ Supported Platforms</Badge>
-              <Badge variant="secondary" className="px-4 py-2">99.9% Uptime</Badge>
-              <Badge variant="secondary" className="px-4 py-2">24/7 Support</Badge>
+              <Badge variant="secondary" className="px-4 py-2 bg-gray-700/50 text-gray-200">10,000+ Active Users</Badge>
+              <Badge variant="secondary" className="px-4 py-2 bg-gray-700/50 text-gray-200">50+ Supported Platforms</Badge>
+              <Badge variant="secondary" className="px-4 py-2 bg-gray-700/50 text-gray-200">99.9% Uptime</Badge>
+              <Badge variant="secondary" className="px-4 py-2 bg-gray-700/50 text-gray-200">24/7 Support</Badge>
             </div>
           </div>
         </div>
