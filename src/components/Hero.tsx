@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -35,7 +34,7 @@ const Hero = () => {
           </h1>
           
           <p className="text-sm sm:text-base md:text-lg text-white/80 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-2">
-            Intelligently batch process, enhance, and deploy prompts across all major AI coding platforms AND local development tools. Transform your development workflow with AutoPromptr's powerful automation tools, whether you prefer cloud-based or local development environments.
+            Intelligently batch process, enhance, and deploy prompts across all major AI coding platforms AND local development tools.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
