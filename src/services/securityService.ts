@@ -1,6 +1,8 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import CryptoJS from "crypto-js";
+import { EnhancedSecurityManager, createEnhancedSecurityManager } from "./security/enhancedSecurityManager";
+import { SecureEncryptionService } from "./security/secureEncryptionService";
+import { InputValidationService } from "./security/inputValidationService";
 
 export interface SecurityConfig {
   encryptionKey: string;
@@ -27,6 +29,8 @@ export interface AuditEvent {
 
 export class SecurityService {
   private static instance: SecurityService;
+  private enhancedManager?: EnhancedSecurityManager;
+  private encryptionService: SecureEncryptionService;
   private config: SecurityConfig;
 
   public static getInstance(): SecurityService {
@@ -48,12 +52,31 @@ export class SecurityService {
         requireUppercase: true
       }
     };
+
+    this.encryptionService = new SecureEncryptionService();
+  }
+
+  // Initialize with user context
+  initializeWithUser(userId: string, authToken: string): void {
+    this.enhancedManager = createEnhancedSecurityManager(userId, authToken, {
+      encryptionKey: this.config.encryptionKey,
+      maxLoginAttempts: this.config.maxLoginAttempts,
+      sessionTimeout: this.config.sessionTimeout,
+      passwordPolicy: this.config.passwordPolicy,
+      rateLimiting: {
+        authAttempts: { limit: 5, windowMs: 15 * 60 * 1000 },
+        apiCalls: { limit: 100, windowMs: 60 * 1000 }
+      }
+    });
   }
 
   // Field-level encryption for sensitive data
   encryptSensitiveData(data: string): string {
     try {
-      return CryptoJS.AES.encrypt(data, this.config.encryptionKey).toString();
+      if (this.enhancedManager) {
+        return this.enhancedManager.encryption.encryptSensitiveData(data);
+      }
+      return this.encryptionService.encryptSensitiveData(data);
     } catch (error) {
       console.error('Encryption failed:', error);
       throw new Error('Failed to encrypt sensitive data');
@@ -62,8 +85,10 @@ export class SecurityService {
 
   decryptSensitiveData(encryptedData: string): string {
     try {
-      const bytes = CryptoJS.AES.decrypt(encryptedData, this.config.encryptionKey);
-      return bytes.toString(CryptoJS.enc.Utf8);
+      if (this.enhancedManager) {
+        return this.enhancedManager.encryption.decryptSensitiveData(encryptedData);
+      }
+      return this.encryptionService.decryptSensitiveData(encryptedData);
     } catch (error) {
       console.error('Decryption failed:', error);
       throw new Error('Failed to decrypt sensitive data');
@@ -72,6 +97,10 @@ export class SecurityService {
 
   // Data masking for PII
   maskPII(data: string, type: 'email' | 'phone' | 'ssn' | 'credit_card'): string {
+    if (this.enhancedManager) {
+      return this.enhancedManager.pii.maskData(data, type);
+    }
+    
     switch (type) {
       case 'email':
         const [localPart, domain] = data.split('@');
@@ -90,6 +119,19 @@ export class SecurityService {
   // Audit logging with correlation IDs
   async logAuditEvent(event: AuditEvent): Promise<void> {
     try {
+      if (this.enhancedManager) {
+        await this.enhancedManager.audit.logEvent({
+          userId: event.userId,
+          action: event.action,
+          resourceType: event.resource,
+          resourceId: event.resourceId,
+          details: event.details,
+          ipAddress: event.ipAddress,
+          userAgent: event.userAgent
+        });
+        return;
+      }
+
       await supabase.from('audit_logs').insert({
         user_id: event.userId,
         action: event.action,
@@ -107,56 +149,21 @@ export class SecurityService {
 
   // Input sanitization
   sanitizeInput(input: string): string {
-    // Remove potentially dangerous characters and patterns
-    return input
-      .replace(/<script[^>]*>.*?<\/script>/gi, '')
-      .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '')
-      .replace(/javascript:/gi, '')
-      .replace(/on\w+\s*=/gi, '')
-      .trim();
+    return InputValidationService.sanitizeText(input);
   }
 
   // Validate file uploads
   validateFileUpload(file: File): { valid: boolean; errors: string[] } {
-    const errors: string[] = [];
-    const allowedTypes = ['text/plain', 'application/pdf', 'image/jpeg', 'image/png'];
-    const maxSize = 10 * 1024 * 1024; // 10MB
-
-    if (!allowedTypes.includes(file.type)) {
-      errors.push('File type not allowed');
-    }
-
-    if (file.size > maxSize) {
-      errors.push('File size exceeds limit');
-    }
-
-    // Check for malicious content signatures
-    if (this.hasMaliciousSignature(file.name)) {
-      errors.push('File contains potentially malicious content');
-    }
-
-    return {
-      valid: errors.length === 0,
-      errors
-    };
-  }
-
-  private hasMaliciousSignature(filename: string): boolean {
-    const maliciousPatterns = [
-      /\.exe$/i,
-      /\.bat$/i,
-      /\.cmd$/i,
-      /\.scr$/i,
-      /\.vbs$/i,
-      /\.js$/i,
-      /\.jar$/i
-    ];
-
-    return maliciousPatterns.some(pattern => pattern.test(filename));
+    return InputValidationService.validateFileUpload(file);
   }
 
   // Rate limiting check
   async checkRateLimit(userId: string, action: string, limit: number, windowMs: number): Promise<boolean> {
+    if (this.enhancedManager) {
+      const result = await this.enhancedManager.rateLimit.checkLimit(userId, action, limit, windowMs);
+      return result.allowed;
+    }
+
     const windowStart = new Date(Date.now() - windowMs);
     
     const { data, error } = await supabase
@@ -176,6 +183,10 @@ export class SecurityService {
 
   // Generate secure API key
   generateSecureApiKey(length: number = 32): string {
+    if (this.enhancedManager) {
+      return this.enhancedManager.encryption.generateSecureApiKey(length);
+    }
+
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     
@@ -188,40 +199,28 @@ export class SecurityService {
 
   // Hash API key for storage
   hashApiKey(apiKey: string): string {
-    return CryptoJS.SHA256(apiKey).toString();
+    if (this.enhancedManager) {
+      return this.enhancedManager.encryption.hashData(apiKey);
+    }
+    return this.encryptionService.hashData(apiKey);
   }
 
   // Validate password against policy
   validatePassword(password: string): { valid: boolean; errors: string[] } {
-    const errors: string[] = [];
-    const policy = this.config.passwordPolicy;
-
-    if (password.length < policy.minLength) {
-      errors.push(`Password must be at least ${policy.minLength} characters long`);
-    }
-
-    if (policy.requireSpecialChars && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      errors.push('Password must contain at least one special character');
-    }
-
-    if (policy.requireNumbers && !/\d/.test(password)) {
-      errors.push('Password must contain at least one number');
-    }
-
-    if (policy.requireUppercase && !/[A-Z]/.test(password)) {
-      errors.push('Password must contain at least one uppercase letter');
-    }
-
+    const validation = InputValidationService.validatePasswordStrength(password);
     return {
-      valid: errors.length === 0,
-      errors
+      valid: validation.isValid,
+      errors: validation.errors
     };
   }
 
   // GDPR data export
   async exportUserData(userId: string): Promise<any> {
+    if (this.enhancedManager) {
+      return await this.enhancedManager.gdpr.exportUserData(userId);
+    }
+
     try {
-      // Define table names to avoid TypeScript issues
       const userDataTables = [
         'profiles',
         'prompt_batches', 
@@ -232,7 +231,6 @@ export class SecurityService {
 
       const exportData: Record<string, any> = {};
 
-      // Process each table individually to avoid TypeScript issues
       for (const tableName of userDataTables) {
         try {
           const { data, error } = await supabase
@@ -257,8 +255,12 @@ export class SecurityService {
 
   // GDPR data deletion
   async deleteUserData(userId: string): Promise<void> {
+    if (this.enhancedManager) {
+      await this.enhancedManager.gdpr.deleteUserData(userId);
+      return;
+    }
+
     try {
-      // Define table names to avoid TypeScript issues
       const userDataTables = [
         'user_usage',
         'notifications', 
@@ -267,7 +269,6 @@ export class SecurityService {
         'profiles'
       ];
 
-      // Process each table individually to avoid TypeScript issues
       for (const tableName of userDataTables) {
         try {
           await supabase
@@ -282,6 +283,11 @@ export class SecurityService {
       console.error('Data deletion failed:', error);
       throw new Error('Failed to delete user data');
     }
+  }
+
+  // Get enhanced security manager instance
+  getEnhancedManager(): EnhancedSecurityManager | undefined {
+    return this.enhancedManager;
   }
 }
 

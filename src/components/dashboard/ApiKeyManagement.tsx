@@ -1,13 +1,11 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Key, TestTube, Trash2, DollarSign, Zap, Shield, AlertTriangle } from "lucide-react";
+import { Key, TestTube, Trash2, Zap, Shield, AlertTriangle } from "lucide-react";
 import { API_PROVIDERS, type ApiProvider, createEnhancedApiKeyService } from "@/services/security/enhancedApiKeyService";
 import { useAuth } from "@/contexts/AuthContext";
 import { createEnhancedSecurityManager } from "@/services/security/enhancedSecurityManager";

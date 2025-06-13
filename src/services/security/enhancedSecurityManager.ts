@@ -28,7 +28,6 @@ export class EnhancedSecurityManager {
   
   public readonly encryption: SecureEncryptionService;
   public readonly audit: AuditService;
-  public readonly validation: InputValidationService;
   public readonly pii: PIIService;
   public readonly rateLimit: RateLimitService;
   public readonly gdpr: GDPRService;
@@ -60,7 +59,6 @@ export class EnhancedSecurityManager {
 
     this.encryption = new SecureEncryptionService(userId, authToken);
     this.audit = new AuditService();
-    this.validation = InputValidationService;
     this.pii = new PIIService();
     this.rateLimit = new RateLimitService();
     this.gdpr = new GDPRService();
@@ -101,11 +99,11 @@ export class EnhancedSecurityManager {
     const sanitized: any = {};
 
     if (input.text !== undefined) {
-      sanitized.text = this.validation.sanitizeText(input.text);
+      sanitized.text = InputValidationService.sanitizeText(input.text);
     }
 
     if (input.email !== undefined) {
-      if (!this.validation.validateEmail(input.email)) {
+      if (!InputValidationService.validateEmail(input.email)) {
         errors.push('Invalid email format');
       } else {
         sanitized.email = input.email.toLowerCase().trim();
@@ -113,7 +111,7 @@ export class EnhancedSecurityManager {
     }
 
     if (input.password !== undefined) {
-      const passwordValidation = this.validation.validatePasswordStrength(input.password);
+      const passwordValidation = InputValidationService.validatePasswordStrength(input.password);
       if (!passwordValidation.isValid) {
         errors.push(...passwordValidation.errors);
       } else {
@@ -123,7 +121,7 @@ export class EnhancedSecurityManager {
     }
 
     if (input.url !== undefined) {
-      const sanitizedUrl = this.validation.sanitizeUrl(input.url);
+      const sanitizedUrl = InputValidationService.sanitizeUrl(input.url);
       if (!sanitizedUrl && input.url) {
         errors.push('Invalid or unsafe URL');
       } else {
@@ -132,7 +130,7 @@ export class EnhancedSecurityManager {
     }
 
     if (input.file !== undefined) {
-      const fileValidation = this.validation.validateFileUpload(input.file);
+      const fileValidation = InputValidationService.validateFileUpload(input.file);
       if (!fileValidation.valid) {
         errors.push(...fileValidation.errors);
       } else {
@@ -141,7 +139,7 @@ export class EnhancedSecurityManager {
     }
 
     if (input.json !== undefined) {
-      const jsonValidation = this.validation.validateAndParseJson(input.json);
+      const jsonValidation = InputValidationService.validateAndParseJson(input.json);
       if (!jsonValidation.valid) {
         errors.push(jsonValidation.error || 'Invalid JSON');
       } else {
@@ -174,7 +172,7 @@ export class EnhancedSecurityManager {
 
     // Check if we're in production with secure settings
     if (process.env.NODE_ENV === 'production') {
-      if (!window.location.protocol.includes('https')) {
+      if (typeof window !== 'undefined' && !window.location.protocol.includes('https')) {
         issues.push('Not using HTTPS in production');
         recommendations.push('Enable HTTPS for production deployment');
       }
