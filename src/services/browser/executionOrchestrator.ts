@@ -1,4 +1,5 @@
 
+import { supabase } from '@/integrations/supabase/client';
 import { BrowserClientProxy, BrowserConfig, BrowserOperationResult } from './browserClientProxy';
 import { SessionManager } from './sessionManager';
 
