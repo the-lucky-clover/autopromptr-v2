@@ -28,7 +28,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-12 px-4">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-6 px-4">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -43,13 +43,12 @@ const Hero = () => {
             <span className="text-xs sm:text-sm text-white/90">AI-Powered Prompt Engineering</span>
           </div>
           
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight">
             <span className="bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent">
-              Supercharge
-            </span>{" "}
-            <span className="text-white">Your AI</span>
+              Supercharge Your
+            </span>
             <span className="block text-white mt-1">
-              Prompt Workflow
+              AI Prompt Workflow
             </span>
           </h1>
           
@@ -79,17 +78,17 @@ const Hero = () => {
             }`}
           >
             <div className={`text-center transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="text-lg sm:text-2xl md:text-3xl font-bold text-white">10K+</div>
+              <div className="text-2xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-bold text-white">10K+</div>
               <div className="text-xs sm:text-sm">Premium Prompts</div>
             </div>
             <div className="w-px h-4 sm:h-8 bg-white/20"></div>
             <div className={`text-center transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="text-lg sm:text-2xl md:text-3xl font-bold text-white">50K+</div>
+              <div className="text-2xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-bold text-white">50K+</div>
               <div className="text-xs sm:text-sm">Happy Users</div>
             </div>
             <div className="w-px h-4 sm:h-8 bg-white/20"></div>
             <div className={`text-center transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="text-lg sm:text-2xl md:text-3xl font-bold text-white">99%</div>
+              <div className="text-2xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-bold text-white">99%</div>
               <div className="text-xs sm:text-sm">Success Rate</div>
             </div>
           </div>
