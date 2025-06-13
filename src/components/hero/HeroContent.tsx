@@ -9,7 +9,7 @@ interface HeroContentProps {
 const HeroContent = ({ onSignInClick }: HeroContentProps) => {
   return (
     <div className="text-center mb-12">
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 leading-[0.85] font-serif">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 leading-[0.85]">
         <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
           Supercharge Your
         </span>
@@ -18,11 +18,14 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
         </span>
       </h1>
       
-      <p className="text-lg sm:text-xl lg:text-2xl text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-        Intelligently batch process, enhance, and deploy prompts across <br className="hidden sm:block" />
-        all major AI coding platforms and <br className="hidden lg:block sm:inline" />
-        local development tools.
-      </p>
+      <div className="text-lg sm:text-xl lg:text-2xl text-slate-200 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+        <p className="italic font-medium text-xl sm:text-2xl lg:text-3xl mb-2">
+          <em>Revolutionize your AI workflow—batch, enhance, deploy</em>
+        </p>
+        <p className="font-bold text-lg sm:text-xl lg:text-2xl">
+          across every platform with <strong>zero friction</strong>
+        </p>
+      </div>
       
       <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
         <Button 
