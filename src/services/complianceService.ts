@@ -1,6 +1,4 @@
-
 import { supabase } from "@/integrations/supabase/client";
-import { securityService } from "./securityService";
 
 export interface ComplianceReport {
   id: string;
@@ -221,25 +219,82 @@ export class ComplianceService {
 
   // GDPR compliance features
   async handleDataSubjectRequest(requestType: 'access' | 'portability' | 'erasure', userId: string): Promise<void> {
-    await securityService.logAuditEvent({
-      userId,
+    // Log the GDPR request
+    await supabase.from('audit_logs').insert({
+      user_id: userId,
       action: `gdpr_${requestType}_request`,
-      resource: 'user_data',
+      resource_type: 'user_data',
       details: { requestType },
-      correlationId: `gdpr_${Date.now()}`
+      created_at: new Date().toISOString()
     });
 
     switch (requestType) {
       case 'access':
       case 'portability':
-        const userData = await securityService.exportUserData(userId);
+        const userData = await this.exportUserData(userId);
         // In production, this would be sent securely to the user
         console.log('User data exported for GDPR request:', userData);
         break;
       
       case 'erasure':
-        await securityService.deleteUserData(userId);
+        await this.deleteUserData(userId);
         break;
+    }
+  }
+
+  // Export user data for GDPR compliance
+  private async exportUserData(userId: string): Promise<any> {
+    try {
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      const { data: auditData } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .eq('user_id', userId);
+
+      const { data: apiTokenData } = await supabase
+        .from('api_tokens')
+        .select('*')
+        .eq('user_id', userId);
+
+      return {
+        profile: profileData,
+        auditLogs: auditData,
+        apiTokens: apiTokenData
+      };
+    } catch (error) {
+      console.error('Failed to export user data:', error);
+      throw new Error('Failed to export user data');
+    }
+  }
+
+  // Delete user data for GDPR compliance
+  private async deleteUserData(userId: string): Promise<void> {
+    try {
+      // Delete audit logs
+      await supabase
+        .from('audit_logs')
+        .delete()
+        .eq('user_id', userId);
+
+      // Delete API tokens
+      await supabase
+        .from('api_tokens')
+        .delete()
+        .eq('user_id', userId);
+
+      // Delete profile
+      await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+    } catch (error) {
+      console.error('Failed to delete user data:', error);
+      throw new Error('Failed to delete user data');
     }
   }
 

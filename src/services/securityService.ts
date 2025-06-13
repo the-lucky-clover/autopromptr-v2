@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { EnhancedSecurityManager, createEnhancedSecurityManager } from "./security/enhancedSecurityManager";
 import { SecureEncryptionService } from "./security/secureEncryptionService";
@@ -57,38 +58,24 @@ export class SecurityService {
 
   async initializeWithUser(userId: string): Promise<void> {
     try {
-      const { data, error } = await supabase
-        .from('user_security_settings')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
-
-      if (error) {
-        console.error('Failed to load user security settings:', error);
-        return;
-      }
-
-      if (data) {
-        this.enhancedManager = createEnhancedSecurityManager(data);
-      } else {
-        this.enhancedManager = createEnhancedSecurityManager({
-          user_id: userId,
-          mfa_enabled: false,
-          security_questions_enabled: false,
-          device_binding_enabled: false
-        });
-      }
+      // Initialize with basic settings since user_security_settings table doesn't exist
+      this.enhancedManager = createEnhancedSecurityManager({
+        user_id: userId,
+        mfa_enabled: false,
+        security_questions_enabled: false,
+        device_binding_enabled: false
+      });
     } catch (error) {
       console.error('Error initializing security manager:', error);
     }
   }
 
   async encryptSensitiveData(data: string): Promise<string> {
-    return this.encryptionService.encrypt(data, this.config.encryptionKey);
+    return this.encryptionService.encryptSensitiveData(data, this.config.encryptionKey);
   }
 
   async decryptSensitiveData(encryptedData: string): Promise<string> {
-    return this.encryptionService.decrypt(encryptedData, this.config.encryptionKey);
+    return this.encryptionService.decryptSensitiveData(encryptedData, this.config.encryptionKey);
   }
 
   maskPII(data: string, type: 'email' | 'phone' | 'ssn' | 'credit_card'): string {
@@ -114,7 +101,7 @@ export class SecurityService {
         await this.enhancedManager.audit.logEvent({
           userId: event.userId,
           action: event.action,
-          resourceType: event.resource,
+          resource: event.resource,
           resourceId: event.resourceId,
           details: event.details,
           ipAddress: event.ipAddress,
@@ -139,8 +126,7 @@ export class SecurityService {
   }
 
   sanitizeInput(input: string): string {
-    const validator = new InputValidationService();
-    return validator.sanitize(input);
+    return InputValidationService.sanitizeText(input);
   }
 
   validateFile(file: File, allowedTypes: string[], maxSizeKB: number): boolean {
@@ -173,14 +159,15 @@ export class SecurityService {
   }
 
   async generateApiKey(userId: string): Promise<string> {
-    const apiKey = this.encryptionService.generateSecureKey();
+    const apiKey = this.encryptionService.generateSecureApiKey();
 
     try {
       await supabase
-        .from('api_keys')
+        .from('api_tokens')
         .insert({
           user_id: userId,
-          api_key: apiKey,
+          token_hash: apiKey,
+          name: 'Generated API Key',
           created_at: new Date().toISOString()
         });
       return apiKey;
@@ -193,13 +180,68 @@ export class SecurityService {
   async revokeApiKey(userId: string, apiKey: string): Promise<void> {
     try {
       await supabase
-        .from('api_keys')
+        .from('api_tokens')
         .delete()
         .eq('user_id', userId)
-        .eq('api_key', apiKey);
+        .eq('token_hash', apiKey);
     } catch (error) {
       console.error('Failed to revoke API key:', error);
       throw new Error('Failed to revoke API key');
+    }
+  }
+
+  // GDPR compliance methods
+  async exportUserData(userId: string): Promise<any> {
+    try {
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      const { data: auditData } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .eq('user_id', userId);
+
+      const { data: apiTokenData } = await supabase
+        .from('api_tokens')
+        .select('*')
+        .eq('user_id', userId);
+
+      return {
+        profile: profileData,
+        auditLogs: auditData,
+        apiTokens: apiTokenData
+      };
+    } catch (error) {
+      console.error('Failed to export user data:', error);
+      throw new Error('Failed to export user data');
+    }
+  }
+
+  async deleteUserData(userId: string): Promise<void> {
+    try {
+      // Delete audit logs
+      await supabase
+        .from('audit_logs')
+        .delete()
+        .eq('user_id', userId);
+
+      // Delete API tokens
+      await supabase
+        .from('api_tokens')
+        .delete()
+        .eq('user_id', userId);
+
+      // Delete profile
+      await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+    } catch (error) {
+      console.error('Failed to delete user data:', error);
+      throw new Error('Failed to delete user data');
     }
   }
 }
