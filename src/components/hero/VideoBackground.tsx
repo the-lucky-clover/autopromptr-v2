@@ -30,19 +30,19 @@ const VideoBackground = () => {
   useEffect(() => {
     const setupVideo = (video: HTMLVideoElement | null) => {
       if (video && currentVideoSrc) {
-        video.playbackRate = 1.0;
+        video.playbackRate = 0.75; // Slowed down by 25%
         video.addEventListener('loadeddata', () => {
-          video.playbackRate = 1.0;
+          video.playbackRate = 0.75; // Ensure playback rate is set after load
         });
         
-        // Fixed jump cut transition - start 6 seconds before end, 4-second duration
+        // Enhanced jump cut transition - start 10 seconds before end, 6-second duration
         video.addEventListener('timeupdate', () => {
           // Check if this is the cloud video (6528444) that needs jump cut fix
           const isCloudVideo = currentVideoSrc.includes('6528444');
           
-          if (isCloudVideo && video.duration - video.currentTime < 6) { // Start crossfade 6 seconds before end
+          if (isCloudVideo && video.duration - video.currentTime < 10) { // Start crossfade 10 seconds before end
             const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (6 - remainingTime) / 4; // 4-second transition duration
+            const fadeProgress = (10 - remainingTime) / 6; // 6-second transition duration
             
             // Smooth crossfade transition for cloud video
             const opacity = Math.max(0.5, 0.8 - (fadeProgress * 0.3)); // Gradual fade
@@ -78,7 +78,7 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[4000ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[6000ms] ease-in-out"
         style={{
           filter: 'saturate(2.0) contrast(1.2)'
         }}
