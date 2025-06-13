@@ -35,30 +35,30 @@ const VideoBackground = () => {
           video.playbackRate = 0.75; // Ensure playback rate is set after load
         });
         
-        // Enhanced jump cut transition - start 10 seconds before end, 6-second duration
+        // Enhanced smooth loop transition - start 15 seconds before end, 10-second duration
         video.addEventListener('timeupdate', () => {
-          // Check if this is the cloud video (6528444) that needs jump cut fix
-          const isCloudVideo = currentVideoSrc.includes('6528444');
-          
-          if (isCloudVideo && video.duration - video.currentTime < 10) { // Start crossfade 10 seconds before end
+          // Apply smooth transition to all videos
+          if (video.duration - video.currentTime < 15) { // Start crossfade 15 seconds before end
             const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (10 - remainingTime) / 6; // 6-second transition duration
+            const fadeProgress = (15 - remainingTime) / 10; // 10-second transition duration
             
-            // Smooth crossfade transition for cloud video
-            const opacity = Math.max(0.5, 0.8 - (fadeProgress * 0.3)); // Gradual fade
+            // Exponential fade curve for ultra-smooth transition
+            const exponentialFade = Math.pow(fadeProgress, 1.5);
+            const opacity = Math.max(0.3, 0.6 - (exponentialFade * 0.3)); // Gradual fade from 60% to 30%
+            
             video.style.opacity = opacity.toString();
-            video.style.filter = 'saturate(2.0) contrast(1.2)';
+            video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
           } else {
-            // Normal state with enhanced saturation
-            video.style.opacity = '0.8';
-            video.style.filter = 'saturate(2.0) contrast(1.2)';
+            // Normal state with enhanced darkening and contrast
+            video.style.opacity = '0.6';
+            video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
           }
         });
 
-        // Reset on loop start with smooth transition and maintain saturation
+        // Reset on loop start with smooth transition and maintain enhanced filters
         video.addEventListener('seeked', () => {
-          video.style.opacity = '0.8';
-          video.style.filter = 'saturate(2.0) contrast(1.2)';
+          video.style.opacity = '0.6';
+          video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
         });
       }
     };
@@ -78,17 +78,17 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[6000ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover opacity-60 transition-all duration-[10000ms] ease-in-out"
         style={{
-          filter: 'saturate(2.0) contrast(1.2)'
+          filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'
         }}
         key={currentVideoSrc} // Force re-render when video source changes
       >
         <source src={currentVideoSrc} type="video/mp4" />
       </video>
       
-      {/* Black linear gradient overlay - 0% to 100% opacity */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/0 via-black/30 to-black/70"></div>
+      {/* Enhanced black linear gradient overlay - darker and more prominent */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/0 via-black/50 to-black/85"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 
