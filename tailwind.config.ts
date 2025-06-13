@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -126,6 +125,37 @@ export default {
 						transform: 'translateY(0)',
 						opacity: '1'
 					}
+				},
+				'psychedelic-shift': {
+					'0%': {
+						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.2), rgba(34, 197, 94, 0.3), rgba(147, 51, 234, 0.3))'
+					},
+					'25%': {
+						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.3), rgba(251, 146, 60, 0.3), rgba(236, 72, 153, 0.2))'
+					},
+					'50%': {
+						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(139, 92, 246, 0.3), rgba(34, 197, 94, 0.2))'
+					},
+					'75%': {
+						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.3), rgba(251, 146, 60, 0.2))'
+					},
+					'100%': {
+						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.3), rgba(236, 72, 153, 0.3), rgba(139, 92, 246, 0.2))'
+					}
+				},
+				'color-cycle': {
+					'0%': {
+						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.25), rgba(139, 69, 19, 0.25), rgba(165, 243, 252, 0.25))'
+					},
+					'33%': {
+						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.25), rgba(217, 70, 239, 0.25), rgba(167, 243, 208, 0.25))'
+					},
+					'66%': {
+						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.25), rgba(165, 243, 252, 0.25), rgba(139, 69, 19, 0.25))'
+					},
+					'100%': {
+						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.25), rgba(167, 243, 208, 0.25), rgba(217, 70, 239, 0.25))'
+					}
 				}
 			},
 			animation: {
@@ -134,7 +164,9 @@ export default {
 				'fade-in': 'fade-in 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scroll': 'scroll 20s linear infinite',
-				'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out'
+				'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
+				'psychedelic-shift': 'psychedelic-shift 8s ease-in-out infinite alternate',
+				'color-cycle': 'color-cycle 12s linear infinite'
 			}
 		}
 	},

@@ -3,7 +3,6 @@ import { useState } from "react";
 import AuthModal from "@/components/AuthModal";
 import VideoBackground from "@/components/hero/VideoBackground";
 import ParticleVignette from "@/components/hero/ParticleVignette";
-import HeroBadge from "@/components/hero/HeroBadge";
 import HeroContent from "@/components/hero/HeroContent";
 import HeroImage from "@/components/hero/HeroImage";
 
@@ -16,10 +15,11 @@ const Hero = () => {
         <VideoBackground />
         <ParticleVignette />
         
-        <div className="relative z-20 max-w-4xl mx-auto px-4 text-center">
-          <HeroBadge />
+        <div className="relative z-20 max-w-6xl mx-auto px-4 text-center">
           <HeroContent onSignInClick={() => setShowAuthModal(true)} />
-          <HeroImage />
+          <div className="drop-shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+            <HeroImage />
+          </div>
         </div>
       </section>
 
