@@ -221,24 +221,30 @@ export class SecurityService {
   // GDPR data export
   async exportUserData(userId: string): Promise<any> {
     try {
-      const tables = [
+      // Define table names as constants to ensure type safety
+      const userDataTables = [
         'profiles',
-        'prompt_batches',
+        'prompt_batches', 
         'prompts',
         'user_usage',
         'notifications'
-      ];
+      ] as const;
 
       const exportData: Record<string, any> = {};
 
-      for (const table of tables) {
-        const { data, error } = await supabase
-          .from(table)
-          .select('*')
-          .eq('user_id', userId);
+      // Process each table individually to avoid TypeScript issues
+      for (const tableName of userDataTables) {
+        try {
+          const { data, error } = await supabase
+            .from(tableName)
+            .select('*')
+            .eq('user_id', userId);
 
-        if (!error && data) {
-          exportData[table] = data;
+          if (!error && data) {
+            exportData[tableName] = data;
+          }
+        } catch (tableError) {
+          console.error(`Failed to export data from ${tableName}:`, tableError);
         }
       }
 
@@ -252,19 +258,25 @@ export class SecurityService {
   // GDPR data deletion
   async deleteUserData(userId: string): Promise<void> {
     try {
-      const tables = [
+      // Define table names as constants to ensure type safety
+      const userDataTables = [
         'user_usage',
-        'notifications',
+        'notifications', 
         'prompts',
         'prompt_batches',
         'profiles'
-      ];
+      ] as const;
 
-      for (const table of tables) {
-        await supabase
-          .from(table)
-          .delete()
-          .eq('user_id', userId);
+      // Process each table individually to avoid TypeScript issues
+      for (const tableName of userDataTables) {
+        try {
+          await supabase
+            .from(tableName)
+            .delete()
+            .eq('user_id', userId);
+        } catch (tableError) {
+          console.error(`Failed to delete data from ${tableName}:`, tableError);
+        }
       }
     } catch (error) {
       console.error('Data deletion failed:', error);

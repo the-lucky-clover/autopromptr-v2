@@ -181,14 +181,11 @@ export class JobQueueService {
   }
 
   private async executeExtractionJob(metadata: any): Promise<void> {
-    // Text extraction job execution - fixed method name
+    // Text extraction job execution - fixed to use correct method signature
     const { textExtractionService } = await import('./textExtractionService');
     
-    // Use extractPrompts method instead of extractText
-    await textExtractionService.extractPrompts(
-      metadata.payload.content,
-      metadata.payload.options
-    );
+    // Use extractPrompts method with single argument
+    await textExtractionService.extractPrompts(metadata.payload.content);
   }
 
   private async executeCleanupJob(metadata: any): Promise<void> {
