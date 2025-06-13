@@ -27,7 +27,7 @@ const Hero = () => {
         </h1>
         
         <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Intelligently batch process, enhance, and deploy prompts across all major AI coding platforms. Transform your development workflow with AutoPromptr's powerful automation tools.
+          Intelligently batch process, enhance, and deploy prompts across all major AI coding platforms AND local development tools. Transform your development workflow with AutoPromptr's powerful automation tools, whether you prefer cloud-based or local development environments.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
