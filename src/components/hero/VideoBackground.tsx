@@ -46,18 +46,18 @@ const VideoBackground = () => {
             const blur = fadeProgress * 1.5;
             
             video.style.opacity = opacity.toString();
-            video.style.filter = `blur(${blur}px)`;
+            video.style.filter = `saturate(2.0) contrast(1.2) blur(${blur}px)`;
           } else {
-            // Reset to normal state
+            // Reset to normal state with super-saturation
             video.style.opacity = '0.8';
-            video.style.filter = 'blur(0px)';
+            video.style.filter = 'saturate(2.0) contrast(1.2) blur(0px)';
           }
         });
 
-        // Reset on loop start with smooth transition
+        // Reset on loop start with smooth transition and maintain saturation
         video.addEventListener('seeked', () => {
           video.style.opacity = '0.8';
-          video.style.filter = 'blur(0px)';
+          video.style.filter = 'saturate(2.0) contrast(1.2) blur(0px)';
         });
       }
     };
@@ -78,19 +78,16 @@ const VideoBackground = () => {
         muted
         playsInline
         className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[4000ms] ease-in-out"
+        style={{
+          filter: 'saturate(2.0) contrast(1.2)'
+        }}
         key={currentVideoSrc} // Force re-render when video source changes
       >
         <source src={currentVideoSrc} type="video/mp4" />
       </video>
       
-      {/* Enhanced 2Advanced-inspired psychedelic animated gradient overlays with higher saturation */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/35 via-cyan-400/30 to-purple-600/40 animate-pulse z-10"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/30 via-orange-500/35 to-pink-600/35 z-10 animate-psychedelic-shift"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-cyan-300/25 via-purple-500/30 to-lime-400/30 z-10 animate-color-cycle"></div>
-      
-      {/* Additional 2Advanced-style tech overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-purple-900/20 z-10"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)] z-10"></div>
+      {/* Minimal dark vignette for content readability */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.15)_100%)] z-10"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 
