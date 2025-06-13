@@ -11,7 +11,12 @@ const CookieBanner = () => {
     // Check if user has already made a choice
     const cookieChoice = localStorage.getItem('cookie-consent');
     if (!cookieChoice) {
-      setIsVisible(true);
+      // Show banner after 2 seconds delay for better page load experience
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -33,7 +38,7 @@ const CookieBanner = () => {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-t border-white/10 p-4">
+      <div className={`fixed bottom-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-t border-white/10 p-4 transition-transform duration-500 ease-out ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex-1 text-sm text-white/80">
             <p>
