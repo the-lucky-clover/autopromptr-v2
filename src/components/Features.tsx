@@ -28,32 +28,32 @@ const Features = () => {
     {
       icon: Brain,
       title: "AI-Optimized Templates",
-      description: "Professionally crafted prompts tested across multiple AI models for <br className='hidden sm:block' />maximum effectiveness."
+      description: "Professionally crafted prompts tested across multiple AI models <br className='hidden sm:block' />for maximum effectiveness and precision."
     },
     {
       icon: Zap,
       title: "Instant Results",
-      description: "Get immediate improvements in your AI outputs with our battle-tested <br className='hidden sm:block' />prompt formulas."
+      description: "Get immediate improvements in your AI outputs with our <br className='hidden sm:block' />battle-tested prompt formulas."
     },
     {
       icon: Target,
       title: "Industry-Specific",
-      description: "Specialized prompts for marketing, coding, writing, business, and <br className='hidden sm:block' />creative projects."
+      description: "Specialized prompts for marketing, coding, writing, business, <br className='hidden sm:block' />and creative projects."
     },
     {
       icon: Users,
       title: "Community Driven",
-      description: "Join thousands of prompt engineers sharing insights and <br className='hidden sm:block' />best practices."
+      description: "Join thousands of prompt engineers sharing insights <br className='hidden sm:block' />and best practices daily."
     },
     {
       icon: BookOpen,
       title: "Expert Courses",
-      description: "Learn from industry experts with comprehensive courses <br className='hidden sm:block' />and workshops."
+      description: "Learn from industry experts with comprehensive courses <br className='hidden sm:block' />and interactive workshops."
     },
     {
       icon: TrendingUp,
       title: "Performance Analytics",
-      description: "Track your prompt performance and optimize for better results <br className='hidden sm:block' />over time."
+      description: "Track your prompt performance and optimize for better <br className='hidden sm:block' />results over time."
     }
   ];
 
@@ -61,12 +61,12 @@ const Features = () => {
     <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-6xl mx-auto">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-serif">
             Why Choose AutoPromptr?
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Discover the features that make us the leading platform for <br className="hidden sm:block" />
-            AI prompt engineering
+            Discover the features that make us the leading platform <br className="hidden sm:block" />
+            for AI prompt engineering excellence
           </p>
         </div>
         

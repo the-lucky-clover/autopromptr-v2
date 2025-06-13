@@ -1,23 +1,25 @@
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Twitter, Github, Linkedin, MessageSquare, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const Footer = ()=> {
   return (
     <footer className="bg-gray-900 text-white">
       {/* CTA Section */}
       <div className="border-b border-gray-800">
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-serif">
             Ready to Transform Your <br className="hidden sm:block" />
-            AI Experience?
+            AI Experience Today?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             Join thousands of professionals who are already creating better AI outputs <br className="hidden sm:block" />
-            with our premium prompts.
+            with our premium prompt solutions.
           </p>
-          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full">
+          <Button size="lg" className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full group shadow-[0_8px_32px_rgba(59,130,246,0.3)]">
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
             Start Your Free Trial
           </Button>
         </div>
@@ -32,13 +34,13 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-pink-500 rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent font-serif">
                 AutoPromptr
               </h3>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              The premier platform for AI prompt engineering. Master the art of crafting effective prompts and unlock <br className="hidden lg:block" />
-              AI's full potential.
+              The premier platform for AI prompt engineering excellence. Master the art of crafting <br className="hidden lg:block" />
+              effective prompts and unlock AI's full potential.
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:bg-gray-800">

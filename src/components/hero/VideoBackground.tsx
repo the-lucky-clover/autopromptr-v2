@@ -12,18 +12,29 @@ const VideoBackground = () => {
           video.playbackRate = 1.0;
         });
         
-        // Handle seamless looping to prevent jump cut - start transition much earlier
+        // Enhanced seamless looping with extended crossfade
         video.addEventListener('timeupdate', () => {
-          if (video.duration - video.currentTime < 4.0) { // Start dissolve 4 seconds before end
-            video.style.filter = 'blur(0.5px)';
-            video.style.opacity = '0.7';
-            setTimeout(() => {
-              if (video.style.filter) {
-                video.style.filter = 'blur(0px)';
-                video.style.opacity = '0.75';
-              }
-            }, 1000); // Longer, smoother transition
+          if (video.duration - video.currentTime < 6.0) { // Start crossfade 6 seconds before end
+            const remainingTime = video.duration - video.currentTime;
+            const fadeProgress = (6.0 - remainingTime) / 6.0; // 0 to 1 over 6 seconds
+            
+            // Gradual opacity and blur changes for ultra-smooth transition
+            const opacity = Math.max(0.4, 0.75 - (fadeProgress * 0.35));
+            const blur = fadeProgress * 1.5;
+            
+            video.style.opacity = opacity.toString();
+            video.style.filter = `blur(${blur}px)`;
+          } else {
+            // Reset to normal state
+            video.style.opacity = '0.75';
+            video.style.filter = 'blur(0px)';
           }
+        });
+
+        // Reset on loop start
+        video.addEventListener('seeked', () => {
+          video.style.opacity = '0.75';
+          video.style.filter = 'blur(0px)';
         });
       }
     };
@@ -39,15 +50,15 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-1000"
+        className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-[2000ms] ease-in-out"
       >
         <source src="https://videos.pexels.com/video-files/6528444/6528444-uhd_2560_1440_30fps.mp4" type="video/mp4" />
       </video>
       
-      {/* Psychedelic animated gradient overlays - now more subtle and slower */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/25 via-cyan-400/20 to-purple-600/25 animate-pulse z-10"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/15 via-orange-500/20 to-pink-600/20 z-10 animate-psychedelic-shift"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-cyan-300/15 via-purple-500/15 to-lime-400/15 z-10 animate-color-cycle"></div>
+      {/* Enhanced psychedelic animated gradient overlays - now more subtle and slower */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-cyan-400/15 to-purple-600/20 animate-pulse z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/10 via-orange-500/15 to-pink-600/15 z-10 animate-psychedelic-shift"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-cyan-300/10 via-purple-500/10 to-lime-400/10 z-10 animate-color-cycle"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 
