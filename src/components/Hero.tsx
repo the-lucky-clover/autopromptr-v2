@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import AuthModal from "@/components/AuthModal";
+import { SakuraBackground } from "@/components/sakura/SakuraBackground";
 
 const Hero = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -29,6 +30,9 @@ const Hero = () => {
   return (
     <>
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-6 px-4">
+        {/* Sakura Background */}
+        <SakuraBackground />
+        
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>

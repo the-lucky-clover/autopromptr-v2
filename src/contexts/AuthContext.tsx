@@ -31,13 +31,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const hashFragment = window.location.hash;
       if (hashFragment && hashFragment.includes('access_token')) {
         try {
-          const { data, error } = await supabase.auth.getSessionFromUrl();
-          if (error) {
-            console.error('Error getting session from URL:', error);
-          } else if (data.session) {
-            // Clean up URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-            // Session will be handled by onAuthStateChange
+          // Parse hash parameters manually
+          const params = new URLSearchParams(hashFragment.substring(1));
+          const accessToken = params.get('access_token');
+          const refreshToken = params.get('refresh_token');
+          
+          if (accessToken && refreshToken) {
+            const { data, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken
+            });
+            
+            if (error) {
+              console.error('Error setting session from URL:', error);
+            } else if (data.session) {
+              // Clean up URL
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
           }
         } catch (error) {
           console.error('Error processing auth URL:', error);
