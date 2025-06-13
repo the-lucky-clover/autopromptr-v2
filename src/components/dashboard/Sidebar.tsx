@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -15,7 +14,7 @@ import {
   Play,
   Calendar,
   Cpu,
-  Queue
+  List
 } from "lucide-react";
 
 interface SidebarProps {
@@ -31,7 +30,7 @@ const Sidebar = ({ activeSection, onSectionChange }: SidebarProps) => {
     { id: "batches", label: "Batch Management", icon: FileText },
     { id: "templates", label: "Template Library", icon: BookOpen },
     { id: "local-tools", label: "Local Tools", icon: Monitor },
-    { id: "execution-queue", label: "Execution Queue", icon: Queue },
+    { id: "execution-queue", label: "Execution Queue", icon: List },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "api-keys", label: "API Keys", icon: Key },
     { id: "settings", label: "Settings", icon: Settings },

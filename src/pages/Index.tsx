@@ -1,5 +1,5 @@
 
-import DynamicHeader from "@/components/DynamicHeader";
+import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
 import Speedometers from "@/components/Speedometers";
@@ -13,7 +13,7 @@ import CookieBanner from "@/components/CookieBanner";
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <DynamicHeader />
+      <Header />
       <Hero />
       <Features />
       <Speedometers />

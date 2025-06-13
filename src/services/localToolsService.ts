@@ -1,261 +1,201 @@
-
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from '@/integrations/supabase/client';
 
 export interface LocalTool {
   id: string;
-  user_id: string;
-  tool_name: string;
-  tool_path: string | null;
-  enabled: boolean;
-  configuration: any;
-  version: string | null;
-  last_verified: string | null;
-  created_at: string;
-  updated_at: string;
+  name: string;
+  description: string;
+  command: string;
+  parameters: Record<string, any>;
+  isActive: boolean;
 }
 
 export interface LocalExecutionJob {
   id: string;
   user_id: string;
-  batch_id: string | null;
-  tool_target: string;
-  execution_data: any;
+  tool_name: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
-  priority: number;
-  scheduled_at: string | null;
-  started_at: string | null;
-  completed_at: string | null;
-  error_message: string | null;
-  result_data: any;
+  parameters: Record<string, any>;
+  result_data?: Record<string, any>;
+  error_message?: string;
   created_at: string;
-  updated_at: string;
+  scheduled_at?: string;
+  started_at?: string;
+  completed_at?: string;
+  priority: number;
+  batch_id?: string;
+  execution_data?: Record<string, any>;
 }
 
 class LocalToolsService {
-  // Local Tools Management
-  async getLocalTools(userId: string): Promise<LocalTool[]> {
-    const { data, error } = await supabase
-      .from('local_tools_settings')
-      .select('*')
-      .eq('user_id', userId)
-      .order('tool_name');
-
-    if (error) throw error;
-    return data || [];
-  }
-
-  async addLocalTool(userId: string, toolName: string, toolPath: string, configuration: any = {}): Promise<LocalTool> {
+  async saveLocalTool(tool: Omit<LocalTool, 'id'>): Promise<LocalTool> {
     const { data, error } = await supabase
       .from('local_tools_settings')
       .insert({
-        user_id: userId,
-        tool_name: toolName,
-        tool_path: toolPath,
-        enabled: true,
-        configuration
+        name: tool.name,
+        description: tool.description,
+        command: tool.command,
+        parameters: tool.parameters,
+        is_active: tool.isActive,
       })
       .select()
       .single();
 
     if (error) throw error;
-    return data;
-  }
 
-  async updateLocalTool(toolId: string, updates: Partial<LocalTool>): Promise<void> {
-    const { error } = await supabase
-      .from('local_tools_settings')
-      .update(updates)
-      .eq('id', toolId);
-
-    if (error) throw error;
-  }
-
-  async deleteLocalTool(toolId: string): Promise<void> {
-    const { error } = await supabase
-      .from('local_tools_settings')
-      .delete()
-      .eq('id', toolId);
-
-    if (error) throw error;
-  }
-
-  async verifyToolInstallation(toolPath: string): Promise<{ installed: boolean; version?: string }> {
-    // This would typically interface with a local agent or API
-    // For now, return a mock response
-    try {
-      // In a real implementation, this would check if the tool is actually installed
-      // and get its version information
-      return {
-        installed: true,
-        version: "1.0.0"
-      };
-    } catch (error) {
-      return {
-        installed: false
-      };
-    }
-  }
-
-  // Local Execution Queue Management
-  async getExecutionQueue(userId: string): Promise<LocalExecutionJob[]> {
-    const { data, error } = await supabase
-      .from('local_execution_queues')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
-  }
-
-  async queueLocalExecution(
-    userId: string,
-    toolTarget: string,
-    executionData: any,
-    batchId?: string,
-    priority: number = 0
-  ): Promise<LocalExecutionJob> {
-    const { data, error } = await supabase
-      .from('local_execution_queues')
-      .insert({
-        user_id: userId,
-        batch_id: batchId,
-        tool_target: toolTarget,
-        execution_data: executionData,
-        priority,
-        status: 'pending'
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  }
-
-  async updateExecutionStatus(
-    executionId: string,
-    status: LocalExecutionJob['status'],
-    resultData?: any,
-    errorMessage?: string
-  ): Promise<void> {
-    const updates: any = { status };
-    
-    if (status === 'running') {
-      updates.started_at = new Date().toISOString();
-    } else if (status === 'completed' || status === 'failed') {
-      updates.completed_at = new Date().toISOString();
-    }
-    
-    if (resultData) {
-      updates.result_data = resultData;
-    }
-    
-    if (errorMessage) {
-      updates.error_message = errorMessage;
-    }
-
-    const { error } = await supabase
-      .from('local_execution_queues')
-      .update(updates)
-      .eq('id', executionId);
-
-    if (error) throw error;
-  }
-
-  async cancelExecution(executionId: string): Promise<void> {
-    const { error } = await supabase
-      .from('local_execution_queues')
-      .update({ status: 'cancelled' })
-      .eq('id', executionId);
-
-    if (error) throw error;
-  }
-
-  async retryExecution(executionId: string): Promise<void> {
-    const { error } = await supabase
-      .from('local_execution_queues')
-      .update({
-        status: 'pending',
-        started_at: null,
-        completed_at: null,
-        error_message: null
-      })
-      .eq('id', executionId);
-
-    if (error) throw error;
-  }
-
-  async deleteExecution(executionId: string): Promise<void> {
-    const { error } = await supabase
-      .from('local_execution_queues')
-      .delete()
-      .eq('id', executionId);
-
-    if (error) throw error;
-  }
-
-  // Analytics and Usage
-  async getLocalToolsUsageStats(userId: string): Promise<{
-    totalExecutions: number;
-    successRate: number;
-    popularTools: Array<{ tool: string; count: number }>;
-    recentActivity: LocalExecutionJob[];
-  }> {
-    const executions = await this.getExecutionQueue(userId);
-    
-    const totalExecutions = executions.length;
-    const successfulExecutions = executions.filter(e => e.status === 'completed').length;
-    const successRate = totalExecutions > 0 ? (successfulExecutions / totalExecutions) * 100 : 0;
-    
-    // Calculate popular tools
-    const toolCounts = executions.reduce((acc, exec) => {
-      acc[exec.tool_target] = (acc[exec.tool_target] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    const popularTools = Object.entries(toolCounts)
-      .map(([tool, count]) => ({ tool, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
-    
-    const recentActivity = executions.slice(0, 10);
-    
     return {
-      totalExecutions,
-      successRate,
-      popularTools,
-      recentActivity
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      command: data.command,
+      parameters: data.parameters,
+      isActive: data.is_active,
     };
   }
 
-  // User Profile Updates
-  async enableLocalTools(userId: string): Promise<void> {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ local_tools_enabled: true })
-      .eq('id', userId);
-
-    if (error) throw error;
-  }
-
-  async disableLocalTools(userId: string): Promise<void> {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ local_tools_enabled: false })
-      .eq('id', userId);
-
-    if (error) throw error;
-  }
-
-  async isLocalToolsEnabled(userId: string): Promise<boolean> {
+  async getLocalTools(): Promise<LocalTool[]> {
     const { data, error } = await supabase
-      .from('profiles')
-      .select('local_tools_enabled')
-      .eq('id', userId)
+      .from('local_tools_settings')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    return data.map(item => ({
+      id: item.id,
+      name: item.name,
+      description: item.description,
+      command: item.command,
+      parameters: item.parameters,
+      isActive: item.is_active,
+    }));
+  }
+
+  async deleteLocalTool(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('local_tools_settings')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+
+  async toggleLocalTool(id: string, isActive: boolean): Promise<void> {
+    const { error } = await supabase
+      .from('local_tools_settings')
+      .update({ is_active: isActive })
+      .eq('id', id);
+
+    if (error) throw error;
+  }
+
+  async queueJob(job: Omit<LocalExecutionJob, 'id' | 'created_at'>): Promise<LocalExecutionJob> {
+    const { data, error } = await supabase
+      .from('local_execution_queues')
+      .insert({
+        tool_name: job.tool_name,
+        status: job.status,
+        parameters: job.parameters,
+        result_data: job.result_data,
+        error_message: job.error_message,
+        scheduled_at: job.scheduled_at,
+        started_at: job.started_at,
+        completed_at: job.completed_at,
+        priority: job.priority,
+        batch_id: job.batch_id,
+        execution_data: job.execution_data,
+      })
+      .select()
       .single();
 
     if (error) throw error;
-    return data?.local_tools_enabled || false;
+
+    return {
+      id: data.id,
+      user_id: data.user_id,
+      tool_name: data.tool_name,
+      status: data.status as LocalExecutionJob['status'],
+      parameters: data.parameters,
+      result_data: data.result_data,
+      error_message: data.error_message,
+      created_at: data.created_at,
+      scheduled_at: data.scheduled_at,
+      started_at: data.started_at,
+      completed_at: data.completed_at,
+      priority: data.priority,
+      batch_id: data.batch_id,
+      execution_data: data.execution_data,
+    };
+  }
+
+  async getQueuedJobs(): Promise<LocalExecutionJob[]> {
+    const { data, error } = await supabase
+      .from('local_execution_queues')
+      .select('*')
+      .order('priority', { ascending: false })
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+
+    return data.map(item => ({
+      id: item.id,
+      user_id: item.user_id,
+      tool_name: item.tool_name,
+      status: item.status as LocalExecutionJob['status'],
+      parameters: item.parameters,
+      result_data: item.result_data,
+      error_message: item.error_message,
+      created_at: item.created_at,
+      scheduled_at: item.scheduled_at,
+      started_at: item.started_at,
+      completed_at: item.completed_at,
+      priority: item.priority,
+      batch_id: item.batch_id,
+      execution_data: item.execution_data,
+    }));
+  }
+
+  async updateJobStatus(id: string, status: LocalExecutionJob['status'], result?: any, error?: string): Promise<LocalExecutionJob> {
+    const updateData: any = { status };
+    
+    if (result) updateData.result_data = result;
+    if (error) updateData.error_message = error;
+    if (status === 'running') updateData.started_at = new Date().toISOString();
+    if (status === 'completed' || status === 'failed') updateData.completed_at = new Date().toISOString();
+
+    const { data, error: updateError } = await supabase
+      .from('local_execution_queues')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (updateError) throw updateError;
+
+    return {
+      id: data.id,
+      user_id: data.user_id,
+      tool_name: data.tool_name,
+      status: data.status as LocalExecutionJob['status'],
+      parameters: data.parameters,
+      result_data: data.result_data,
+      error_message: data.error_message,
+      created_at: data.created_at,
+      scheduled_at: data.scheduled_at,
+      started_at: data.started_at,
+      completed_at: data.completed_at,
+      priority: data.priority,
+      batch_id: data.batch_id,
+      execution_data: data.execution_data,
+    };
+  }
+
+  async deleteJob(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('local_execution_queues')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
   }
 }
 

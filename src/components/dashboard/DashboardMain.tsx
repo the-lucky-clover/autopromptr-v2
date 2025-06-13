@@ -1,7 +1,8 @@
-import Analytics from "./Analytics";
-import BatchManagement from "./BatchManagement";
-import TemplateLibrary from "./TemplateLibrary";
-import ApiKeyManagement from "./ApiKeyManagement";
+
+import { Analytics } from "./Analytics";
+import { BatchManagement } from "./BatchManagement";
+import { TemplateLibrary } from "./TemplateLibrary";
+import { ApiKeyManagement } from "./ApiKeyManagement";
 import DashboardSettings from "./DashboardSettings";
 import LocalToolsSettings from "./LocalToolsSettings";
 import LocalExecutionQueue from "./LocalExecutionQueue";
