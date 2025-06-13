@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,4 +99,100 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Header Animations */
+@keyframes glass-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes mobile-pastel-gradient {
+  0% {
+    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+  }
+  25% {
+    background: linear-gradient(45deg, #a8edea, #fed6e3);
+  }
+  50% {
+    background: linear-gradient(45deg, #d299c2, #fef9d7);
+  }
+  75% {
+    background: linear-gradient(45deg, #89f7fe, #66a6ff);
+  }
+  100% {
+    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+  }
+}
+
+@keyframes mobile-pastel-text {
+  0% {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  25% {
+    background: linear-gradient(45deg, #a8e6cf, #ffd3a5);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  50% {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  75% {
+    background: linear-gradient(45deg, #f093fb, #f5576c);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  100% {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
+
+.animate-glass-slide-down {
+  animation: glass-slide-down 0.5s ease-out;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.5s ease-out;
+}
+
+.animate-mobile-pastel-gradient {
+  animation: mobile-pastel-gradient 3s ease-in-out infinite;
+}
+
+.animate-mobile-pastel-text {
+  animation: mobile-pastel-text 3s ease-in-out infinite;
+}
+
+/* Lightning animation for buttons */
+@keyframes lightning-flash {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-lightning-flash {
+  animation: lightning-flash 0.8s ease-out;
 }

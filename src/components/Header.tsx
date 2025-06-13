@@ -44,20 +44,20 @@ const Header = () => {
     <>
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         isScrolled 
-          ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-slide-down' 
-          : 'bg-transparent md:bg-transparent bg-black/20 md:bg-transparent backdrop-blur-none md:backdrop-blur-none'
+          ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-glass-slide-down' 
+          : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-12 sm:h-14 md:h-16">
-            {/* Logo - Mobile optimized with enhanced visibility */}
+            {/* Logo - Always visible with mobile animated gradient */}
             <a 
               href="https://app.autopromptr.com" 
               className="flex items-center space-x-1 sm:space-x-1.5 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] group cursor-pointer flex-shrink-0"
             >
-              <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-600 md:bg-gradient-to-r md:from-blue-500 md:to-purple-600 animate-mobile-pastel-gradient md:animate-none rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
                 <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-5 md:h-5 text-white" />
               </div>
-              <span className="text-sm sm:text-base md:text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] font-sans">
+              <span className="text-sm sm:text-base md:text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 md:bg-gradient-to-r md:from-purple-600 md:to-blue-500 animate-mobile-pastel-text md:animate-none bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] font-sans">
                 AutoPromptr
               </span>
             </a>
@@ -102,9 +102,9 @@ const Header = () => {
               </Button>
             </div>
 
-            {/* Mobile Menu Button - Enhanced visibility */}
+            {/* Mobile Menu Button - Always visible */}
             <button
-              className="md:hidden text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] relative group p-2 bg-black/20 rounded-lg backdrop-blur-sm border border-white/10"
+              className="md:hidden text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] relative group p-2 bg-black/30 rounded-lg backdrop-blur-sm border border-white/20"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg blur-sm"></div>
@@ -153,23 +153,6 @@ const Header = () => {
       </header>
 
       <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
-
-      <style jsx>{`
-        @keyframes slide-down {
-          from {
-            transform: translateY(-100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-        
-        .animate-slide-down {
-          animation: slide-down 0.5s ease-out;
-        }
-      `}</style>
     </>
   );
 };
