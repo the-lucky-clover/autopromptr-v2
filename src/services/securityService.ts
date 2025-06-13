@@ -1,6 +1,5 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { EnhancedSecurityManager, createEnhancedSecurityManager } from "./security/enhancedSecurityManager";
 import { SecureEncryptionService } from "./security/secureEncryptionService";
 import { InputValidationService } from "./security/inputValidationService";
 
@@ -29,7 +28,6 @@ export interface AuditEvent {
 
 export class SecurityService {
   private static instance: SecurityService;
-  private enhancedManager?: EnhancedSecurityManager;
   private encryptionService: SecureEncryptionService;
   private config: SecurityConfig;
 
@@ -58,24 +56,18 @@ export class SecurityService {
 
   async initializeWithUser(userId: string): Promise<void> {
     try {
-      // Initialize with basic settings since user_security_settings table doesn't exist
-      this.enhancedManager = createEnhancedSecurityManager({
-        user_id: userId,
-        mfa_enabled: false,
-        security_questions_enabled: false,
-        device_binding_enabled: false
-      });
+      console.log(`Security manager initialized for user: ${userId}`);
     } catch (error) {
       console.error('Error initializing security manager:', error);
     }
   }
 
   async encryptSensitiveData(data: string): Promise<string> {
-    return this.encryptionService.encryptSensitiveData(data, this.config.encryptionKey);
+    return this.encryptionService.encryptSensitiveData(data);
   }
 
   async decryptSensitiveData(encryptedData: string): Promise<string> {
-    return this.encryptionService.decryptSensitiveData(encryptedData, this.config.encryptionKey);
+    return this.encryptionService.decryptSensitiveData(encryptedData);
   }
 
   maskPII(data: string, type: 'email' | 'phone' | 'ssn' | 'credit_card'): string {
@@ -97,32 +89,25 @@ export class SecurityService {
   // Audit logging with correlation IDs
   async logAuditEvent(event: AuditEvent): Promise<void> {
     try {
-      if (this.enhancedManager) {
-        await this.enhancedManager.audit.logEvent({
-          userId: event.userId,
-          action: event.action,
-          resource: event.resource,
-          resourceId: event.resourceId,
-          details: event.details,
-          ipAddress: event.ipAddress,
-          userAgent: event.userAgent
-        });
-        return;
-      }
-
-      await supabase.from('audit_logs').insert({
+      const auditData = {
         user_id: event.userId,
         action: event.action,
         resource_type: event.resource,
         resource_id: event.resourceId,
-        details: event.details,
+        details: { ...event.details, correlationId: event.correlationId },
         ip_address: event.ipAddress,
         user_agent: event.userAgent,
         created_at: new Date().toISOString()
-      });
+      };
+
+      await supabase.from('audit_logs').insert(auditData);
     } catch (error) {
       console.error('Failed to log audit event:', error);
     }
+  }
+
+  generateCorrelationId(): string {
+    return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
   sanitizeInput(input: string): string {

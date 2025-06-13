@@ -116,10 +116,100 @@ export class ComplianceService {
     };
   }
 
+  // GDPR compliance features - refactored to be self-contained
+  async handleDataSubjectRequest(requestType: 'access' | 'portability' | 'erasure', userId: string): Promise<void> {
+    try {
+      // Log the GDPR request
+      await supabase.from('audit_logs').insert({
+        user_id: userId,
+        action: `gdpr_${requestType}_request`,
+        resource_type: 'user_data',
+        details: { requestType },
+        created_at: new Date().toISOString()
+      });
+
+      switch (requestType) {
+        case 'access':
+        case 'portability':
+          const userData = await this.exportUserData(userId);
+          console.log('User data exported for GDPR request:', userData);
+          break;
+        
+        case 'erasure':
+          await this.deleteUserData(userId);
+          break;
+      }
+    } catch (error) {
+      console.error('Failed to handle GDPR request:', error);
+      throw new Error('Failed to process GDPR request');
+    }
+  }
+
+  // Export user data for GDPR compliance - self-contained implementation
+  private async exportUserData(userId: string): Promise<any> {
+    try {
+      const userDataTables = [
+        'profiles',
+        'prompt_batches', 
+        'prompts',
+        'user_usage',
+        'notifications'
+      ];
+
+      const exportData: Record<string, any> = {};
+
+      for (const tableName of userDataTables) {
+        try {
+          const { data, error } = await supabase
+            .from(tableName as any)
+            .select('*')
+            .eq('user_id', userId);
+
+          if (!error && data) {
+            exportData[tableName] = data;
+          }
+        } catch (tableError) {
+          console.error(`Failed to export data from ${tableName}:`, tableError);
+        }
+      }
+
+      return exportData;
+    } catch (error) {
+      console.error('Data export failed:', error);
+      throw new Error('Failed to export user data');
+    }
+  }
+
+  // Delete user data for GDPR compliance - self-contained implementation
+  private async deleteUserData(userId: string): Promise<void> {
+    try {
+      const userDataTables = [
+        'user_usage',
+        'notifications', 
+        'prompts',
+        'prompt_batches',
+        'profiles'
+      ];
+
+      for (const tableName of userDataTables) {
+        try {
+          await supabase
+            .from(tableName as any)
+            .delete()
+            .eq('user_id', userId);
+        } catch (tableError) {
+          console.error(`Failed to delete data from ${tableName}:`, tableError);
+        }
+      }
+    } catch (error) {
+      console.error('Data deletion failed:', error);
+      throw new Error('Failed to delete user data');
+    }
+  }
+
   private async assessSecurityControls(): Promise<ComplianceFinding[]> {
     const findings: ComplianceFinding[] = [];
     
-    // Check for encryption at rest
     findings.push({
       id: 'sec_001',
       category: 'Security',
@@ -130,7 +220,6 @@ export class ComplianceService {
       status: 'resolved'
     });
     
-    // Check access controls
     findings.push({
       id: 'sec_002',
       category: 'Access Control',
@@ -147,7 +236,6 @@ export class ComplianceService {
   private async assessAvailabilityControls(): Promise<ComplianceFinding[]> {
     const findings: ComplianceFinding[] = [];
     
-    // Check system uptime
     const uptime = await this.calculateSystemUptime();
     if (uptime < 99.9) {
       findings.push({
@@ -213,92 +301,9 @@ export class ComplianceService {
   }
 
   private async calculateSystemUptime(): Promise<number> {
-    // In a real implementation, this would query actual uptime metrics
     return 99.95; // Mock uptime percentage
   }
 
-  // GDPR compliance features
-  async handleDataSubjectRequest(requestType: 'access' | 'portability' | 'erasure', userId: string): Promise<void> {
-    // Log the GDPR request
-    await supabase.from('audit_logs').insert({
-      user_id: userId,
-      action: `gdpr_${requestType}_request`,
-      resource_type: 'user_data',
-      details: { requestType },
-      created_at: new Date().toISOString()
-    });
-
-    switch (requestType) {
-      case 'access':
-      case 'portability':
-        const userData = await this.exportUserData(userId);
-        // In production, this would be sent securely to the user
-        console.log('User data exported for GDPR request:', userData);
-        break;
-      
-      case 'erasure':
-        await this.deleteUserData(userId);
-        break;
-    }
-  }
-
-  // Export user data for GDPR compliance
-  private async exportUserData(userId: string): Promise<any> {
-    try {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      const { data: auditData } = await supabase
-        .from('audit_logs')
-        .select('*')
-        .eq('user_id', userId);
-
-      const { data: apiTokenData } = await supabase
-        .from('api_tokens')
-        .select('*')
-        .eq('user_id', userId);
-
-      return {
-        profile: profileData,
-        auditLogs: auditData,
-        apiTokens: apiTokenData
-      };
-    } catch (error) {
-      console.error('Failed to export user data:', error);
-      throw new Error('Failed to export user data');
-    }
-  }
-
-  // Delete user data for GDPR compliance
-  private async deleteUserData(userId: string): Promise<void> {
-    try {
-      // Delete audit logs
-      await supabase
-        .from('audit_logs')
-        .delete()
-        .eq('user_id', userId);
-
-      // Delete API tokens
-      await supabase
-        .from('api_tokens')
-        .delete()
-        .eq('user_id', userId);
-
-      // Delete profile
-      await supabase
-        .from('profiles')
-        .delete()
-        .eq('id', userId);
-    } catch (error) {
-      console.error('Failed to delete user data:', error);
-      throw new Error('Failed to delete user data');
-    }
-  }
-
-  // Data retention policy enforcement
   async enforceDataRetentionPolicies(): Promise<void> {
     for (const policy of this.retentionPolicies) {
       const cutoffDate = new Date(Date.now() - policy.retentionPeriodDays * 24 * 60 * 60 * 1000);
@@ -329,13 +334,11 @@ export class ComplianceService {
         .from('system_logs')
         .delete()
         .lt('created_at', cutoffDate.toISOString())
-        .neq('level', 'error'); // Keep error logs longer
+        .neq('level', 'error');
     }
   }
 
   private async cleanupAuditLogs(cutoffDate: Date, method: string): Promise<void> {
-    // Audit logs typically have longer retention for compliance
-    // Only clean up non-critical audit events
     if (method === 'hard_delete') {
       await supabase
         .from('audit_logs')
