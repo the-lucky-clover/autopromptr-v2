@@ -25,12 +25,12 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-10"
+        className="absolute inset-0 w-full h-full object-cover opacity-75"
       >
         <source src="https://videos.pexels.com/video-files/6528444/6528444-uhd_2560_1440_30fps.mp4" type="video/mp4" />
       </video>
       
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 opacity-90 z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-blue-900/60 to-slate-900/60 z-10"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 

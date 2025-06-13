@@ -9,10 +9,12 @@ interface HeroContentProps {
 const HeroContent = ({ onSignInClick }: HeroContentProps) => {
   return (
     <div className="text-center mb-12">
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-        <span className="block">Supercharge Your</span>
-        <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-          AI Prompt Workflow
+      <h1 className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold mb-6 leading-[0.9]">
+        <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Supercharge
+        </span>
+        <span className="block text-stone-100">
+          Your AI Prompt Workflow
         </span>
       </h1>
       
