@@ -55,51 +55,43 @@ export class SecurityService {
     this.encryptionService = new SecureEncryptionService();
   }
 
-  // Initialize with user context
-  initializeWithUser(userId: string, authToken: string): void {
-    this.enhancedManager = createEnhancedSecurityManager(userId, authToken, {
-      encryptionKey: this.config.encryptionKey,
-      maxLoginAttempts: this.config.maxLoginAttempts,
-      sessionTimeout: this.config.sessionTimeout,
-      passwordPolicy: this.config.passwordPolicy,
-      rateLimiting: {
-        authAttempts: { limit: 5, windowMs: 15 * 60 * 1000 },
-        apiCalls: { limit: 100, windowMs: 60 * 1000 }
-      }
-    });
-  }
-
-  // Field-level encryption for sensitive data
-  encryptSensitiveData(data: string): string {
+  async initializeWithUser(userId: string): Promise<void> {
     try {
-      if (this.enhancedManager) {
-        return this.enhancedManager.encryption.encryptSensitiveData(data);
+      const { data, error } = await supabase
+        .from('user_security_settings')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        console.error('Failed to load user security settings:', error);
+        return;
       }
-      return this.encryptionService.encryptSensitiveData(data);
+
+      if (data) {
+        this.enhancedManager = createEnhancedSecurityManager(data);
+      } else {
+        this.enhancedManager = createEnhancedSecurityManager({
+          user_id: userId,
+          mfa_enabled: false,
+          security_questions_enabled: false,
+          device_binding_enabled: false
+        });
+      }
     } catch (error) {
-      console.error('Encryption failed:', error);
-      throw new Error('Failed to encrypt sensitive data');
+      console.error('Error initializing security manager:', error);
     }
   }
 
-  decryptSensitiveData(encryptedData: string): string {
-    try {
-      if (this.enhancedManager) {
-        return this.enhancedManager.encryption.decryptSensitiveData(encryptedData);
-      }
-      return this.encryptionService.decryptSensitiveData(encryptedData);
-    } catch (error) {
-      console.error('Decryption failed:', error);
-      throw new Error('Failed to decrypt sensitive data');
-    }
+  async encryptSensitiveData(data: string): Promise<string> {
+    return this.encryptionService.encrypt(data, this.config.encryptionKey);
   }
 
-  // Data masking for PII
+  async decryptSensitiveData(encryptedData: string): Promise<string> {
+    return this.encryptionService.decrypt(encryptedData, this.config.encryptionKey);
+  }
+
   maskPII(data: string, type: 'email' | 'phone' | 'ssn' | 'credit_card'): string {
-    if (this.enhancedManager) {
-      return this.enhancedManager.pii.maskData(data, type);
-    }
-    
     switch (type) {
       case 'email':
         const [localPart, domain] = data.split('@');
@@ -146,147 +138,69 @@ export class SecurityService {
     }
   }
 
-  // Input sanitization
   sanitizeInput(input: string): string {
-    return InputValidationService.sanitizeText(input);
+    const validator = new InputValidationService();
+    return validator.sanitize(input);
   }
 
-  // Validate file uploads
-  validateFileUpload(file: File): { valid: boolean; errors: string[] } {
-    return InputValidationService.validateFileUpload(file);
+  validateFile(file: File, allowedTypes: string[], maxSizeKB: number): boolean {
+    if (!allowedTypes.includes(file.type)) return false;
+    if (file.size > maxSizeKB * 1024) return false;
+    return true;
   }
 
-  // Rate limiting check
   async checkRateLimit(userId: string, action: string, limit: number, windowMs: number): Promise<boolean> {
-    if (this.enhancedManager) {
-      const result = await this.enhancedManager.rateLimit.checkLimit(userId, action, limit, windowMs);
-      return typeof result === 'boolean' ? result : Boolean(result);
-    }
-
     const windowStart = new Date(Date.now() - windowMs);
     
-    const { data, error } = await supabase
-      .from('audit_logs')
-      .select('created_at')
-      .eq('user_id', userId)
-      .eq('action', action)
-      .gte('created_at', windowStart.toISOString());
+    try {
+      const { data, error } = await supabase
+        .from('audit_logs')
+        .select('created_at')
+        .eq('user_id', userId)
+        .eq('action', action)
+        .gte('created_at', windowStart.toISOString());
 
-    if (error) {
-      console.error('Rate limit check failed:', error);
+      if (error) {
+        console.error('Rate limit check failed:', error);
+        return false;
+      }
+
+      return (data?.length || 0) < limit;
+    } catch (error) {
+      console.error('Rate limit check error:', error);
       return false;
     }
-
-    return (data?.length || 0) < limit;
   }
 
-  // Generate secure API key
-  generateSecureApiKey(length: number = 32): string {
-    if (this.enhancedManager) {
-      return this.enhancedManager.encryption.generateSecureApiKey(length);
-    }
-
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    
-    for (let i = 0; i < length; i++) {
-      result += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    
-    return result;
-  }
-
-  // Hash API key for storage
-  hashApiKey(apiKey: string): string {
-    if (this.enhancedManager) {
-      return this.enhancedManager.encryption.hashData(apiKey);
-    }
-    return this.encryptionService.hashData(apiKey);
-  }
-
-  // Validate password against policy
-  validatePassword(password: string): { valid: boolean; errors: string[] } {
-    const validation = InputValidationService.validatePasswordStrength(password);
-    return {
-      valid: validation.isValid,
-      errors: validation.errors
-    };
-  }
-
-  // GDPR data export
-  async exportUserData(userId: string): Promise<any> {
-    if (this.enhancedManager) {
-      return await this.enhancedManager.gdpr.exportUserData(userId);
-    }
+  async generateApiKey(userId: string): Promise<string> {
+    const apiKey = this.encryptionService.generateSecureKey();
 
     try {
-      const userDataTables = [
-        'profiles',
-        'prompt_batches', 
-        'prompts',
-        'user_usage',
-        'notifications'
-      ];
-
-      const exportData: Record<string, any> = {};
-
-      for (const tableName of userDataTables) {
-        try {
-          const { data, error } = await supabase
-            .from(tableName as any)
-            .select('*')
-            .eq('user_id', userId);
-
-          if (!error && data) {
-            exportData[tableName] = data;
-          }
-        } catch (tableError) {
-          console.error(`Failed to export data from ${tableName}:`, tableError);
-        }
-      }
-
-      return exportData;
+      await supabase
+        .from('api_keys')
+        .insert({
+          user_id: userId,
+          api_key: apiKey,
+          created_at: new Date().toISOString()
+        });
+      return apiKey;
     } catch (error) {
-      console.error('Data export failed:', error);
-      throw new Error('Failed to export user data');
+      console.error('Failed to generate API key:', error);
+      throw new Error('Failed to generate API key');
     }
   }
 
-  // GDPR data deletion
-  async deleteUserData(userId: string): Promise<void> {
-    if (this.enhancedManager) {
-      await this.enhancedManager.gdpr.deleteUserData(userId);
-      return;
-    }
-
+  async revokeApiKey(userId: string, apiKey: string): Promise<void> {
     try {
-      const userDataTables = [
-        'user_usage',
-        'notifications', 
-        'prompts',
-        'prompt_batches',
-        'profiles'
-      ];
-
-      for (const tableName of userDataTables) {
-        try {
-          await supabase
-            .from(tableName as any)
-            .delete()
-            .eq('user_id', userId);
-        } catch (tableError) {
-          console.error(`Failed to delete data from ${tableName}:`, tableError);
-        }
-      }
+      await supabase
+        .from('api_keys')
+        .delete()
+        .eq('user_id', userId)
+        .eq('api_key', apiKey);
     } catch (error) {
-      console.error('Data deletion failed:', error);
-      throw new Error('Failed to delete user data');
+      console.error('Failed to revoke API key:', error);
+      throw new Error('Failed to revoke API key');
     }
-  }
-
-  // Get enhanced security manager instance
-  getEnhancedManager(): EnhancedSecurityManager | undefined {
-    return this.enhancedManager;
   }
 }
 
