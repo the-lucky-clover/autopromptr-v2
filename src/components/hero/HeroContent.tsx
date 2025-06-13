@@ -24,28 +24,27 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
   };
 
   return (
-    <div className="space-y-8 text-center">
-      {/* Enhanced Hero Headline with selective gradient - 5% smaller and two lines */}
-      <div className="space-y-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-bold leading-tight font-sans">
+    <div className="space-y-6 sm:space-y-8 text-center px-2 sm:px-4">
+      {/* Mobile-optimized Hero Headline */}
+      <div className="space-y-2 sm:space-y-4">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight font-sans">
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
-            Supercharge
+            Supercharge Your AI
           </span>
-          <span className="text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"> Your AI</span>
         </h1>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-bold leading-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
           Prompt Workflow
         </h1>
       </div>
 
-      <p className="text-lg sm:text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] font-light">
+      <p className="text-sm sm:text-lg md:text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] font-light px-4">
         Supercharge your productivity with intelligent prompt optimization, batch processing, and seamless deployment across all major AI platforms
       </p>
 
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+      <div className="flex flex-col gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4 px-4">
         <Button 
           size="lg" 
-          className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-[0_8px_32px_rgba(59,130,246,0.4)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:scale-105 hover:shadow-[0_12px_40px_rgba(59,130,246,0.6)] group"
+          className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-[0_8px_32px_rgba(59,130,246,0.4)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-300 transform hover:scale-105 hover:shadow-[0_12px_40px_rgba(59,130,246,0.6)] group w-full sm:w-auto max-w-xs sm:max-w-none min-h-[44px]"
           onClick={handleGetStartedClick}
         >
           {/* Idle sheen layers */}
@@ -61,13 +60,13 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
           <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isGetStartedLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
           
           <span className="relative z-10">Get Started</span>
-          <ArrowRight className="ml-2 w-5 h-5 relative z-10" />
+          <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 relative z-10" />
         </Button>
         
         <Button 
           size="lg" 
           variant="outline" 
-          className="relative overflow-hidden border-2 border-white/30 text-white hover:text-white hover:bg-white/10 px-8 py-4 rounded-full text-lg font-semibold backdrop-blur-sm drop-shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-white/50 bg-transparent group"
+          className="relative overflow-hidden border-2 border-white/30 text-white hover:text-white hover:bg-white/10 px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold backdrop-blur-sm drop-shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-white/50 bg-transparent group w-full sm:w-auto max-w-xs sm:max-w-none min-h-[44px]"
           onClick={handleSignInClick}
         >
           {/* Idle sheen layers for outline button */}

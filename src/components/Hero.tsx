@@ -11,13 +11,13 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative h-screen lg:h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-14 sm:pt-16">
         <VideoBackground />
         <ParticleVignette />
         
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 lg:py-8">
+        <div className="relative z-20 max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 text-center w-full py-6 sm:py-8 lg:py-12">
           <HeroContent onSignInClick={() => setShowAuthModal(true)} />
-          <div className="drop-shadow-[0_8px_32px_rgba(0,0,0,0.3)] mt-6 lg:mt-8 xl:mt-10 px-4">
+          <div className="drop-shadow-[0_8px_32px_rgba(0,0,0,0.3)] mt-6 sm:mt-8 lg:mt-10 xl:mt-12 px-2 sm:px-4">
             <HeroImage />
           </div>
         </div>
