@@ -1,129 +1,91 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/contexts/AuthContext";
-import { 
-  Zap, 
-  LayoutDashboard, 
-  FileText, 
-  Download, 
-  Target, 
-  BarChart3, 
-  Settings,
-  LogOut,
-  Menu,
-  X
-} from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  BarChart3,
+  FileText,
+  Settings,
+  Zap,
+  Users,
+  CreditCard,
+  Key,
+  BookOpen,
+  Monitor,
+  Play,
+  Calendar,
+  Cpu,
+  Queue
+} from "lucide-react";
 
 interface SidebarProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
+  activeSection: string;
+  onSectionChange: (section: string) => void;
 }
 
-const navigationItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "batches", label: "Batches", icon: FileText },
-  { id: "batch-extractor", label: "Batch Extractor", icon: Download },
-  { id: "templates", label: "Templates", icon: Target },
-  { id: "analytics", label: "Analytics", icon: BarChart3 },
-  { id: "settings", label: "Settings", icon: Settings },
-];
+const Sidebar = ({ activeSection, onSectionChange }: SidebarProps) => {
+  const [collapsed, setCollapsed] = useState(false);
 
-export const Sidebar = ({ activeTab, onTabChange, isCollapsed, onToggleCollapse }: SidebarProps) => {
-  const { user, signOut } = useAuth();
+  const menuItems = [
+    { id: "overview", label: "Overview", icon: BarChart3 },
+    { id: "batches", label: "Batch Management", icon: FileText },
+    { id: "templates", label: "Template Library", icon: BookOpen },
+    { id: "local-tools", label: "Local Tools", icon: Monitor },
+    { id: "execution-queue", label: "Execution Queue", icon: Queue },
+    { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "api-keys", label: "API Keys", icon: Key },
+    { id: "settings", label: "Settings", icon: Settings },
+  ];
 
   return (
     <div className={cn(
-      "bg-gray-900 text-white border-r border-gray-700 flex flex-col transition-all duration-300",
-      isCollapsed ? "w-16" : "w-60"
+      "flex flex-col h-full bg-gray-900 border-r border-gray-800 transition-all duration-300",
+      collapsed ? "w-16" : "w-64"
     )}>
-      {/* Header with Logo and Toggle */}
-      <div className="p-4 border-b border-gray-700">
-        <div className="flex items-center justify-between">
-          {!isCollapsed && (
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Zap className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-bold">AutoPromptr</span>
-            </div>
+      <div className="p-4 border-b border-gray-800">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white" />
+          </div>
+          {!collapsed && (
+            <span className="font-semibold text-white">AutoPromptr</span>
           )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onToggleCollapse}
-            className="text-gray-400 hover:text-white hover:bg-gray-800"
-          >
-            {isCollapsed ? <Menu className="w-4 h-4" /> : <X className="w-4 h-4" />}
-          </Button>
         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="flex-1 py-4">
-        <nav className="space-y-1 px-2">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            
-            return (
-              <button
-                key={item.id}
-                onClick={() => onTabChange(item.id)}
-                className={cn(
-                  "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                  isActive 
-                    ? "bg-blue-600 text-white" 
-                    : "text-gray-300 hover:text-white hover:bg-gray-800"
-                )}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </button>
-            );
-          })}
-        </nav>
-      </div>
+      <nav className="flex-1 p-2 space-y-2">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Button
+              key={item.id}
+              variant={activeSection === item.id ? "secondary" : "ghost"}
+              className={cn(
+                "w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800",
+                activeSection === item.id && "bg-gray-800 text-white",
+                collapsed && "px-2"
+              )}
+              onClick={() => onSectionChange(item.id)}
+            >
+              <Icon className={cn("w-5 h-5", collapsed ? "" : "mr-3")} />
+              {!collapsed && item.label}
+            </Button>
+          );
+        })}
+      </nav>
 
-      {/* User Profile */}
-      <div className="p-4 border-t border-gray-700">
-        <div className={cn(
-          "flex items-center",
-          isCollapsed ? "justify-center" : "space-x-3"
-        )}>
-          <Avatar className="w-8 h-8">
-            <AvatarImage src={user?.user_metadata?.avatar_url} />
-            <AvatarFallback className="bg-blue-600 text-white">
-              {user?.email?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
-                {user?.user_metadata?.display_name || user?.email}
-              </p>
-              <p className="text-xs text-gray-400 truncate">
-                {user?.email}
-              </p>
-            </div>
-          )}
-        </div>
-        {!isCollapsed && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={signOut}
-            className="w-full mt-2 text-gray-400 hover:text-white hover:bg-gray-800 justify-start"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
-          </Button>
-        )}
+      <div className="p-2 border-t border-gray-800">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? "→" : "←"}
+          {!collapsed && <span className="ml-3">Collapse</span>}
+        </Button>
       </div>
     </div>
   );
 };
+
+export default Sidebar;

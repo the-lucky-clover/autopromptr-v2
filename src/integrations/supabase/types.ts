@@ -361,6 +361,7 @@ export type Database = {
           created_at: string | null
           error_message: string | null
           executed_at: string | null
+          execution_type: string | null
           id: string
           platform_response_time: number | null
           prompt_id: string | null
@@ -372,6 +373,7 @@ export type Database = {
           created_at?: string | null
           error_message?: string | null
           executed_at?: string | null
+          execution_type?: string | null
           id?: string
           platform_response_time?: number | null
           prompt_id?: string | null
@@ -383,6 +385,7 @@ export type Database = {
           created_at?: string | null
           error_message?: string | null
           executed_at?: string | null
+          execution_type?: string | null
           id?: string
           platform_response_time?: number | null
           prompt_id?: string | null
@@ -534,6 +537,104 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      local_execution_queues: {
+        Row: {
+          batch_id: string | null
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          execution_data: Json | null
+          id: string
+          priority: number | null
+          result_data: Json | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string | null
+          tool_target: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          batch_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          execution_data?: Json | null
+          id?: string
+          priority?: number | null
+          result_data?: Json | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string | null
+          tool_target: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          batch_id?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          execution_data?: Json | null
+          id?: string
+          priority?: number | null
+          result_data?: Json | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string | null
+          tool_target?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "local_execution_queues_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "prompt_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      local_tools_settings: {
+        Row: {
+          configuration: Json | null
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          last_verified: string | null
+          tool_name: string
+          tool_path: string | null
+          updated_at: string | null
+          user_id: string
+          version: string | null
+        }
+        Insert: {
+          configuration?: Json | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          last_verified?: string | null
+          tool_name: string
+          tool_path?: string | null
+          updated_at?: string | null
+          user_id: string
+          version?: string | null
+        }
+        Update: {
+          configuration?: Json | null
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          last_verified?: string | null
+          tool_name?: string
+          tool_path?: string | null
+          updated_at?: string | null
+          user_id?: string
+          version?: string | null
+        }
+        Relationships: []
       }
       notification_templates: {
         Row: {
@@ -754,8 +855,10 @@ export type Database = {
           id: string
           is_active: boolean | null
           name: string
+          platform_type: string | null
           rate_limit_per_hour: number | null
           requires_api_key: boolean | null
+          requires_local_install: boolean | null
           slug: string
           success_rate: number | null
           supports_custom_endpoint: boolean | null
@@ -769,8 +872,10 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           name: string
+          platform_type?: string | null
           rate_limit_per_hour?: number | null
           requires_api_key?: boolean | null
+          requires_local_install?: boolean | null
           slug: string
           success_rate?: number | null
           supports_custom_endpoint?: boolean | null
@@ -784,8 +889,10 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           name?: string
+          platform_type?: string | null
           rate_limit_per_hour?: number | null
           requires_api_key?: boolean | null
+          requires_local_install?: boolean | null
           slug?: string
           success_rate?: number | null
           supports_custom_endpoint?: boolean | null
@@ -804,6 +911,7 @@ export type Database = {
           email: string | null
           id: string
           last_login: string | null
+          local_tools_enabled: boolean | null
           preferences: Json | null
           subscription_plan: string | null
           updated_at: string | null
@@ -820,6 +928,7 @@ export type Database = {
           email?: string | null
           id: string
           last_login?: string | null
+          local_tools_enabled?: boolean | null
           preferences?: Json | null
           subscription_plan?: string | null
           updated_at?: string | null
@@ -836,6 +945,7 @@ export type Database = {
           email?: string | null
           id?: string
           last_login?: string | null
+          local_tools_enabled?: boolean | null
           preferences?: Json | null
           subscription_plan?: string | null
           updated_at?: string | null
@@ -852,6 +962,7 @@ export type Database = {
           execution_count: number | null
           id: string
           is_template: boolean | null
+          local_execution_mode: string | null
           platform_targets: string[] | null
           project_url: string | null
           status: string
@@ -867,6 +978,7 @@ export type Database = {
           execution_count?: number | null
           id?: string
           is_template?: boolean | null
+          local_execution_mode?: string | null
           platform_targets?: string[] | null
           project_url?: string | null
           status?: string
@@ -882,6 +994,7 @@ export type Database = {
           execution_count?: number | null
           id?: string
           is_template?: boolean | null
+          local_execution_mode?: string | null
           platform_targets?: string[] | null
           project_url?: string | null
           status?: string
@@ -999,6 +1112,7 @@ export type Database = {
           execution_order: number | null
           id: string
           improved_prompt: string | null
+          local_tool_target: string | null
           optimization_score: number | null
           original_prompt: string
           output_data: Json | null
@@ -1019,6 +1133,7 @@ export type Database = {
           execution_order?: number | null
           id?: string
           improved_prompt?: string | null
+          local_tool_target?: string | null
           optimization_score?: number | null
           original_prompt: string
           output_data?: Json | null
@@ -1039,6 +1154,7 @@ export type Database = {
           execution_order?: number | null
           id?: string
           improved_prompt?: string | null
+          local_tool_target?: string | null
           optimization_score?: number | null
           original_prompt?: string
           output_data?: Json | null
@@ -1468,6 +1584,7 @@ export type Database = {
           date: string
           executions_count: number | null
           id: string
+          local_tool_executions: number | null
           tokens_used: number | null
           user_id: string
         }
@@ -1477,6 +1594,7 @@ export type Database = {
           date?: string
           executions_count?: number | null
           id?: string
+          local_tool_executions?: number | null
           tokens_used?: number | null
           user_id: string
         }
@@ -1486,6 +1604,7 @@ export type Database = {
           date?: string
           executions_count?: number | null
           id?: string
+          local_tool_executions?: number | null
           tokens_used?: number | null
           user_id?: string
         }
