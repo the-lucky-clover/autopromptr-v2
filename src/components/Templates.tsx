@@ -3,8 +3,29 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Download, Eye } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const Templates = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const templates = [
     {
       title: "Marketing Copy Generator",
@@ -68,9 +89,9 @@ const Templates = () => {
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Premium Prompt Templates
           </h2>
@@ -81,43 +102,51 @@ const Templates = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {templates.map((template, index) => (
-            <Card key={index} className="group hover:shadow-2xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-1 bg-gray-800/50 backdrop-blur-sm border border-white/10">
+            <Card 
+              key={index} 
+              className={`group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg hover:-translate-y-1 bg-gray-800/50 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:scale-105 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{
+                transitionDelay: isVisible ? `${index * 100}ms` : '0ms'
+              }}
+            >
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between mb-2">
-                  <Badge className={`${getCategoryColor(template.category)} border`}>
+                  <Badge className={`${getCategoryColor(template.category)} border transition-all duration-300 group-hover:scale-105`}>
                     {template.category}
                   </Badge>
-                  <div className="flex items-center gap-1 text-sm text-gray-400">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <div className="flex items-center gap-1 text-sm text-gray-400 group-hover:text-yellow-400 transition-colors duration-300">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 group-hover:scale-110 transition-transform duration-300" />
                     {template.rating}
                   </div>
                 </div>
-                <CardTitle className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                <CardTitle className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
                   {template.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <CardDescription className="text-gray-300 leading-relaxed">
+                <CardDescription className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
                   {template.description}
                 </CardDescription>
                 
-                <div className="p-3 bg-gray-700/50 rounded-lg border-l-4 border-blue-500">
-                  <p className="text-sm text-gray-300 italic">
+                <div className="p-3 bg-gray-700/50 rounded-lg border-l-4 border-blue-500 group-hover:bg-gray-700/70 transition-colors duration-300">
+                  <p className="text-sm text-gray-300 italic group-hover:text-gray-200 transition-colors duration-300">
                     "{template.preview}"
                   </p>
                 </div>
                 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                  <div className="flex items-center gap-1 text-sm text-gray-400">
+                  <div className="flex items-center gap-1 text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
                     <Download className="w-4 h-4" />
                     {template.downloads} downloads
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="hover:bg-blue-500/10 border-gray-600 text-gray-300">
+                    <Button size="sm" variant="outline" className="hover:bg-blue-500/10 border-gray-600 text-gray-300 hover:border-blue-400 hover:text-blue-300 transition-all duration-300">
                       <Eye className="w-4 h-4 mr-1" />
                       Preview
                     </Button>
-                    <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                    <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:scale-105 transition-all duration-300">
                       <Download className="w-4 h-4 mr-1" />
                       Use
                     </Button>
@@ -128,8 +157,8 @@ const Templates = () => {
           ))}
         </div>
         
-        <div className="text-center mt-12">
-          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full">
+        <div className={`text-center mt-12 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full hover:scale-105 transition-all duration-300">
             Browse All Templates
           </Button>
         </div>
