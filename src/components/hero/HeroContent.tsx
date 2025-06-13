@@ -25,9 +25,9 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
 
   return (
     <div className="space-y-4 sm:space-y-6 text-center px-2 sm:px-4">
-      {/* Mobile-optimized Hero Headline */}
+      {/* Mobile-optimized Hero Headline - Maximized for mobile portrait */}
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight font-sans">
+        <h1 className="text-3xl xs:text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight font-sans">
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
             Supercharge
           </span>{" "}
@@ -35,7 +35,7 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
             Your AI
           </span>
         </h1>
-        <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
+        <h1 className="text-3xl xs:text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
           Prompt Workflow
         </h1>
       </div>

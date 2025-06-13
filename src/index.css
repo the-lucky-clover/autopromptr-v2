@@ -124,47 +124,129 @@
   }
 }
 
-@keyframes mobile-pastel-gradient {
+/* Psychedelic Mobile Gradients - Subtle and Trippy */
+@keyframes psychedelic-icon-gradient {
   0% {
-    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+    background: linear-gradient(135deg, 
+      rgba(147, 197, 253, 0.8),   /* soft blue */
+      rgba(196, 181, 253, 0.7),   /* soft purple */
+      rgba(252, 165, 165, 0.6)    /* soft pink */
+    );
   }
-  25% {
-    background: linear-gradient(45deg, #a8edea, #fed6e3);
+  16.66% {
+    background: linear-gradient(155deg, 
+      rgba(196, 181, 253, 0.7),   /* soft purple */
+      rgba(252, 165, 165, 0.6),   /* soft pink */
+      rgba(254, 215, 170, 0.7)    /* soft orange */
+    );
+  }
+  33.33% {
+    background: linear-gradient(175deg, 
+      rgba(252, 165, 165, 0.6),   /* soft pink */
+      rgba(254, 215, 170, 0.7),   /* soft orange */
+      rgba(187, 247, 208, 0.6)    /* soft green */
+    );
   }
   50% {
-    background: linear-gradient(45deg, #d299c2, #fef9d7);
+    background: linear-gradient(195deg, 
+      rgba(254, 215, 170, 0.7),   /* soft orange */
+      rgba(187, 247, 208, 0.6),   /* soft green */
+      rgba(165, 243, 252, 0.7)    /* soft cyan */
+    );
   }
-  75% {
-    background: linear-gradient(45deg, #89f7fe, #66a6ff);
+  66.66% {
+    background: linear-gradient(215deg, 
+      rgba(187, 247, 208, 0.6),   /* soft green */
+      rgba(165, 243, 252, 0.7),   /* soft cyan */
+      rgba(221, 214, 254, 0.6)    /* soft violet */
+    );
+  }
+  83.33% {
+    background: linear-gradient(235deg, 
+      rgba(165, 243, 252, 0.7),   /* soft cyan */
+      rgba(221, 214, 254, 0.6),   /* soft violet */
+      rgba(147, 197, 253, 0.8)    /* soft blue */
+    );
   }
   100% {
-    background: linear-gradient(45deg, #ff9a9e, #fecfef);
+    background: linear-gradient(135deg, 
+      rgba(147, 197, 253, 0.8),   /* soft blue */
+      rgba(196, 181, 253, 0.7),   /* soft purple */
+      rgba(252, 165, 165, 0.6)    /* soft pink */
+    );
   }
 }
 
-@keyframes mobile-pastel-text {
+@keyframes psychedelic-text-gradient {
   0% {
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    background: linear-gradient(145deg, 
+      rgba(167, 139, 250, 0.9),   /* soft purple */
+      rgba(96, 165, 250, 0.8),    /* soft blue */
+      rgba(251, 113, 133, 0.7)    /* soft rose */
+    );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  25% {
-    background: linear-gradient(45deg, #a8e6cf, #ffd3a5);
+  14.28% {
+    background: linear-gradient(160deg, 
+      rgba(96, 165, 250, 0.8),    /* soft blue */
+      rgba(251, 113, 133, 0.7),   /* soft rose */
+      rgba(251, 146, 60, 0.8)     /* soft amber */
+    );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  50% {
-    background: linear-gradient(45deg, #667eea, #764ba2);
+  28.57% {
+    background: linear-gradient(175deg, 
+      rgba(251, 113, 133, 0.7),   /* soft rose */
+      rgba(251, 146, 60, 0.8),    /* soft amber */
+      rgba(34, 197, 94, 0.7)      /* soft emerald */
+    );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  75% {
-    background: linear-gradient(45deg, #f093fb, #f5576c);
+  42.85% {
+    background: linear-gradient(190deg, 
+      rgba(251, 146, 60, 0.8),    /* soft amber */
+      rgba(34, 197, 94, 0.7),     /* soft emerald */
+      rgba(14, 165, 233, 0.8)     /* soft sky */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  57.14% {
+    background: linear-gradient(205deg, 
+      rgba(34, 197, 94, 0.7),     /* soft emerald */
+      rgba(14, 165, 233, 0.8),    /* soft sky */
+      rgba(139, 92, 246, 0.7)     /* soft violet */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  71.42% {
+    background: linear-gradient(220deg, 
+      rgba(14, 165, 233, 0.8),    /* soft sky */
+      rgba(139, 92, 246, 0.7),    /* soft violet */
+      rgba(236, 72, 153, 0.8)     /* soft pink */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  85.71% {
+    background: linear-gradient(235deg, 
+      rgba(139, 92, 246, 0.7),    /* soft violet */
+      rgba(236, 72, 153, 0.8),    /* soft pink */
+      rgba(167, 139, 250, 0.9)    /* soft purple */
+    );
     -webkit-background-clip: text;
     background-clip: text;
   }
   100% {
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    background: linear-gradient(145deg, 
+      rgba(167, 139, 250, 0.9),   /* soft purple */
+      rgba(96, 165, 250, 0.8),    /* soft blue */
+      rgba(251, 113, 133, 0.7)    /* soft rose */
+    );
     -webkit-background-clip: text;
     background-clip: text;
   }
@@ -178,12 +260,12 @@
   animation: slide-down 0.5s ease-out;
 }
 
-.animate-mobile-pastel-gradient {
-  animation: mobile-pastel-gradient 3s ease-in-out infinite;
+.animate-psychedelic-icon {
+  animation: psychedelic-icon-gradient 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
-.animate-mobile-pastel-text {
-  animation: mobile-pastel-text 3s ease-in-out infinite;
+.animate-psychedelic-text {
+  animation: psychedelic-text-gradient 12s cubic-bezier(0.23, 1, 0.32, 1) infinite;
 }
 
 /* Lightning animation for buttons */

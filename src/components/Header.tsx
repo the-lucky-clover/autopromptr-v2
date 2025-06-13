@@ -54,10 +54,10 @@ const Header = () => {
               href="https://app.autopromptr.com" 
               className="flex items-center space-x-1 sm:space-x-1.5 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] group cursor-pointer flex-shrink-0"
             >
-              <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-600 md:bg-gradient-to-r md:from-blue-500 md:to-purple-600 animate-mobile-pastel-gradient md:animate-none rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-600 md:bg-gradient-to-r md:from-blue-500 md:to-purple-600 animate-psychedelic-icon md:animate-none rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
                 <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-5 md:h-5 text-white" />
               </div>
-              <span className="text-sm sm:text-base md:text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 md:bg-gradient-to-r md:from-purple-600 md:to-blue-500 animate-mobile-pastel-text md:animate-none bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] font-sans">
+              <span className="text-lg sm:text-base md:text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 md:bg-gradient-to-r md:from-purple-600 md:to-blue-500 animate-psychedelic-text md:animate-none bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] font-sans">
                 AutoPromptr
               </span>
             </a>
