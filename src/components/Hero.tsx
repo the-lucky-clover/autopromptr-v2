@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import AuthModal from "@/components/AuthModal";
-import { SakuraBackground } from "@/components/sakura/SakuraBackground";
 
 const Hero = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -30,8 +29,26 @@ const Hero = () => {
   return (
     <>
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-6 px-4">
-        {/* Sakura Background */}
-        <SakuraBackground />
+        {/* Video Background */}
+        <div className="fixed inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: 'brightness(0.4)' }}
+          >
+            <source src="http://localhost:3000/#access_token=eyJhbGciOiJIUzI1NiIsImtpZCI6IkpwSEJYT3o5dTFLZUhSeXMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3FveHV0dmtwdGt0bXRkaWt1YmZnLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJlMWQ5MTBmZC1kZTM4LTQ5OGYtOGJmNS1mYzI1MjM4ZGFjZjQiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQ5ODA1NzU1LCJpYXQiOjE3NDk4MDIxNTUsImVtYWlsIjoicG91bmRzMUBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoicG91bmRzMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZnVsbF9uYW1lIjoiU1AiLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6ImUxZDkxMGZkLWRlMzgtNDk4Zi04YmY1LWZjMjUyMzhkYWNmNCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6Im90cCIsInRpbWVzdGFtcCI6MTc0OTgwMjE1NX1dLCJzZXNzaW9uX2lkIjoiYzIxYmFlYmItNjM0Ny00MDQyLWFkNWMtNGQ4ZmYyODAzMDZjIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.MH0lDZz_sx-Ft7bd2Bu5CJnNAq6pZBdtYhWZYkBhEDU&expires_at=1749805755&expires_in=3600&refresh_token=c5vt6y4mx6lb&token_type=bearer&type=signup" type="video/mp4" />
+          </video>
+          
+          {/* Video Attribution */}
+          <div className="absolute bottom-4 right-4 z-10">
+            <span className="text-xs text-white/70 bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
+              Video by Micro
+            </span>
+          </div>
+        </div>
         
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
