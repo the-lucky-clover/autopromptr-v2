@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -28,7 +27,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-6 px-4">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-6 px-4 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900">
         {/* Video Background */}
         <div className="fixed inset-0 z-0">
           <video
@@ -42,25 +41,18 @@ const Hero = () => {
           </video>
           
           {/* Video Attribution */}
-          <div className="absolute bottom-4 right-4 z-10">
+          <div className="absolute bottom-4 right-4 z-20">
             <span className="text-xs text-white/70 bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
               Video by Micro
             </span>
           </div>
           
           {/* Gradient Overlay with Multiply Blend Mode */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 mix-blend-multiply opacity-80 z-1"></div>
-        </div>
-        
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden z-2">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-          <div className="absolute top-40 left-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 mix-blend-multiply opacity-40 z-10"></div>
         </div>
         
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <div className="relative z-20 max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6 sm:mb-8 mt-16 sm:mt-8">
             <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 mr-2" />
             <span className="text-xs sm:text-sm text-white/90">AI-Powered Prompt Engineering</span>
