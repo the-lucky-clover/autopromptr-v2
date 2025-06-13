@@ -1,9 +1,10 @@
-
 import { useEffect, useRef, useState } from "react";
 
 const VideoBackground = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
   const [currentVideoSrc, setCurrentVideoSrc] = useState<string>("");
+  const [activeVideo, setActiveVideo] = useState<1 | 2>(1);
 
   // Array of video sources for random selection
   const videoSources = [
@@ -28,54 +29,70 @@ const VideoBackground = () => {
   }, []);
 
   useEffect(() => {
-    const setupVideo = (video: HTMLVideoElement | null) => {
-      if (video && currentVideoSrc) {
-        video.playbackRate = 0.75; // Slowed down by 25%
-        video.addEventListener('loadeddata', () => {
-          video.playbackRate = 0.75; // Ensure playback rate is set after load
-        });
+    const setupDualVideoSystem = () => {
+      const video1 = videoRef1.current;
+      const video2 = videoRef2.current;
+      
+      if (!video1 || !video2 || !currentVideoSrc) return;
+
+      // Set up both videos with the same source
+      video1.src = currentVideoSrc;
+      video2.src = currentVideoSrc;
+      
+      // Configure video properties
+      [video1, video2].forEach(video => {
+        video.playbackRate = 0.75;
+        video.muted = true;
+        video.loop = false; // We'll handle looping manually
+        video.preload = 'auto';
+      });
+
+      // Start with video1 active
+      video1.style.opacity = '0.6';
+      video2.style.opacity = '0';
+      video1.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
+      video2.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
+
+      // Handle seamless transitions
+      const handleVideoEnd = (endingVideo: HTMLVideoElement, nextVideo: HTMLVideoElement, videoNumber: 1 | 2) => {
+        // Preload next video to the beginning
+        nextVideo.currentTime = 0;
+        nextVideo.play().catch(console.error);
         
-        // Enhanced seamless loop transition - eliminate jump cuts
-        video.addEventListener('timeupdate', () => {
-          const duration = video.duration;
-          const currentTime = video.currentTime;
-          
-          // Start smooth transition 8 seconds before end
-          if (duration - currentTime < 8) {
-            const remainingTime = duration - currentTime;
-            const fadeProgress = Math.max(0, (8 - remainingTime) / 5); // 5-second fade duration
-            
-            // Smoother exponential fade curve
-            const exponentialFade = Math.pow(fadeProgress, 2);
-            const opacity = Math.max(0.35, 0.6 - (exponentialFade * 0.25)); // Fade from 60% to 35%
-            
-            video.style.opacity = opacity.toString();
-            video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
-          } else {
-            // Normal state with enhanced darkening and contrast
-            video.style.opacity = '0.6';
-            video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
-          }
-        });
+        // Smooth crossfade
+        endingVideo.style.transition = 'opacity 1000ms ease-in-out';
+        nextVideo.style.transition = 'opacity 1000ms ease-in-out';
+        
+        endingVideo.style.opacity = '0';
+        nextVideo.style.opacity = '0.6';
+        
+        // Update active video state
+        setActiveVideo(videoNumber === 1 ? 2 : 1);
+        
+        // Reset ending video after fade
+        setTimeout(() => {
+          endingVideo.currentTime = 0;
+          endingVideo.style.transition = '';
+          nextVideo.style.transition = '';
+        }, 1000);
+      };
 
-        // Seamless loop restart - preload and smooth transition
-        video.addEventListener('ended', () => {
-          // Instant restart with smooth opacity restoration
-          video.currentTime = 0;
-          video.style.opacity = '0.6';
-          video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
-          video.play().catch(console.error);
-        });
+      // Set up event listeners for seamless looping
+      video1.addEventListener('ended', () => handleVideoEnd(video1, video2, 1));
+      video2.addEventListener('ended', () => handleVideoEnd(video2, video1, 2));
 
-        // Enhanced seeked event for smoother transitions
-        video.addEventListener('seeked', () => {
-          video.style.opacity = '0.6';
-          video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
-        });
-      }
+      // Start the first video
+      video1.play().catch(console.error);
+
+      // Cleanup function
+      return () => {
+        video1.removeEventListener('ended', () => {});
+        video2.removeEventListener('ended', () => {});
+      };
     };
 
-    setupVideo(videoRef.current);
+    const cleanup = setupDualVideoSystem();
+    return cleanup;
   }, [currentVideoSrc]);
 
   if (!currentVideoSrc) {
@@ -84,18 +101,32 @@ const VideoBackground = () => {
 
   return (
     <div className="absolute inset-0 z-0">
+      {/* Dual video setup for seamless looping */}
       <video
-        ref={videoRef}
+        ref={videoRef1}
         autoPlay
-        loop
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover opacity-60 transition-all duration-[5000ms] ease-out"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
         style={{
+          opacity: activeVideo === 1 ? '0.6' : '0',
           filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'
         }}
-        key={currentVideoSrc} // Force re-render when video source changes
+      >
+        <source src={currentVideoSrc} type="video/mp4" />
+      </video>
+      
+      <video
+        ref={videoRef2}
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+        style={{
+          opacity: activeVideo === 2 ? '0.6' : '0',
+          filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'
+        }}
       >
         <source src={currentVideoSrc} type="video/mp4" />
       </video>

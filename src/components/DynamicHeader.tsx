@@ -49,7 +49,7 @@ const DynamicHeader = () => {
         <div className="bg-gray-900/20 backdrop-blur-md border-b border-white/10">
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex items-center justify-between h-16">
-              {/* Interactive Logo with metallic sheen animations */}
+              {/* Interactive Logo with inverse gradient on AutoPromptr text */}
               <a 
                 href="https://app.autopromptr.com" 
                 className="flex items-center space-x-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] group cursor-pointer"
@@ -59,7 +59,7 @@ const DynamicHeader = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></div>
                   <Zap className="w-5 h-5 text-white relative z-10" />
                 </div>
-                <span className="text-xl font-bold text-white relative overflow-hidden">
+                <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent relative overflow-hidden">
                   {/* Metallic sheen overlay for text - only on hover and mousedown */}
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></span>
                   <span className="relative z-10">AutoPromptr</span>

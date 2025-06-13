@@ -12,13 +12,15 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
     <div className="space-y-8 text-center">
       <HeroBadge />
       
-      {/* Enhanced Hero Headline - 10% bigger while maintaining two lines */}
+      {/* Enhanced Hero Headline with selective gradient */}
       <div className="space-y-4">
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
-          Transform Your
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl font-bold leading-tight font-sans">
+          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+            Supercharge
+          </span>
         </h1>
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl font-bold leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
-          AI Workflow
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
+          Your AI Prompt Workflow
         </h1>
       </div>
 

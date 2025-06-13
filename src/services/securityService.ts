@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { EnhancedSecurityManager, createEnhancedSecurityManager } from "./security/enhancedSecurityManager";
 import { SecureEncryptionService } from "./security/secureEncryptionService";
