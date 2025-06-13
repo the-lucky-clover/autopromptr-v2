@@ -28,32 +28,32 @@ const Features = () => {
     {
       icon: Brain,
       title: "AI-Optimized Templates",
-      description: "Professionally crafted prompts tested across multiple AI models for maximum effectiveness."
+      description: "Professionally crafted prompts tested across multiple AI models for <br className='hidden sm:block' />maximum effectiveness."
     },
     {
       icon: Zap,
       title: "Instant Results",
-      description: "Get immediate improvements in your AI outputs with our battle-tested prompt formulas."
+      description: "Get immediate improvements in your AI outputs with our battle-tested <br className='hidden sm:block' />prompt formulas."
     },
     {
       icon: Target,
       title: "Industry-Specific",
-      description: "Specialized prompts for marketing, coding, writing, business, and creative projects."
+      description: "Specialized prompts for marketing, coding, writing, business, and <br className='hidden sm:block' />creative projects."
     },
     {
       icon: Users,
       title: "Community Driven",
-      description: "Join thousands of prompt engineers sharing insights and best practices."
+      description: "Join thousands of prompt engineers sharing insights and <br className='hidden sm:block' />best practices."
     },
     {
       icon: BookOpen,
       title: "Expert Courses",
-      description: "Learn from industry experts with comprehensive courses and workshops."
+      description: "Learn from industry experts with comprehensive courses <br className='hidden sm:block' />and workshops."
     },
     {
       icon: TrendingUp,
       title: "Performance Analytics",
-      description: "Track your prompt performance and optimize for better results over time."
+      description: "Track your prompt performance and optimize for better results <br className='hidden sm:block' />over time."
     }
   ];
 
@@ -65,7 +65,8 @@ const Features = () => {
             Why Choose AutoPromptr?
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Discover the features that make us the leading platform for AI prompt engineering
+            Discover the features that make us the leading platform for <br className="hidden sm:block" />
+            AI prompt engineering
           </p>
         </div>
         
@@ -89,9 +90,10 @@ const Features = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
-                  {feature.description}
-                </CardDescription>
+                <CardDescription 
+                  className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300"
+                  dangerouslySetInnerHTML={{ __html: feature.description }}
+                />
               </CardContent>
             </Card>
           ))}

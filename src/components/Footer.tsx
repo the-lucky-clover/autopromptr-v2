@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Twitter, Github, Linkedin, MessageSquare, Zap } from "lucide-react";
@@ -11,10 +10,12 @@ const Footer = () => {
       <div className="border-b border-gray-800">
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Transform Your AI Experience?
+            Ready to Transform Your <br className="hidden sm:block" />
+            AI Experience?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who are already creating better AI outputs with our premium prompts.
+            Join thousands of professionals who are already creating better AI outputs <br className="hidden sm:block" />
+            with our premium prompts.
           </p>
           <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full">
             Start Your Free Trial
@@ -36,7 +37,8 @@ const Footer = () => {
               </h3>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              The premier platform for AI prompt engineering. Master the art of crafting effective prompts and unlock AI's full potential.
+              The premier platform for AI prompt engineering. Master the art of crafting effective prompts and unlock <br className="hidden lg:block" />
+              AI's full potential.
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:bg-gray-800">

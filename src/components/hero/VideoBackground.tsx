@@ -14,13 +14,15 @@ const VideoBackground = () => {
         
         // Handle seamless looping to prevent jump cut - start transition much earlier
         video.addEventListener('timeupdate', () => {
-          if (video.duration - video.currentTime < 2.0) { // Start dissolve 2 seconds before end
-            video.style.filter = 'blur(1px)';
+          if (video.duration - video.currentTime < 4.0) { // Start dissolve 4 seconds before end
+            video.style.filter = 'blur(0.5px)';
+            video.style.opacity = '0.7';
             setTimeout(() => {
               if (video.style.filter) {
                 video.style.filter = 'blur(0px)';
+                video.style.opacity = '0.75';
               }
-            }, 500);
+            }, 1000); // Longer, smoother transition
           }
         });
       }
@@ -37,15 +39,15 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-500"
+        className="absolute inset-0 w-full h-full object-cover opacity-75 transition-all duration-1000"
       >
         <source src="https://videos.pexels.com/video-files/6528444/6528444-uhd_2560_1440_30fps.mp4" type="video/mp4" />
       </video>
       
-      {/* Psychedelic animated gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/40 via-cyan-400/30 to-purple-600/40 animate-pulse z-10"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/20 via-orange-500/30 to-pink-600/30 z-10 animate-psychedelic-shift"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-cyan-300/25 via-purple-500/25 to-lime-400/25 z-10 animate-color-cycle"></div>
+      {/* Psychedelic animated gradient overlays - now more subtle and slower */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/25 via-cyan-400/20 to-purple-600/25 animate-pulse z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-lime-400/15 via-orange-500/20 to-pink-600/20 z-10 animate-psychedelic-shift"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-cyan-300/15 via-purple-500/15 to-lime-400/15 z-10 animate-color-cycle"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 

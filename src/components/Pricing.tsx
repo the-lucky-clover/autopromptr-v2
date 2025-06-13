@@ -31,7 +31,8 @@ const Pricing = () => {
             Choose Your Plan
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Select the perfect plan to accelerate your AI prompting journey
+            Select the perfect plan to accelerate your <br className="hidden sm:block" />
+            AI prompting journey
           </p>
         </div>
         
@@ -40,7 +41,7 @@ const Pricing = () => {
         </div>
         
         <div className={`text-center mt-12 text-gray-300 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <p>All plans include a 14-day money-back guarantee • No setup fees • Cancel anytime</p>
+          <p>All plans include a 14-day money-back guarantee • No setup fees • <br className="hidden sm:block" />Cancel anytime</p>
         </div>
       </div>
     </section>

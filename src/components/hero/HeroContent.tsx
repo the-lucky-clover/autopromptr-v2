@@ -9,17 +9,19 @@ interface HeroContentProps {
 const HeroContent = ({ onSignInClick }: HeroContentProps) => {
   return (
     <div className="text-center mb-12">
-      <h1 className="text-6xl sm:text-8xl lg:text-9xl xl:text-[12rem] font-bold mb-8 leading-[0.85]">
+      <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8 leading-[0.9]">
         <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
-          Supercharge
+          Supercharge Your
         </span>
         <span className="block text-stone-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)]">
-          Your AI Prompt Workflow
+          AI Prompt Workflow
         </span>
       </h1>
       
       <p className="text-xl sm:text-2xl lg:text-3xl text-slate-200 mb-12 max-w-4xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-        Intelligently batch process, enhance, and deploy prompts across all major AI coding platforms AND local development tools.
+        Intelligently batch process, enhance, and deploy prompts across all major AI coding <br className="hidden sm:block" />
+        platforms AND local <br className="hidden lg:block" />
+        development tools.
       </p>
       
       <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">

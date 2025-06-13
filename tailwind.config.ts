@@ -128,33 +128,33 @@ export default {
 				},
 				'psychedelic-shift': {
 					'0%': {
-						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.2), rgba(34, 197, 94, 0.3), rgba(147, 51, 234, 0.3))'
+						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.15), rgba(34, 197, 94, 0.20), rgba(147, 51, 234, 0.20))'
 					},
 					'25%': {
-						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.3), rgba(251, 146, 60, 0.3), rgba(236, 72, 153, 0.2))'
+						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.20), rgba(251, 146, 60, 0.20), rgba(236, 72, 153, 0.15))'
 					},
 					'50%': {
-						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(139, 92, 246, 0.3), rgba(34, 197, 94, 0.2))'
+						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.20), rgba(139, 92, 246, 0.20), rgba(34, 197, 94, 0.15))'
 					},
 					'75%': {
-						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.3), rgba(251, 146, 60, 0.2))'
+						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.20), rgba(6, 182, 212, 0.20), rgba(251, 146, 60, 0.15))'
 					},
 					'100%': {
-						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.3), rgba(236, 72, 153, 0.3), rgba(139, 92, 246, 0.2))'
+						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.20), rgba(236, 72, 153, 0.20), rgba(139, 92, 246, 0.15))'
 					}
 				},
 				'color-cycle': {
 					'0%': {
-						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.25), rgba(139, 69, 19, 0.25), rgba(165, 243, 252, 0.25))'
+						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.15), rgba(139, 69, 19, 0.15), rgba(165, 243, 252, 0.15))'
 					},
 					'33%': {
-						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.25), rgba(217, 70, 239, 0.25), rgba(167, 243, 208, 0.25))'
+						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.15), rgba(217, 70, 239, 0.15), rgba(167, 243, 208, 0.15))'
 					},
 					'66%': {
-						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.25), rgba(165, 243, 252, 0.25), rgba(139, 69, 19, 0.25))'
+						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.15), rgba(165, 243, 252, 0.15), rgba(139, 69, 19, 0.15))'
 					},
 					'100%': {
-						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.25), rgba(167, 243, 208, 0.25), rgba(217, 70, 239, 0.25))'
+						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.15), rgba(167, 243, 208, 0.15), rgba(217, 70, 239, 0.15))'
 					}
 				}
 			},
@@ -165,8 +165,8 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scroll': 'scroll 20s linear infinite',
 				'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
-				'psychedelic-shift': 'psychedelic-shift 8s ease-in-out infinite alternate',
-				'color-cycle': 'color-cycle 12s linear infinite'
+				'psychedelic-shift': 'psychedelic-shift 25s ease-in-out infinite alternate',
+				'color-cycle': 'color-cycle 30s ease-in-out infinite'
 			}
 		}
 	},
