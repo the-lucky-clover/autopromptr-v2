@@ -29,10 +29,6 @@ const CookieBanner = () => {
     setIsVisible(false);
   };
 
-  const handleSignIn = () => {
-    setShowAuthModal(true);
-  };
-
   if (!isVisible) return null;
 
   return (
@@ -63,13 +59,6 @@ const CookieBanner = () => {
               className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap"
             >
               Accept All
-            </Button>
-            <Button
-              size="sm"
-              onClick={handleSignIn}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white whitespace-nowrap"
-            >
-              Sign In
             </Button>
             <Button
               variant="ghost"
