@@ -24,7 +24,7 @@ const Pricing = () => {
   }, []);
 
   return (
-    <section ref={sectionRef}  id="pricing" className="py-20 px-4 bg-gradient-to-b from-purple-900/20 via-gray-900 to-blue-900/20 relative overflow-hidden">
+    <section ref={sectionRef} id="pricing" className="py-24 px-4 bg-gradient-to-b from-purple-900/20 via-gray-900 to-blue-900/20 relative overflow-hidden -mt-1">
       {/* 2Advanced-inspired background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.1),transparent_50%)]"></div>
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent"></div>

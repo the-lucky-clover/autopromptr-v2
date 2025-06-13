@@ -28,30 +28,14 @@ const Index = () => {
       <Header />
       <main className="w-full">
         <Hero />
-        <div className="py-16 lg:py-24">
-          <Features />
-        </div>
-        <div className="py-16 lg:py-24">
-          <Speedometers />
-        </div>
-        <div className="py-16 lg:py-24">
-          <UseCases />
-        </div>
-        <div className="py-16 lg:py-24">
-          <Templates />
-        </div>
-        <div className="py-16 lg:py-24">
-          <WhitePaper />
-        </div>
-        <div className="py-16 lg:py-24">
-          <SocialProof />
-        </div>
-        <div className="py-16 lg:py-24">
-          <TrustedPlatforms />
-        </div>
-        <div className="py-16 lg:py-24">
-          <Pricing />
-        </div>
+        <Features />
+        <Speedometers />
+        <UseCases />
+        <Templates />
+        <WhitePaper />
+        <SocialProof />
+        <TrustedPlatforms />
+        <Pricing />
       </main>
       <Footer />
       <CookieBanner />

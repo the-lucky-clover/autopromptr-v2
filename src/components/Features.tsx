@@ -57,7 +57,7 @@ const Features = () => {
   ];
 
   return (
-    <section ref={sectionRef} id="features" className="py-20 px-4 bg-gradient-to-b from-gray-900 via-blue-900/30 to-purple-900/30 relative overflow-hidden">
+    <section ref={sectionRef} id="features" className="py-24 px-4 bg-gradient-to-b from-gray-900 via-blue-900/30 to-purple-900/30 relative overflow-hidden -mt-1">
       {/* 2Advanced-inspired background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.1),transparent_50%)]"></div>
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>

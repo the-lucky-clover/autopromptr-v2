@@ -11,7 +11,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen lg:h-[90vh] flex items-center justify-center overflow-hidden">
         <VideoBackground />
         <ParticleVignette />
         
