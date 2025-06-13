@@ -1,4 +1,5 @@
 
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -53,19 +54,19 @@ const Hero = () => {
             </Button>
           </div>
           
-          <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-white/60">
+          <div className="mt-8 sm:mt-12 flex items-center justify-center gap-2 sm:gap-8 text-white/60 px-2">
             <div className="text-center">
-              <div className="text-lg sm:text-xl font-bold text-white">10K+</div>
+              <div className="text-sm sm:text-lg md:text-xl font-bold text-white">10K+</div>
               <div className="text-xs sm:text-sm">Premium Prompts</div>
             </div>
-            <div className="hidden sm:block w-px h-8 bg-white/20"></div>
+            <div className="w-px h-4 sm:h-8 bg-white/20"></div>
             <div className="text-center">
-              <div className="text-lg sm:text-xl font-bold text-white">50K+</div>
+              <div className="text-sm sm:text-lg md:text-xl font-bold text-white">50K+</div>
               <div className="text-xs sm:text-sm">Happy Users</div>
             </div>
-            <div className="hidden sm:block w-px h-8 bg-white/20"></div>
+            <div className="w-px h-4 sm:h-8 bg-white/20"></div>
             <div className="text-center">
-              <div className="text-lg sm:text-xl font-bold text-white">99%</div>
+              <div className="text-sm sm:text-lg md:text-xl font-bold text-white">99%</div>
               <div className="text-xs sm:text-sm">Success Rate</div>
             </div>
           </div>
@@ -78,3 +79,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
