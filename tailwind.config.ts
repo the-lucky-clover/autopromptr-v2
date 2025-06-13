@@ -73,7 +73,7 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
-				// Accordion Animations
+				// === ACCORDION ANIMATIONS ===
 				'accordion-down': {
 					from: { height: '0' },
 					to: { height: 'var(--radix-accordion-content-height)' }
@@ -83,7 +83,7 @@ export default {
 					to: { height: '0' }
 				},
 				
-				// Basic Transitions
+				// === BASIC TRANSITIONS ===
 				'fade-in': {
 					'0%': { opacity: '0', transform: 'translateY(10px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
@@ -97,13 +97,13 @@ export default {
 					'100%': { transform: 'translateY(0)', opacity: '1' }
 				},
 				
-				// Scroll & Movement
+				// === SCROLL & MOVEMENT ===
 				'scroll': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(-50%)' }
 				},
 				
-				// Metallic & Sheen Effects
+				// === METALLIC & SHEEN EFFECTS ===
 				'metallic-sheen': {
 					'0%': { transform: 'translateX(-150%) translateY(-150%) rotate(45deg)', opacity: '0' },
 					'10%': { opacity: '1' },
@@ -118,12 +118,27 @@ export default {
 					'95%': { opacity: '0.3' },
 					'100%': { transform: 'translateX(-150%) translateY(150%) rotate(45deg)', opacity: '0' }
 				},
+				'idle-metallic-sheen': {
+					'0%': { transform: 'translateX(150%) translateY(-150%) rotate(45deg)', opacity: '0' },
+					'5%': { opacity: '0.2' },
+					'15%': { opacity: '0.6' },
+					'85%': { opacity: '0.6' },
+					'95%': { opacity: '0.2' },
+					'100%': { transform: 'translateX(-150%) translateY(150%) rotate(45deg)', opacity: '0' }
+				},
+				'navbar-glass-sheen': {
+					'0%': { transform: 'translateX(-100%) translateY(-100%) rotate(45deg)', opacity: '0' },
+					'10%': { opacity: '0.1' },
+					'50%': { opacity: '0.3' },
+					'90%': { opacity: '0.1' },
+					'100%': { transform: 'translateX(400%) translateY(400%) rotate(45deg)', opacity: '0' }
+				},
 				'sheen': {
 					'0%': { transform: 'translateX(-100%) translateY(-100%) rotate(45deg)' },
 					'100%': { transform: 'translateX(400%) translateY(400%) rotate(45deg)' }
 				},
 				
-				// Lightning & Flash Effects
+				// === LIGHTNING & FLASH EFFECTS ===
 				'lightning-flash': {
 					'0%': { opacity: '0', transform: 'scale(0.5)', filter: 'brightness(1)' },
 					'10%': { opacity: '1', transform: 'scale(1.1)', filter: 'brightness(2) saturate(2)' },
@@ -134,13 +149,13 @@ export default {
 					'100%': { opacity: '0', transform: 'scale(1)', filter: 'brightness(1)' }
 				},
 				
-				// Pulse & Glow Effects
+				// === PULSE & GLOW EFFECTS ===
 				'tech-pulse': {
 					'0%, 100%': { opacity: '0.3', transform: 'scale(1)' },
 					'50%': { opacity: '0.7', transform: 'scale(1.05)' }
 				},
 				
-				// Background Color Cycles
+				// === BACKGROUND COLOR CYCLES ===
 				'psychedelic-shift': {
 					'0%': { background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.35), rgba(34, 197, 94, 0.40), rgba(147, 51, 234, 0.35))' },
 					'25%': { background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.40), rgba(251, 146, 60, 0.35), rgba(236, 72, 153, 0.35))' },
@@ -161,7 +176,7 @@ export default {
 				}
 			},
 			animation: {
-				// Basic Animations
+				// === BASIC ANIMATIONS ===
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
@@ -169,21 +184,23 @@ export default {
 				'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
 				'scroll': 'scroll 20s linear infinite',
 				
-				// Metallic Effects
+				// === METALLIC EFFECTS ===
 				'metallic-sheen': 'metallic-sheen 0.6s ease-out',
 				'enhanced-metallic-sheen': 'enhanced-metallic-sheen 0.8s ease-out',
+				'idle-metallic-sheen': 'idle-metallic-sheen 2.5s ease-in-out infinite',
+				'navbar-glass-sheen': 'navbar-glass-sheen 0.8s ease-out infinite 8s',
 				'sheen': 'sheen 1.2s ease-out',
 				'sheen-delay-1': 'sheen 1.2s ease-out 2s',
 				'sheen-delay-2': 'sheen 1.2s ease-out 4s',
 				'sheen-delay-3': 'sheen 1.2s ease-out 6s',
 				
-				// Lightning & Flash
+				// === LIGHTNING & FLASH ===
 				'lightning-flash': 'lightning-flash 0.8s ease-out',
 				
-				// Pulse & Glow
+				// === PULSE & GLOW ===
 				'tech-pulse': 'tech-pulse 3s ease-in-out infinite',
 				
-				// Background Cycles
+				// === BACKGROUND CYCLES ===
 				'psychedelic-shift': 'psychedelic-shift 45s ease-in-out infinite alternate',
 				'color-cycle': 'color-cycle 50s ease-in-out infinite',
 				'holographic': 'holographic 8s ease-in-out infinite'

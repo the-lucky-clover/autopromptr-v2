@@ -35,14 +35,18 @@ const VideoBackground = () => {
           video.playbackRate = 1.0;
         });
         
-        // Seamless looping with early transition start (no jump cuts)
+        // Fixed jump cut transition - start 6 seconds before end, 4-second duration
         video.addEventListener('timeupdate', () => {
-          if (video.duration - video.currentTime < 15) { // Start crossfade 15 seconds before end
+          // Check if this is the cloud video (6528444) that needs jump cut fix
+          const isCloudVideo = currentVideoSrc.includes('6528444');
+          
+          if (isCloudVideo && video.duration - video.currentTime < 6) { // Start crossfade 6 seconds before end
             const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (15 - remainingTime) / 15; // 0 to 1 over 15 seconds
+            const fadeProgress = (6 - remainingTime) / 4; // 4-second transition duration
             
-            // Maintain opacity for seamless loop (no visible transitions)
-            video.style.opacity = '0.8';
+            // Smooth crossfade transition for cloud video
+            const opacity = Math.max(0.5, 0.8 - (fadeProgress * 0.3)); // Gradual fade
+            video.style.opacity = opacity.toString();
             video.style.filter = 'saturate(2.0) contrast(1.2)';
           } else {
             // Normal state with enhanced saturation
@@ -74,7 +78,7 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[15000ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[4000ms] ease-in-out"
         style={{
           filter: 'saturate(2.0) contrast(1.2)'
         }}
@@ -83,7 +87,7 @@ const VideoBackground = () => {
         <source src={currentVideoSrc} type="video/mp4" />
       </video>
       
-      {/* Black linear gradient overlay */}
+      {/* Black linear gradient overlay - 0% to 100% opacity */}
       <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/0 via-black/30 to-black/70"></div>
       
       <div className="absolute bottom-4 right-4 z-20">

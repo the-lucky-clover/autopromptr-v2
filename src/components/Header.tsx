@@ -47,7 +47,12 @@ const Header = () => {
           ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]' 
           : 'bg-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto px-4">
+        {/* Intermittent navbar glass sheen overlay */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 animate-navbar-glass-sheen"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 relative">
           <div className="flex items-center justify-between h-16">
             {/* Logo with enhanced drop shadow - matching hero headline font */}
             <div className="flex items-center space-x-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
@@ -92,8 +97,11 @@ const Header = () => {
                 className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)]"
                 onClick={handleHeaderButtonClick}
               >
-                {/* Metallic sheen overlay */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform -translate-x-full -translate-y-full rotate-45 group-hover:animate-metallic-sheen pointer-events-none"></span>
+                {/* Idle metallic sheen overlay - continuous animation */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></span>
+                
+                {/* Hover metallic sheen overlay */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
                 
                 {/* Lightning flash overlay */}
                 <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isHeaderLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
@@ -142,8 +150,11 @@ const Header = () => {
                 className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group"
                 onClick={handleMobileButtonClick}
               >
-                {/* Metallic sheen overlay */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform -translate-x-full -translate-y-full rotate-45 group-hover:animate-metallic-sheen pointer-events-none"></span>
+                {/* Idle metallic sheen overlay - continuous animation */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></span>
+                
+                {/* Hover metallic sheen overlay */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
                 
                 {/* Lightning flash overlay */}
                 <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isMobileLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
