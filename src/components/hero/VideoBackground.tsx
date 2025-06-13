@@ -35,29 +35,28 @@ const VideoBackground = () => {
           video.playbackRate = 1.0;
         });
         
-        // Enhanced seamless looping with extended crossfade (10 seconds for ultra-smooth transition)
+        // Extended seamless looping with 4-5 second crossfade (no blur effects)
         video.addEventListener('timeupdate', () => {
-          if (video.duration - video.currentTime < 10.0) { // Start crossfade 10 seconds before end
+          if (video.duration - video.currentTime < 4.5) { // Start crossfade 4.5 seconds before end
             const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (10.0 - remainingTime) / 10.0; // 0 to 1 over 10 seconds
+            const fadeProgress = (4.5 - remainingTime) / 4.5; // 0 to 1 over 4.5 seconds
             
-            // Ultra-gradual opacity and blur changes for perfect transition
+            // Gradual opacity changes only (no blur)
             const opacity = Math.max(0.4, 0.8 - (fadeProgress * 0.4));
-            const blur = fadeProgress * 1.5;
             
             video.style.opacity = opacity.toString();
-            video.style.filter = `saturate(2.0) contrast(1.2) blur(${blur}px)`;
+            video.style.filter = 'saturate(2.0) contrast(1.2)';
           } else {
             // Reset to normal state with super-saturation
             video.style.opacity = '0.8';
-            video.style.filter = 'saturate(2.0) contrast(1.2) blur(0px)';
+            video.style.filter = 'saturate(2.0) contrast(1.2)';
           }
         });
 
         // Reset on loop start with smooth transition and maintain saturation
         video.addEventListener('seeked', () => {
           video.style.opacity = '0.8';
-          video.style.filter = 'saturate(2.0) contrast(1.2) blur(0px)';
+          video.style.filter = 'saturate(2.0) contrast(1.2)';
         });
       }
     };
@@ -77,7 +76,7 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[4000ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[4500ms] ease-in-out"
         style={{
           filter: 'saturate(2.0) contrast(1.2)'
         }}
@@ -85,9 +84,6 @@ const VideoBackground = () => {
       >
         <source src={currentVideoSrc} type="video/mp4" />
       </video>
-      
-      {/* Minimal dark vignette for content readability */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.15)_100%)] z-10"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 
