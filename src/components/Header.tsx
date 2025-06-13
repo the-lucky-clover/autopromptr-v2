@@ -63,7 +63,7 @@ const Header = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></div>
                 <Zap className="w-5 h-5 text-white relative z-10" />
               </div>
-              <span className="text-xl font-bold text-white font-sans">
+              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent font-sans">
                 AutoPromptr
               </span>
             </div>
