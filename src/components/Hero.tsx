@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -27,9 +28,14 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-6 px-4 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900">
+      <section 
+        className="relative min-h-screen flex items-center justify-center overflow-hidden pt-6 px-4"
+        style={{
+          background: 'linear-gradient(to bottom right, rgb(30, 58, 138), rgb(30, 64, 175), rgb(88, 28, 135))'
+        }}
+      >
         {/* Video Background */}
-        <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 z-0">
           <video
             autoPlay
             loop
@@ -37,18 +43,23 @@ const Hero = () => {
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
           >
-            <source src="https://videos.pexels.com/video-files/856171/856171-hd_1920_1080_30fps.mp4" type="video/mp4" />
+            <source src="https://videos.pexels.com/video-files/6528444/6528444-uhd_2560_1440_30fps.mp4" type="video/mp4" />
           </video>
           
           {/* Video Attribution */}
           <div className="absolute bottom-4 right-4 z-20">
-            <span className="text-xs text-white/70 bg-black/30 px-2 py-1 rounded backdrop-blur-sm">
-              Video by Micro
-            </span>
+            <a 
+              href="https://www.pexels.com/video/movement-of-clouds-in-the-sky-6528444/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs text-white/70 bg-black/40 px-2 py-1 rounded backdrop-blur-sm hover:text-white/90 transition-colors"
+            >
+              Video by DV
+            </a>
           </div>
           
-          {/* Gradient Overlay with Multiply Blend Mode */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 mix-blend-multiply opacity-40 z-10"></div>
+          {/* Simple dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/20 z-10"></div>
         </div>
         
         {/* Content */}
