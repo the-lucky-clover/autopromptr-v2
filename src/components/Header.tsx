@@ -42,22 +42,22 @@ const Header = () => {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
         isScrolled 
-          ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]' 
-          : 'bg-transparent'
+          ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-slide-down' 
+          : 'bg-transparent md:bg-transparent bg-black/20 md:bg-transparent backdrop-blur-none md:backdrop-blur-none'
       }`}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
-            {/* Logo - Mobile optimized */}
+          <div className="flex items-center justify-between h-12 sm:h-14 md:h-16">
+            {/* Logo - Mobile optimized with enhanced visibility */}
             <a 
               href="https://app.autopromptr.com" 
-              className="flex items-center space-x-1.5 sm:space-x-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] group cursor-pointer flex-shrink-0"
+              className="flex items-center space-x-1 sm:space-x-1.5 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] group cursor-pointer flex-shrink-0"
             >
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
-                <Zap className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
+              <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
+                <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-5 md:h-5 text-white" />
               </div>
-              <span className="text-base sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.5)] font-sans">
+              <span className="text-sm sm:text-base md:text-xl lg:text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)] font-sans">
                 AutoPromptr
               </span>
             </a>
@@ -102,20 +102,20 @@ const Header = () => {
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Enhanced visibility */}
             <button
-              className="md:hidden text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] relative group p-2"
+              className="md:hidden text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] relative group p-2 bg-black/20 rounded-lg backdrop-blur-sm border border-white/10"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded blur-sm"></div>
-              {isMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" />}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg blur-sm"></div>
+              {isMenuOpen ? <X className="w-5 h-5 relative z-10" /> : <Menu className="w-5 h-5 relative z-10" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+          <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] animate-slide-down">
             <div className="px-4 py-4 space-y-3">
               <button 
                 onClick={() => scrollToSection('features')} 
@@ -153,6 +153,23 @@ const Header = () => {
       </header>
 
       <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
+
+      <style jsx>{`
+        @keyframes slide-down {
+          from {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-down {
+          animation: slide-down 0.5s ease-out;
+        }
+      `}</style>
     </>
   );
 };
