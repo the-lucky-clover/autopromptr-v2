@@ -1,218 +1,149 @@
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Star, Zap, Clock, Calendar } from "lucide-react";
-import { subscriptionService, SubscriptionPlan } from '@/services/subscriptionService';
-import { useSubscription } from '@/hooks/useSubscription';
-import { useToast } from '@/hooks/use-toast';
+import { Check, Zap, Crown, Rocket } from "lucide-react";
+
+const plans = [
+  {
+    name: "Starter",
+    price: "$29",
+    period: "/month",
+    description: "Perfect for individual developers and small teams getting started with AI prompt optimization",
+    icon: Zap,
+    features: [
+      "100 AI-optimized prompts per month",
+      "5 platforms supported",
+      "Basic analytics dashboard",
+      "Email support",
+      "Template library access",
+      "Standard processing speed"
+    ],
+    buttonText: "Start Free Trial",
+    popular: false
+  },
+  {
+    name: "Professional",
+    price: "$89",
+    period: "/month",
+    description: "Ideal for growing teams and businesses that need advanced features and higher limits",
+    icon: Crown,
+    features: [
+      "500 AI-optimized prompts per month",
+      "15+ platforms supported",
+      "Advanced analytics & insights",
+      "Priority support & training",
+      "Custom template creation",
+      "3x faster processing speed",
+      "Team collaboration tools",
+      "API access"
+    ],
+    buttonText: "Start Free Trial",
+    popular: true
+  },
+  {
+    name: "Enterprise",
+    price: "$299",
+    period: "/month",
+    description: "For large organizations requiring enterprise-grade security, compliance, and unlimited scale",
+    icon: Rocket,
+    features: [
+      "Unlimited AI-optimized prompts",
+      "All platforms supported",
+      "Real-time analytics & reporting",
+      "24/7 dedicated support",
+      "White-label solutions",
+      "10x fastest processing speed",
+      "Advanced team management",
+      "Full API access",
+      "SOC 2 compliance",
+      "Custom integrations"
+    ],
+    buttonText: "Contact Sales",
+    popular: false
+  }
+];
 
 export const PricingPlans = () => {
-  const [loading, setLoading] = useState(false);
-  const { subscription } = useSubscription();
-  const { toast } = useToast();
+  const [lightningStates, setLightningStates] = useState<{ [key: string]: boolean }>({});
 
-  // Static pricing plans - no more free tier
-  const plans = [
-    {
-      id: 'trial',
-      name: '3-Day Trial',
-      price: 0,
-      period: '3 days',
-      description: 'Full access to all features',
-      features: [
-        'Unlimited prompts',
-        'AI optimization',
-        'Batch processing',
-        'API access',
-        'All integrations',
-        'Priority support',
-        'Team collaboration'
-      ],
-      badge: 'Trial',
-      badgeColor: 'bg-green-600',
-      icon: <Clock className="w-6 h-6 text-green-600" />,
-      buttonText: 'Start Free Trial',
-      popular: false
-    },
-    {
-      id: 'monthly',
-      name: 'Monthly',
-      price: 19,
-      period: 'month',
-      description: 'Full access billed monthly',
-      features: [
-        'Unlimited prompts',
-        'AI optimization',
-        'Batch processing', 
-        'API access',
-        'All integrations',
-        'Priority support',
-        'Team collaboration'
-      ],
-      badge: 'Most Flexible',
-      badgeColor: 'bg-blue-600',
-      icon: <Zap className="w-6 h-6 text-blue-600" />,
-      buttonText: 'Get Monthly Access',
-      popular: true
-    },
-    {
-      id: 'annual',
-      name: 'Annual',
-      price: 120,
-      period: 'year',
-      originalPrice: 228, // $19 * 12 months
-      description: 'Full access billed annually',
-      features: [
-        'Unlimited prompts',
-        'AI optimization',
-        'Batch processing',
-        'API access', 
-        'All integrations',
-        'Priority support',
-        'Team collaboration',
-        '2 months FREE'
-      ],
-      badge: 'Best Value',
-      badgeColor: 'bg-purple-600',
-      icon: <Calendar className="w-6 h-6 text-purple-600" />,
-      buttonText: 'Get Annual Access',
-      popular: false,
-      savings: {
-        percent: 47,
-        amount: 108 // $228 - $120
-      }
-    }
-  ];
-
-  const handlePlanSelect = async (plan: any) => {
-    if (plan.id === 'trial') {
-      toast({
-        title: "Trial Started!",
-        description: "Your 3-day full access trial has begun. Enjoy all features!",
-      });
-      return;
-    }
-
-    try {
-      setLoading(true);
-      // In a real implementation, this would create a Stripe checkout session
-      toast({
-        title: "Redirecting to Payment",
-        description: `Setting up ${plan.name} subscription...`,
-      });
-      
-      // Simulate payment redirect
-      setTimeout(() => {
-        window.location.href = `#/checkout?plan=${plan.id}`;
-      }, 1000);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to process subscription. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const isCurrentPlan = (planId: string) => {
-    return subscription?.plan_name?.toLowerCase() === planId;
+  const handlePlanClick = (planName: string) => {
+    setLightningStates(prev => ({ ...prev, [planName]: true }));
+    setTimeout(() => {
+      setLightningStates(prev => ({ ...prev, [planName]: false }));
+    }, 800);
   };
 
   return (
-    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      <div className="grid md:grid-cols-3 gap-8 md:grid-rows-1">
-        {plans.map((plan) => (
+    <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      {plans.map((plan) => {
+        const IconComponent = plan.icon;
+        return (
           <Card 
-            key={plan.id} 
-            className={`relative transition-all duration-300 hover:shadow-lg flex flex-col h-full ${
-              plan.popular ? 'border-2 border-blue-500 md:scale-105' : ''
+            key={plan.name} 
+            className={`relative bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:shadow-[0_12px_48px_rgba(147,51,234,0.2)] group flex flex-col ${
+              plan.popular ? 'ring-2 ring-purple-500/50 scale-105' : ''
             }`}
           >
             {plan.popular && (
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                <Badge className="bg-blue-600 text-white">
-                  <Star className="w-3 h-3 mr-1" />
-                  Most Popular
-                </Badge>
-              </div>
+              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-1 font-semibold">
+                Most Popular
+              </Badge>
             )}
-
-            <CardHeader className="text-center pb-4 flex-shrink-0">
-              <div className="flex justify-center mb-2">
-                {plan.icon}
+            
+            <CardHeader className="text-center pb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-[0_8px_32px_rgba(59,130,246,0.3)]">
+                <IconComponent className="w-8 h-8 text-white" />
               </div>
-              <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
-              
-              <div className="mt-4">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-4xl font-bold">
-                    ${plan.price}
-                  </span>
-                  <span className="text-gray-600">/{plan.period}</span>
-                </div>
-                
-                {/* Savings display for annual plan */}
-                {plan.savings && (
-                  <div className="mt-2 space-y-1">
-                    <div className="text-sm text-gray-500 line-through">
-                      ${plan.originalPrice}/year
-                    </div>
-                    <Badge className="bg-green-100 text-green-800 border-green-200">
-                      Save {plan.savings.percent}% (${plan.savings.amount})
-                    </Badge>
-                  </div>
-                )}
+              <CardTitle className="text-2xl text-white font-bold font-sans">{plan.name}</CardTitle>
+              <div className="flex items-baseline justify-center gap-1 mt-2">
+                <span className="text-4xl font-bold text-white">{plan.price}</span>
+                <span className="text-gray-400 font-medium">{plan.period}</span>
               </div>
-              
-              <CardDescription className="mt-2">
+              <CardDescription className="text-gray-300 mt-4 leading-relaxed font-sans">
                 {plan.description}
               </CardDescription>
             </CardHeader>
-
-            <CardContent className="space-y-4 flex-grow flex flex-col">
-              <ul className="space-y-3 flex-grow">
+            
+            <CardContent className="flex-1 flex flex-col">
+              <div className="space-y-4 flex-1 mb-8">
                 {plan.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                    <span className="text-sm text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-auto pt-4">
-                <Button
-                  className={`w-full ${
-                    plan.popular
-                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                      : plan.id === 'annual'
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                      : 'border border-gray-300 hover:bg-gray-50'
-                  }`}
-                  variant={plan.popular || plan.id === 'annual' ? 'default' : 'outline'}
-                  onClick={() => handlePlanSelect(plan)}
-                  disabled={isCurrentPlan(plan.id) || loading}
-                >
-                  {isCurrentPlan(plan.id) 
-                    ? 'Current Plan' 
-                    : plan.buttonText
-                  }
-                </Button>
-
-                {/* Additional value messaging for annual plan */}
-                {plan.id === 'annual' && (
-                  <div className="text-center text-sm text-purple-600 font-medium mt-2">
-                    💰 That's only $10/month when paid annually!
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="w-5 h-5 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white stroke-[3]" />
+                    </div>
+                    <span className="text-gray-300 leading-relaxed font-sans">{feature}</span>
                   </div>
-                )}
+                ))}
               </div>
+              
+              <Button 
+                className={`relative overflow-hidden w-full py-4 text-lg font-semibold rounded-full transition-all duration-300 transform hover:scale-105 group ${
+                  plan.popular 
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-[0_8px_32px_rgba(147,51,234,0.4)]' 
+                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-[0_8px_32px_rgba(59,130,246,0.4)]'
+                }`}
+                onClick={() => handlePlanClick(plan.name)}
+              >
+                {/* Idle sheen layers */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent w-1/4 h-full transform -translate-x-full rotate-47 animate-rare-glass-sheen-1 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/18 to-transparent w-1/3 h-full transform -translate-x-full rotate-43 animate-rare-glass-sheen-2 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/22 to-transparent w-1/5 h-full transform -translate-x-full rotate-49 animate-rare-glass-sheen-3 pointer-events-none"></div>
+                
+                {/* Hover sheen overlay */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
+                
+                {/* Lightning flash overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${lightningStates[plan.name] ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
+                
+                <span className="relative z-10">{plan.buttonText}</span>
+              </Button>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };

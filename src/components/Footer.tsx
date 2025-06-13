@@ -18,14 +18,18 @@ const Footer = ()=> {
       {/* CTA Section */}
       <div className="border-b border-gray-800">
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-serif">
+          <h2 className="text-4xl md:text-6xl font-bold leading-tight font-sans mb-6">
             Ready to Transform Your <br className="hidden sm:block" />
             AI Experience Today?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who are already creating better AI outputs <br className="hidden sm:block" />
-            with our premium prompt solutions.
-          </p>
+          <div className="space-y-2 mb-8">
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-sans">
+              Join thousands of AI pros and enthusiasts who are already creating better AI
+            </p>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto font-sans">
+              utilizing our exclusive premium prompt solutions.
+            </p>
+          </div>
           <Button 
             size="lg" 
             className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full group shadow-[0_8px_32px_rgba(59,130,246,0.3)] transition-all duration-300"

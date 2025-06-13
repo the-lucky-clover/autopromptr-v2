@@ -1,7 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import HeroBadge from "./HeroBadge";
 import { useState } from "react";
 
 interface HeroContentProps {
@@ -26,18 +25,16 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
 
   return (
     <div className="space-y-8 text-center">
-      <HeroBadge />
-      
       {/* Enhanced Hero Headline with selective gradient - 5% smaller and two lines */}
       <div className="space-y-4">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-bold leading-tight font-sans">
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
             Supercharge
           </span>
-          <span className="text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"> Your</span>
+          <span className="text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"> Your AI</span>
         </h1>
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-bold leading-tight text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
-          AI Prompt Workflow
+          Prompt Workflow
         </h1>
       </div>
 

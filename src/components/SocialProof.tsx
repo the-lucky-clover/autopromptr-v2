@@ -1,75 +1,64 @@
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Star, Quote } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Star, Quote } from "lucide-react";
+
+const testimonials = [
+  {
+    name: "Sarah Chen",
+    role: "AI Product Manager at TechCorp",
+    content: "AutoPromptr has revolutionized our AI workflow. We've increased our prompt efficiency by 300% and saved countless hours of manual optimization.",
+    rating: 5,
+    avatar: "SC"
+  },
+  {
+    name: "Marcus Rodriguez",
+    role: "Senior Developer at InnovateLab",
+    content: "The batch processing feature is incredible. What used to take us days now happens in minutes. This tool is essential for any serious AI development team.",
+    rating: 5,
+    avatar: "MR"
+  },
+  {
+    name: "Dr. Emily Watson",
+    role: "Research Director at AI Institute",
+    content: "The analytics and optimization suggestions have helped us achieve breakthrough results in our research. AutoPromptr is now integral to our methodology.",
+    rating: 5,
+    avatar: "EW"
+  },
+  {
+    name: "Alex Thompson",
+    role: "Freelance AI Consultant",
+    content: "As a consultant working with multiple clients, AutoPromptr's multi-platform deployment saves me hours every week. The ROI has been exceptional.",
+    rating: 5,
+    avatar: "AT"
+  },
+  {
+    name: "Lisa Park",
+    role: "Content Strategy Lead",
+    content: "The prompt templates library is phenomenal. We've improved our content quality dramatically while reducing the time spent on prompt engineering.",
+    rating: 5,
+    avatar: "LP"
+  },
+  {
+    name: "David Kumar",
+    role: "CTO at StartupX",
+    content: "AutoPromptr's enterprise security features give us confidence to use AI at scale. The compliance tools are exactly what we needed.",
+    rating: 5,
+    avatar: "DK"
+  }
+];
 
 const SocialProof = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [animatedStats, setAnimatedStats] = useState([0, 0, 0, 0]);
   const sectionRef = useRef<HTMLElement>(null);
-
-  const testimonials = [
-    {
-      name: "Sarah Chen",
-      role: "Senior Developer",
-      company: "TechCorp",
-      content: "AutoPromptr has revolutionized how I work with AI. The prompts are incredibly effective and save me hours every day.",
-      rating: 5,
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b789?w=64&h=64&fit=crop&crop=face"
-    },
-    {
-      name: "Marcus Rodriguez",
-      role: "Product Manager",
-      company: "InnovateLab",
-      content: "The batch processing feature is a game-changer. I can now deploy prompts across multiple platforms seamlessly.",
-      rating: 5,
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
-    },
-    {
-      name: "Emily Watson",
-      role: "AI Researcher",
-      company: "DataFlow",
-      content: "The quality of prompts and the analytics dashboard provide incredible insights into AI performance.",
-      rating: 5,
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face"
-    }
-  ];
-
-  const stats = [
-    { number: 50, label: "Active Users", suffix: "K+" },
-    { number: 1, label: "Prompts Generated", suffix: "M+" },
-    { number: 99.9, label: "Uptime", suffix: "%" },
-    { number: 24, label: "Support", suffix: "/7" }
-  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          // Animate stats
-          stats.forEach((stat, index) => {
-            let start = 0;
-            const end = stat.number;
-            const duration = 2000;
-            const increment = end / (duration / 16);
-            
-            const timer = setInterval(() => {
-              start += increment;
-              if (start >= end) {
-                start = end;
-                clearInterval(timer);
-              }
-              setAnimatedStats(prev => {
-                const newStats = [...prev];
-                newStats[index] = start;
-                return newStats;
-              });
-            }, 16);
-          });
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -80,66 +69,52 @@ const SocialProof = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-purple-900/20 via-gray-900 to-blue-900/20">
-      <div className="max-w-6xl mx-auto">
+    <section ref={sectionRef} className="py-24 px-4 bg-gray-900 relative overflow-hidden">
+      {/* Dark background with subtle effects */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.05),transparent_50%)]"></div>
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent"></div>
+      
+      <div className="max-w-6xl mx-auto relative z-10">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 font-sans">
             Trusted by Thousands of Professionals
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Join the community of developers and creators who have transformed their AI workflow
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto font-sans">
+            Join the community of AI professionals who have transformed <br className="hidden sm:block" />
+            their workflow with AutoPromptr
           </p>
         </div>
         
-        {/* Stats */}
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
-                {index === 2 ? animatedStats[index].toFixed(1) : Math.floor(animatedStats[index])}{stat.suffix}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
+            <div
+              key={index}
+              className={`group p-6 rounded-2xl bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm border border-gray-700/50 hover:border-purple-500/50 hover:shadow-[0_8px_32px_rgba(147,51,234,0.15)] transition-all duration-500 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: `${index * 100}ms` }}
+            >
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-4">
+                  {testimonial.avatar}
+                </div>
+                <div>
+                  <h4 className="text-white font-semibold font-sans">{testimonial.name}</h4>
+                  <p className="text-gray-400 text-sm font-sans">{testimonial.role}</p>
+                </div>
               </div>
-              <div className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
-                {stat.label}
+              
+              <div className="flex items-center mb-3">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              
+              <div className="relative">
+                <Quote className="w-6 h-6 text-purple-400/50 absolute -top-2 -left-1" />
+                <p className="text-gray-300 leading-relaxed pl-4 font-sans">{testimonial.content}</p>
               </div>
             </div>
-          ))}
-        </div>
-        
-        {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card 
-              key={index} 
-              className={`group hover:shadow-2xl transition-all duration-500 border-0 shadow-lg hover:-translate-y-2 bg-gray-900/50 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:scale-105 ${
-                isVisible ? 'opacity-100 translate-x-0' : index % 2 === 0 ? 'opacity-0 -translate-x-8' : 'opacity-0 translate-x-8'
-              }`}
-              style={{
-                transitionDelay: isVisible ? `${400 + index * 100}ms` : '0ms'
-              }}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400 group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }} />
-                  ))}
-                </div>
-                <Quote className="w-8 h-8 text-blue-400 mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
-                <p className="text-gray-300 mb-6 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
-                  {testimonial.content}
-                </p>
-                <div className="flex items-center">
-                  <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.name}
-                    className="w-10 h-10 rounded-full mr-3 group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div>
-                    <div className="text-white font-semibold group-hover:text-blue-300 transition-colors duration-300">{testimonial.name}</div>
-                    <div className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">{testimonial.role} at {testimonial.company}</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           ))}
         </div>
       </div>
