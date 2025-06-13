@@ -35,16 +35,19 @@ const VideoBackground = () => {
           video.playbackRate = 0.75; // Ensure playback rate is set after load
         });
         
-        // Enhanced smooth loop transition - start 15 seconds before end, 10-second duration
+        // Enhanced seamless loop transition - eliminate jump cuts
         video.addEventListener('timeupdate', () => {
-          // Apply smooth transition to all videos
-          if (video.duration - video.currentTime < 15) { // Start crossfade 15 seconds before end
-            const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (15 - remainingTime) / 10; // 10-second transition duration
+          const duration = video.duration;
+          const currentTime = video.currentTime;
+          
+          // Start smooth transition 8 seconds before end
+          if (duration - currentTime < 8) {
+            const remainingTime = duration - currentTime;
+            const fadeProgress = Math.max(0, (8 - remainingTime) / 5); // 5-second fade duration
             
-            // Exponential fade curve for ultra-smooth transition
-            const exponentialFade = Math.pow(fadeProgress, 1.5);
-            const opacity = Math.max(0.3, 0.6 - (exponentialFade * 0.3)); // Gradual fade from 60% to 30%
+            // Smoother exponential fade curve
+            const exponentialFade = Math.pow(fadeProgress, 2);
+            const opacity = Math.max(0.35, 0.6 - (exponentialFade * 0.25)); // Fade from 60% to 35%
             
             video.style.opacity = opacity.toString();
             video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
@@ -55,7 +58,16 @@ const VideoBackground = () => {
           }
         });
 
-        // Reset on loop start with smooth transition and maintain enhanced filters
+        // Seamless loop restart - preload and smooth transition
+        video.addEventListener('ended', () => {
+          // Instant restart with smooth opacity restoration
+          video.currentTime = 0;
+          video.style.opacity = '0.6';
+          video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
+          video.play().catch(console.error);
+        });
+
+        // Enhanced seeked event for smoother transitions
         video.addEventListener('seeked', () => {
           video.style.opacity = '0.6';
           video.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
@@ -78,7 +90,8 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-60 transition-all duration-[10000ms] ease-in-out"
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover opacity-60 transition-all duration-[5000ms] ease-out"
         style={{
           filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'
         }}

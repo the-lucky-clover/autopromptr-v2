@@ -67,7 +67,7 @@ const Header = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></div>
                 <Zap className="w-5 h-5 text-white relative z-10" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent font-sans relative overflow-hidden">
+              <span className="text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] font-sans relative overflow-hidden">
                 {/* Metallic sheen overlay for text - only on hover and mousedown */}
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></span>
                 <span className="relative z-10">AutoPromptr</span>

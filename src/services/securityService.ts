@@ -161,7 +161,7 @@ export class SecurityService {
   async checkRateLimit(userId: string, action: string, limit: number, windowMs: number): Promise<boolean> {
     if (this.enhancedManager) {
       const result = await this.enhancedManager.rateLimit.checkLimit(userId, action, limit, windowMs);
-      return typeof result === 'boolean' ? result : result.allowed;
+      return typeof result === 'boolean' ? result : Boolean(result);
     }
 
     const windowStart = new Date(Date.now() - windowMs);
