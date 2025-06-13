@@ -221,14 +221,14 @@ export class SecurityService {
   // GDPR data export
   async exportUserData(userId: string): Promise<any> {
     try {
-      // Define table names as constants to ensure type safety
+      // Define table names to avoid TypeScript issues
       const userDataTables = [
         'profiles',
         'prompt_batches', 
         'prompts',
         'user_usage',
         'notifications'
-      ] as const;
+      ];
 
       const exportData: Record<string, any> = {};
 
@@ -236,7 +236,7 @@ export class SecurityService {
       for (const tableName of userDataTables) {
         try {
           const { data, error } = await supabase
-            .from(tableName)
+            .from(tableName as any)
             .select('*')
             .eq('user_id', userId);
 
@@ -258,20 +258,20 @@ export class SecurityService {
   // GDPR data deletion
   async deleteUserData(userId: string): Promise<void> {
     try {
-      // Define table names as constants to ensure type safety
+      // Define table names to avoid TypeScript issues
       const userDataTables = [
         'user_usage',
         'notifications', 
         'prompts',
         'prompt_batches',
         'profiles'
-      ] as const;
+      ];
 
       // Process each table individually to avoid TypeScript issues
       for (const tableName of userDataTables) {
         try {
           await supabase
-            .from(tableName)
+            .from(tableName as any)
             .delete()
             .eq('user_id', userId);
         } catch (tableError) {
