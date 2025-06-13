@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap } from "lucide-react";
@@ -8,6 +7,8 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isHeaderLightningActive, setIsHeaderLightningActive] = useState(false);
+  const [isMobileLightningActive, setIsMobileLightningActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +25,18 @@ const Header = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsMenuOpen(false);
+  };
+
+  const handleHeaderButtonClick = () => {
+    setIsHeaderLightningActive(true);
+    setTimeout(() => setIsHeaderLightningActive(false), 800);
+    setShowAuthModal(true);
+  };
+
+  const handleMobileButtonClick = () => {
+    setIsMobileLightningActive(true);
+    setTimeout(() => setIsMobileLightningActive(false), 800);
+    setShowAuthModal(true);
   };
 
   return (
@@ -75,10 +88,15 @@ const Header = () => {
 
             <div className="flex items-center">
               <Button 
-                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)]"
-                onClick={() => setShowAuthModal(true)}
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] animate-electric-pulse"
+                onClick={handleHeaderButtonClick}
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
+                {/* Metallic sheen overlay */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform -translate-x-full -translate-y-full rotate-45 group-hover:animate-metallic-sheen pointer-events-none"></span>
+                
+                {/* Lightning flash overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isHeaderLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
+                
                 <span className="relative z-10">Get Started / Sign In</span>
               </Button>
             </div>
@@ -120,10 +138,15 @@ const Header = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <Button 
-                className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group"
-                onClick={() => setShowAuthModal(true)}
+                className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group animate-electric-pulse"
+                onClick={handleMobileButtonClick}
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
+                {/* Metallic sheen overlay */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform -translate-x-full -translate-y-full rotate-45 group-hover:animate-metallic-sheen pointer-events-none"></span>
+                
+                {/* Lightning flash overlay */}
+                <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isMobileLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
+                
                 <span className="relative z-10">Get Started / Sign In</span>
               </Button>
             </div>

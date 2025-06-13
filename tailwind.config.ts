@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -158,6 +157,69 @@ export default {
 						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.30), rgba(167, 243, 208, 0.25), rgba(217, 70, 239, 0.25))'
 					}
 				},
+				'metallic-sheen': {
+					'0%': {
+						transform: 'translateX(-150%) translateY(-150%) rotate(45deg)',
+						opacity: '0'
+					},
+					'10%': {
+						opacity: '1'
+					},
+					'90%': {
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'translateX(150%) translateY(150%) rotate(45deg)',
+						opacity: '0'
+					}
+				},
+				'lightning-flash': {
+					'0%': {
+						opacity: '0',
+						transform: 'scale(0.5)',
+						filter: 'brightness(1)'
+					},
+					'10%': {
+						opacity: '1',
+						transform: 'scale(1.1)',
+						filter: 'brightness(2) saturate(2)'
+					},
+					'20%': {
+						opacity: '0.8',
+						transform: 'scale(1.05)',
+						filter: 'brightness(1.8) saturate(1.8)'
+					},
+					'40%': {
+						opacity: '1',
+						transform: 'scale(1.15)',
+						filter: 'brightness(2.5) saturate(2.2)'
+					},
+					'60%': {
+						opacity: '0.6',
+						transform: 'scale(1.02)',
+						filter: 'brightness(1.5) saturate(1.5)'
+					},
+					'80%': {
+						opacity: '0.3',
+						transform: 'scale(1)',
+						filter: 'brightness(1.2) saturate(1.2)'
+					},
+					'100%': {
+						opacity: '0',
+						transform: 'scale(1)',
+						filter: 'brightness(1)'
+					}
+				},
+				'electric-pulse': {
+					'0%, 100%': {
+						boxShadow: '0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(147, 51, 234, 0.3)',
+						filter: 'brightness(1)'
+					},
+					'50%': {
+						boxShadow: '0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(147, 51, 234, 0.6), 0 0 30px rgba(236, 72, 153, 0.4)',
+						filter: 'brightness(1.1)'
+					}
+				},
 				'sheen': {
 					'0%': {
 						transform: 'translateX(-100%) translateY(-100%) rotate(45deg)'
@@ -202,7 +264,10 @@ export default {
 				'sheen-delay-2': 'sheen 1.2s ease-out 4s',
 				'sheen-delay-3': 'sheen 1.2s ease-out 6s',
 				'tech-pulse': 'tech-pulse 3s ease-in-out infinite',
-				'holographic': 'holographic 8s ease-in-out infinite'
+				'holographic': 'holographic 8s ease-in-out infinite',
+				'metallic-sheen': 'metallic-sheen 0.6s ease-out',
+				'lightning-flash': 'lightning-flash 0.8s ease-out',
+				'electric-pulse': 'electric-pulse 2s ease-in-out infinite'
 			}
 		}
 	},
