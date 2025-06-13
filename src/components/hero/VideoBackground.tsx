@@ -87,6 +87,17 @@ const VideoBackground = () => {
         <source src={currentVideoSrc} type="video/mp4" />
       </video>
       
+      {/* Psychedelic Dayglo Overlays - Multiple layers for subtle animated color shifts */}
+      
+      {/* Primary psychedelic overlay - 45s cycle with pink/green/purple */}
+      <div className="absolute inset-0 z-5 opacity-10 mix-blend-overlay pointer-events-none animate-psychedelic-shift"></div>
+      
+      {/* Secondary color cycle overlay - 50s cycle with emerald/brown/magenta/cyan */}
+      <div className="absolute inset-0 z-6 opacity-8 mix-blend-soft-light pointer-events-none animate-color-cycle" style={{ animationDelay: '12s' }}></div>
+      
+      {/* Tertiary holographic overlay - 8s cycle with blue/purple/pink holographic effect */}
+      <div className="absolute inset-0 z-7 opacity-15 mix-blend-overlay pointer-events-none animate-holographic" style={{ animationDelay: '5s' }}></div>
+      
       {/* Enhanced black linear gradient overlay - darker and more prominent */}
       <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/0 via-black/50 to-black/85"></div>
       
