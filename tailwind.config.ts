@@ -173,6 +173,28 @@ export default {
 						opacity: '0'
 					}
 				},
+				'enhanced-metallic-sheen': {
+					'0%': {
+						transform: 'translateX(150%) translateY(-150%) rotate(45deg)',
+						opacity: '0'
+					},
+					'5%': {
+						opacity: '0.3'
+					},
+					'15%': {
+						opacity: '1'
+					},
+					'85%': {
+						opacity: '1'
+					},
+					'95%': {
+						opacity: '0.3'
+					},
+					'100%': {
+						transform: 'translateX(-150%) translateY(150%) rotate(45deg)',
+						opacity: '0'
+					}
+				},
 				'lightning-flash': {
 					'0%': {
 						opacity: '0',
@@ -266,6 +288,7 @@ export default {
 				'tech-pulse': 'tech-pulse 3s ease-in-out infinite',
 				'holographic': 'holographic 8s ease-in-out infinite',
 				'metallic-sheen': 'metallic-sheen 0.6s ease-out',
+				'enhanced-metallic-sheen': 'enhanced-metallic-sheen 0.8s ease-out',
 				'lightning-flash': 'lightning-flash 0.8s ease-out',
 				'electric-pulse': 'electric-pulse 2s ease-in-out infinite'
 			}

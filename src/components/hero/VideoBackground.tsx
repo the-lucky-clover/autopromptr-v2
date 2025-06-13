@@ -35,14 +35,14 @@ const VideoBackground = () => {
           video.playbackRate = 1.0;
         });
         
-        // Extended seamless looping with 4-5 second crossfade (no blur effects)
+        // Extended seamless looping with early transition start (no jump cuts)
         video.addEventListener('timeupdate', () => {
-          if (video.duration - video.currentTime < 4.5) { // Start crossfade 4.5 seconds before end
+          if (video.duration - video.currentTime < 12) { // Start crossfade 12 seconds before end
             const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (4.5 - remainingTime) / 4.5; // 0 to 1 over 4.5 seconds
+            const fadeProgress = (12 - remainingTime) / 12; // 0 to 1 over 12 seconds
             
-            // Gradual opacity changes only (no blur)
-            const opacity = Math.max(0.4, 0.8 - (fadeProgress * 0.4));
+            // Very subtle opacity changes to maintain seamless loop (no jump cuts)
+            const opacity = Math.max(0.75, 0.8 - (fadeProgress * 0.05));
             
             video.style.opacity = opacity.toString();
             video.style.filter = 'saturate(2.0) contrast(1.2)';
@@ -76,7 +76,7 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[4500ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[12000ms] ease-in-out"
         style={{
           filter: 'saturate(2.0) contrast(1.2)'
         }}
