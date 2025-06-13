@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface LocalTool {
@@ -215,10 +214,11 @@ class LocalToolsService {
   }
 
   // Legacy methods for backward compatibility
-  async saveLocalTool(tool: Omit<LocalTool, 'id'>): Promise<LocalTool> {
+  async saveLocalTool(userId: string, tool: Omit<LocalTool, 'id'>): Promise<LocalTool> {
     const { data, error } = await supabase
       .from('local_tools_settings')
       .insert({
+        user_id: userId,
         tool_name: tool.tool_name,
         tool_path: tool.tool_path,
         enabled: tool.enabled,
