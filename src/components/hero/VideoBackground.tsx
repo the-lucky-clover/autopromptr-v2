@@ -35,19 +35,17 @@ const VideoBackground = () => {
           video.playbackRate = 1.0;
         });
         
-        // Extended seamless looping with early transition start (no jump cuts)
+        // Seamless looping with early transition start (no jump cuts)
         video.addEventListener('timeupdate', () => {
-          if (video.duration - video.currentTime < 12) { // Start crossfade 12 seconds before end
+          if (video.duration - video.currentTime < 15) { // Start crossfade 15 seconds before end
             const remainingTime = video.duration - video.currentTime;
-            const fadeProgress = (12 - remainingTime) / 12; // 0 to 1 over 12 seconds
+            const fadeProgress = (15 - remainingTime) / 15; // 0 to 1 over 15 seconds
             
-            // Very subtle opacity changes to maintain seamless loop (no jump cuts)
-            const opacity = Math.max(0.75, 0.8 - (fadeProgress * 0.05));
-            
-            video.style.opacity = opacity.toString();
+            // Maintain opacity for seamless loop (no visible transitions)
+            video.style.opacity = '0.8';
             video.style.filter = 'saturate(2.0) contrast(1.2)';
           } else {
-            // Reset to normal state with super-saturation
+            // Normal state with enhanced saturation
             video.style.opacity = '0.8';
             video.style.filter = 'saturate(2.0) contrast(1.2)';
           }
@@ -76,7 +74,7 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[12000ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-[15000ms] ease-in-out"
         style={{
           filter: 'saturate(2.0) contrast(1.2)'
         }}
@@ -84,6 +82,9 @@ const VideoBackground = () => {
       >
         <source src={currentVideoSrc} type="video/mp4" />
       </video>
+      
+      {/* Black linear gradient overlay */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/0 via-black/30 to-black/70"></div>
       
       <div className="absolute bottom-4 right-4 z-20">
         <a 

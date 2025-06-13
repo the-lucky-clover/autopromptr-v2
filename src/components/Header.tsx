@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap } from "lucide-react";
@@ -88,7 +89,7 @@ const Header = () => {
 
             <div className="flex items-center">
               <Button 
-                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] animate-electric-pulse"
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)]"
                 onClick={handleHeaderButtonClick}
               >
                 {/* Metallic sheen overlay */}
@@ -138,7 +139,7 @@ const Header = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <Button 
-                className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group animate-electric-pulse"
+                className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group"
                 onClick={handleMobileButtonClick}
               >
                 {/* Metallic sheen overlay */}

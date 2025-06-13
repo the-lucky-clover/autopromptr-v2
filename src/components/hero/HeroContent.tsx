@@ -24,11 +24,16 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
 
   return (
     <div className="text-center mb-12 pt-16 sm:pt-20 lg:pt-24">
-      {/* Maximized hero headline - 2 lines with gradient only on "Supercharge" */}
-      <h1 className="text-7xl sm:text-8xl lg:text-9xl xl:text-[8rem] 2xl:text-[10rem] font-bold mb-8 leading-[0.85] font-sans">
-        <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] relative mb-2">
-          Supercharge Your
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-2xl opacity-50"></div>
+      {/* Hero headline - forced 2 lines with gradient only on "Supercharge" */}
+      <h1 className="font-bold mb-8 leading-[0.8] font-sans text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[9rem] 2xl:text-[11rem]">
+        <span className="block relative mb-1">
+          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
+            Supercharge
+          </span>{" "}
+          <span className="text-stone-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)]">
+            Your
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-2xl opacity-30"></div>
         </span>
         <span className="block text-stone-100 drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)] relative">
           AI Prompt Workflow
@@ -36,17 +41,17 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
         </span>
       </h1>
       
-      {/* Reformatted subheader with larger text and line break after "enhance," */}
-      <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-slate-200 mb-12 max-w-5xl mx-auto leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] font-sans">
-        <p className="font-medium mb-2">
-          Revolutionize your AI workflow—batch, enhance,
+      {/* TBWA/Chiat/Day inspired subheader - forced 2 lines */}
+      <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-slate-200 mb-12 max-w-5xl mx-auto leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] font-sans">
+        <p className="font-bold mb-1 text-white">
+          Think Different About AI.
         </p>
-        <p className="font-medium">
-          deploy across every platform with zero friction.
+        <p className="font-bold text-slate-300">
+          Break Every Workflow Boundary.
         </p>
       </div>
       
-      {/* CTA buttons with improved metallic sheen animation (no pulse) */}
+      {/* CTA buttons with improved metallic sheen animation */}
       <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
         <Button 
           size="lg" 
