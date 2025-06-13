@@ -24,13 +24,18 @@ const Pricing = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-purple-900/20 via-gray-900 to-blue-900/20">
-      <div className="max-w-6xl mx-auto">
+    <section ref={sectionRef} id="pricing" className="py-20 px-4 bg-gradient-to-b from-purple-900/20 via-gray-900 to-blue-900/20 relative overflow-hidden">
+      {/* 2Advanced-inspired background elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.1),transparent_50%)]"></div>
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-400/50 to-transparent"></div>
+      
+      <div className="max-w-6xl mx-auto relative z-10">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-serif">
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 font-sans relative">
             Choose Your Plan
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-blue-400/20 to-pink-400/20 blur-2xl opacity-50"></div>
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto font-sans">
             Select the perfect plan to accelerate your <br className="hidden sm:block" />
             AI prompting journey and unlock success
           </p>
@@ -40,7 +45,7 @@ const Pricing = () => {
           <PricingPlans />
         </div>
         
-        <div className={`text-center mt-12 text-gray-300 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`text-center mt-12 text-gray-300 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} font-sans`}>
           <p>All plans include a 14-day money-back guarantee • No setup fees • <br className="hidden sm:block" />Cancel anytime with ease</p>
         </div>
       </div>

@@ -1,7 +1,6 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Zap, Target, Users, BookOpen, TrendingUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Bot, Zap, Globe, Shield, Gauge, Users } from "lucide-react";
 
 const Features = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,76 +25,81 @@ const Features = () => {
 
   const features = [
     {
-      icon: Brain,
-      title: "AI-Optimized Templates",
-      description: "Professionally crafted prompts tested across multiple AI models <br className='hidden sm:block' />for maximum effectiveness and precision."
+      icon: Bot,
+      title: "AI-Powered Automation",
+      description: "Intelligently batch process and optimize prompts across multiple platforms simultaneously.",
     },
     {
       icon: Zap,
-      title: "Instant Results",
-      description: "Get immediate improvements in your AI outputs with our <br className='hidden sm:block' />battle-tested prompt formulas."
+      title: "Lightning Fast Execution",
+      description: "Deploy prompts to dozens of platforms in seconds, not hours.",
     },
     {
-      icon: Target,
-      title: "Industry-Specific",
-      description: "Specialized prompts for marketing, coding, writing, business, <br className='hidden sm:block' />and creative projects."
+      icon: Globe,
+      title: "Universal Platform Support",
+      description: "Works seamlessly with ChatGPT, Claude, Gemini, and 50+ AI platforms.",
+    },
+    {
+      icon: Shield,
+      title: "Enterprise Security",
+      description: "Bank-grade encryption and compliance with SOC 2 and GDPR standards.",
+    },
+    {
+      icon: Gauge,
+      title: "Performance Analytics",
+      description: "Real-time insights and metrics to optimize your AI workflow efficiency.",
     },
     {
       icon: Users,
-      title: "Community Driven",
-      description: "Join thousands of prompt engineers sharing insights <br className='hidden sm:block' />and best practices daily."
+      title: "Team Collaboration",
+      description: "Share templates, manage permissions, and collaborate on prompt strategies.",
     },
-    {
-      icon: BookOpen,
-      title: "Expert Courses",
-      description: "Learn from industry experts with comprehensive courses <br className='hidden sm:block' />and interactive workshops."
-    },
-    {
-      icon: TrendingUp,
-      title: "Performance Analytics",
-      description: "Track your prompt performance and optimize for better <br className='hidden sm:block' />results over time."
-    }
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      <div className="max-w-6xl mx-auto">
+    <section ref={sectionRef} id="features" className="py-20 px-4 bg-gradient-to-b from-gray-900 via-blue-900/30 to-purple-900/30 relative overflow-hidden">
+      {/* 2Advanced-inspired background elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.1),transparent_50%)]"></div>
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
+      
+      <div className="max-w-6xl mx-auto relative z-10">
         <div className={`text-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-serif">
-            Why Choose AutoPromptr?
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 font-sans relative">
+            Powerful Features
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-2xl opacity-50"></div>
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Discover the features that make us the leading platform <br className="hidden sm:block" />
-            for AI prompt engineering excellence
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto font-sans">
+            Everything you need to revolutionize your AI workflow
           </p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <Card 
-              key={index} 
-              className={`group hover:shadow-xl transition-all duration-500 border-0 shadow-lg hover:-translate-y-2 bg-gray-800/50 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:scale-105 ${
+            <div
+              key={index}
+              className={`group relative bg-gray-800/40 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(59,130,246,0.3)] hover:bg-gray-800/60 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
-              style={{
-                transitionDelay: isVisible ? `${index * 100}ms` : '0ms'
-              }}
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <CardHeader className="pb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-500/25">
-                  <feature.icon className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+              {/* 2Advanced-style hover effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+              
+              <div className="relative z-10">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <CardTitle className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-white mb-4 font-sans group-hover:text-blue-300 transition-colors duration-300">
                   {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription 
-                  className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300"
-                  dangerouslySetInnerHTML={{ __html: feature.description }}
-                />
-              </CardContent>
-            </Card>
+                </h3>
+                <p className="text-gray-300 font-sans leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+              
+              {/* Subtle tech accent */}
+              <div className="absolute top-4 right-4 w-2 h-2 bg-blue-400/50 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            </div>
           ))}
         </div>
       </div>

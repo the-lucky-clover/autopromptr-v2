@@ -33,85 +33,98 @@ const Header = () => {
           ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]' 
           : 'bg-transparent'
       }`}>
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo with enhanced drop shadow */}
+            {/* Logo with enhanced drop shadow - matching hero headline font */}
             <div className="flex items-center space-x-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)]">
-                <Zap className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></div>
+                <Zap className="w-5 h-5 text-white relative z-10" />
               </div>
-              <span className="text-xl font-bold text-white">
+              <span className="text-xl font-bold text-white font-sans">
                 AutoPromptr
               </span>
             </div>
             
-            {/* Desktop Navigation with drop shadows */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <button 
-                onClick={() => scrollToSection('features')} 
-                className="text-white hover:text-blue-400 transition-colors font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-              >
-                Features
-              </button>
-              <button 
-                onClick={() => scrollToSection('templates')} 
-                className="text-white hover:text-blue-400 transition-colors font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-              >
-                Templates
-              </button>
-              <button 
-                onClick={() => scrollToSection('pricing')} 
-                className="text-white hover:text-blue-400 transition-colors font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-              >
-                Pricing
-              </button>
-              <Button 
-                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group"
-                onClick={() => setShowAuthModal(true)}
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
-                Get Started / Sign In
-              </Button>
+            {/* Desktop Navigation with enhanced center alignment and 2Advanced styling */}
+            <nav className="hidden md:flex items-center justify-center flex-1 px-8">
+              <div className="flex items-center space-x-12">
+                <button 
+                  onClick={() => scrollToSection('features')} 
+                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group"
+                >
+                  <span className="relative z-10">Features</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                </button>
+                <button 
+                  onClick={() => scrollToSection('templates')} 
+                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group"
+                >
+                  <span className="relative z-10">Templates</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                </button>
+                <button 
+                  onClick={() => scrollToSection('pricing')} 
+                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group"
+                >
+                  <span className="relative z-10">Pricing</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                </button>
+              </div>
             </nav>
 
-            {/* Mobile Menu Button with drop shadow */}
+            <div className="flex items-center">
+              <Button 
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)]"
+                onClick={() => setShowAuthModal(true)}
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
+                <span className="relative z-10">Get Started / Sign In</span>
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button with enhanced styling */}
             <button
-              className="md:hidden text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+              className="md:hidden text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] relative group p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded blur-sm"></div>
+              {isMenuOpen ? <X className="w-6 h-6 relative z-10" /> : <Menu className="w-6 h-6 relative z-10" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Enhanced Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
             <div className="px-4 py-4 space-y-4">
               <button 
                 onClick={() => scrollToSection('features')} 
-                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2"
+                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group"
               >
-                Features
+                <span className="relative z-10">Features</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <button 
                 onClick={() => scrollToSection('templates')} 
-                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2"
+                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group"
               >
-                Templates
+                <span className="relative z-10">Templates</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')} 
-                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2"
+                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group"
               >
-                Pricing
+                <span className="relative z-10">Pricing</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <Button 
                 className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group"
                 onClick={() => setShowAuthModal(true)}
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
-                Get Started / Sign In
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
+                <span className="relative z-10">Get Started / Sign In</span>
               </Button>
             </div>
           </div>

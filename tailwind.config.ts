@@ -129,33 +129,33 @@ export default {
 				},
 				'psychedelic-shift': {
 					'0%': {
-						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.25), rgba(34, 197, 94, 0.30), rgba(147, 51, 234, 0.25))'
+						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.35), rgba(34, 197, 94, 0.40), rgba(147, 51, 234, 0.35))'
 					},
 					'25%': {
-						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.30), rgba(251, 146, 60, 0.25), rgba(236, 72, 153, 0.25))'
+						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.40), rgba(251, 146, 60, 0.35), rgba(236, 72, 153, 0.35))'
 					},
 					'50%': {
-						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.25), rgba(139, 92, 246, 0.30), rgba(34, 197, 94, 0.25))'
+						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.35), rgba(139, 92, 246, 0.40), rgba(34, 197, 94, 0.35))'
 					},
 					'75%': {
-						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.30), rgba(6, 182, 212, 0.25), rgba(251, 146, 60, 0.25))'
+						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.40), rgba(6, 182, 212, 0.35), rgba(251, 146, 60, 0.35))'
 					},
 					'100%': {
-						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.25), rgba(236, 72, 153, 0.30), rgba(139, 92, 246, 0.25))'
+						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.35), rgba(236, 72, 153, 0.40), rgba(139, 92, 246, 0.35))'
 					}
 				},
 				'color-cycle': {
 					'0%': {
-						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.20), rgba(139, 69, 19, 0.25), rgba(165, 243, 252, 0.20))'
+						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.25), rgba(139, 69, 19, 0.30), rgba(165, 243, 252, 0.25))'
 					},
 					'33%': {
-						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.25), rgba(217, 70, 239, 0.20), rgba(167, 243, 208, 0.20))'
+						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.30), rgba(217, 70, 239, 0.25), rgba(167, 243, 208, 0.25))'
 					},
 					'66%': {
-						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.20), rgba(165, 243, 252, 0.25), rgba(139, 69, 19, 0.20))'
+						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.25), rgba(165, 243, 252, 0.30), rgba(139, 69, 19, 0.25))'
 					},
 					'100%': {
-						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.25), rgba(167, 243, 208, 0.20), rgba(217, 70, 239, 0.20))'
+						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.30), rgba(167, 243, 208, 0.25), rgba(217, 70, 239, 0.25))'
 					}
 				},
 				'sheen': {
@@ -164,6 +164,27 @@ export default {
 					},
 					'100%': {
 						transform: 'translateX(400%) translateY(400%) rotate(45deg)'
+					}
+				},
+				'tech-pulse': {
+					'0%, 100%': {
+						opacity: '0.3',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '0.7',
+						transform: 'scale(1.05)'
+					}
+				},
+				'holographic': {
+					'0%': {
+						background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1))'
+					},
+					'50%': {
+						background: 'linear-gradient(45deg, rgba(147, 51, 234, 0.1), rgba(236, 72, 153, 0.1))'
+					},
+					'100%': {
+						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.1), rgba(59, 130, 246, 0.1))'
 					}
 				}
 			},
@@ -174,12 +195,14 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scroll': 'scroll 20s linear infinite',
 				'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
-				'psychedelic-shift': 'psychedelic-shift 40s ease-in-out infinite alternate',
-				'color-cycle': 'color-cycle 45s ease-in-out infinite',
-				'sheen': 'sheen 1s ease-out',
-				'sheen-delay-1': 'sheen 1s ease-out 2s',
-				'sheen-delay-2': 'sheen 1s ease-out 4s',
-				'sheen-delay-3': 'sheen 1s ease-out 6s'
+				'psychedelic-shift': 'psychedelic-shift 45s ease-in-out infinite alternate',
+				'color-cycle': 'color-cycle 50s ease-in-out infinite',
+				'sheen': 'sheen 1.2s ease-out',
+				'sheen-delay-1': 'sheen 1.2s ease-out 2s',
+				'sheen-delay-2': 'sheen 1.2s ease-out 4s',
+				'sheen-delay-3': 'sheen 1.2s ease-out 6s',
+				'tech-pulse': 'tech-pulse 3s ease-in-out infinite',
+				'holographic': 'holographic 8s ease-in-out infinite'
 			}
 		}
 	},
