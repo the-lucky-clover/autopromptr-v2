@@ -8,6 +8,8 @@ const Hero = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -26,6 +28,21 @@ const Hero = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Slow down video playback and setup seamless looping
+  useEffect(() => {
+    const setupVideo = (video: HTMLVideoElement | null) => {
+      if (video) {
+        video.playbackRate = 0.4; // Slow, hypnotic movement
+        video.addEventListener('loadeddata', () => {
+          video.playbackRate = 0.4;
+        });
+      }
+    };
+
+    setupVideo(videoRef1.current);
+    setupVideo(videoRef2.current);
+  }, []);
+
   return (
     <>
       <section 
@@ -34,17 +51,66 @@ const Hero = () => {
           background: 'linear-gradient(to bottom right, rgb(30, 58, 138), rgb(30, 64, 175), rgb(88, 28, 135))'
         }}
       >
-        {/* Video Background */}
+        {/* Dual Video Background for Seamless Loop */}
         <div className="absolute inset-0 z-0">
+          {/* Primary Video */}
           <video
+            ref={videoRef1}
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover opacity-100"
           >
             <source src="https://videos.pexels.com/video-files/6528444/6528444-uhd_2560_1440_30fps.mp4" type="video/mp4" />
           </video>
+          
+          {/* Secondary Video for Crossfade */}
+          <video
+            ref={videoRef2}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-0 animate-pulse"
+            style={{ animationDelay: '15s', animationDuration: '30s' }}
+          >
+            <source src="https://videos.pexels.com/video-files/6528444/6528444-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+          </video>
+          
+          {/* Psychedelic Color Overlays */}
+          {/* Primary Dayglo Gradient */}
+          <div 
+            className="absolute inset-0 z-10 animate-pulse"
+            style={{
+              background: 'linear-gradient(45deg, rgba(0,255,255,0.3), rgba(255,0,255,0.3), rgba(0,255,0,0.3), rgba(255,20,147,0.3))',
+              mixBlendMode: 'color-dodge',
+              animation: 'psychedelic-shift 8s ease-in-out infinite'
+            }}
+          ></div>
+          
+          {/* Secondary Color Layer */}
+          <div 
+            className="absolute inset-0 z-10"
+            style={{
+              background: 'radial-gradient(circle at 30% 70%, rgba(138,43,226,0.4), rgba(255,255,0,0.2), rgba(0,255,255,0.3))',
+              mixBlendMode: 'screen',
+              animation: 'rave-pulse 6s ease-in-out infinite reverse'
+            }}
+          ></div>
+          
+          {/* Chromatic Aberration Effect */}
+          <div 
+            className="absolute inset-0 z-10"
+            style={{
+              background: 'linear-gradient(90deg, rgba(255,0,0,0.1), transparent, rgba(0,255,0,0.1), transparent, rgba(0,0,255,0.1))',
+              mixBlendMode: 'overlay',
+              animation: 'chromatic-shift 4s linear infinite'
+            }}
+          ></div>
+          
+          {/* Subtle text readability overlay */}
+          <div className="absolute inset-0 bg-black/10 z-15"></div>
           
           {/* Video Attribution */}
           <div className="absolute bottom-4 right-4 z-20">
@@ -57,9 +123,6 @@ const Hero = () => {
               Video by DV
             </a>
           </div>
-          
-          {/* Simple dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/20 z-10"></div>
         </div>
         
         {/* Content */}
@@ -119,6 +182,51 @@ const Hero = () => {
             </div>
           </div>
         </div>
+        
+        {/* Custom CSS Animations */}
+        <style jsx>{`
+          @keyframes psychedelic-shift {
+            0% { 
+              background: linear-gradient(45deg, rgba(0,255,255,0.3), rgba(255,0,255,0.3), rgba(0,255,0,0.3), rgba(255,20,147,0.3));
+              filter: hue-rotate(0deg);
+            }
+            25% { 
+              background: linear-gradient(135deg, rgba(255,0,255,0.4), rgba(0,255,0,0.3), rgba(255,255,0,0.3), rgba(138,43,226,0.3));
+              filter: hue-rotate(90deg);
+            }
+            50% { 
+              background: linear-gradient(225deg, rgba(0,255,0,0.3), rgba(255,255,0,0.4), rgba(0,255,255,0.3), rgba(255,0,255,0.3));
+              filter: hue-rotate(180deg);
+            }
+            75% { 
+              background: linear-gradient(315deg, rgba(255,255,0,0.3), rgba(0,255,255,0.4), rgba(255,20,147,0.3), rgba(0,255,0,0.3));
+              filter: hue-rotate(270deg);
+            }
+            100% { 
+              background: linear-gradient(45deg, rgba(0,255,255,0.3), rgba(255,0,255,0.3), rgba(0,255,0,0.3), rgba(255,20,147,0.3));
+              filter: hue-rotate(360deg);
+            }
+          }
+          
+          @keyframes rave-pulse {
+            0%, 100% { 
+              opacity: 0.3;
+              transform: scale(1);
+            }
+            50% { 
+              opacity: 0.6;
+              transform: scale(1.05);
+            }
+          }
+          
+          @keyframes chromatic-shift {
+            0% { transform: translateX(-2px); }
+            25% { transform: translateX(2px) translateY(-1px); }
+            50% { transform: translateX(1px) translateY(2px); }
+            75% { transform: translateX(-1px) translateY(1px); }
+            100% { transform: translateX(-2px); }
+          }
+        `}</style>
       </section>
 
       <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
