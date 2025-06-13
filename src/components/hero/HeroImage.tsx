@@ -1,7 +1,7 @@
 
 const HeroImage = () => {
   return (
-    <div className="flex-1 max-w-lg">
+    <div className="max-w-2xl mx-auto">
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl blur-3xl"></div>
         <img 
