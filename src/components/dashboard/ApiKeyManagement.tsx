@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Key, TestTube, Trash2, DollarSign, Zap } from "lucide-react";
-import { apiKeyService, API_PROVIDERS, type ApiProvider } from "@/services/apiKeyService";
+import { Key, TestTube, Trash2, DollarSign, Zap, Shield, AlertTriangle } from "lucide-react";
+import { API_PROVIDERS, type ApiProvider, createEnhancedApiKeyService } from "@/services/security/enhancedApiKeyService";
+import { useAuth } from "@/contexts/AuthContext";
+import { createEnhancedSecurityManager } from "@/services/security/enhancedSecurityManager";
 
 export const ApiKeyManagement = () => {
   const [selectedProvider, setSelectedProvider] = useState<string>("");
@@ -15,15 +18,42 @@ export const ApiKeyManagement = () => {
   const [customEndpoint, setCustomEndpoint] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
-  const [userKeys, setUserKeys] = useState<Array<{ providerId: string; isValid: boolean; createdAt: string }>>([]);
+  const [userKeys, setUserKeys] = useState<Array<{ providerId: string; isValid: boolean; createdAt: string; maskedKey: string }>>([]);
   const [usageStats, setUsageStats] = useState({ totalCost: 0, operationsCount: 0, remainingQuota: 0 });
+  const [securityStatus, setSecurityStatus] = useState<{ status: string; issues: string[] }>({ status: 'checking', issues: [] });
   const { toast } = useToast();
+  const { user, session } = useAuth();
+
+  const apiKeyService = user && session ? 
+    createEnhancedApiKeyService(user.id, session.access_token) : null;
+  
+  const securityManager = user && session ? 
+    createEnhancedSecurityManager(user.id, session.access_token) : null;
 
   useEffect(() => {
-    loadUserData();
-  }, []);
+    if (user && session) {
+      loadUserData();
+      checkSecurityHealth();
+    }
+  }, [user, session]);
+
+  const checkSecurityHealth = async () => {
+    if (!securityManager) return;
+    
+    try {
+      const healthCheck = await securityManager.performSecurityHealthCheck();
+      setSecurityStatus({ 
+        status: healthCheck.status, 
+        issues: healthCheck.issues 
+      });
+    } catch (error) {
+      console.error('Security health check failed:', error);
+    }
+  };
 
   const loadUserData = async () => {
+    if (!apiKeyService) return;
+    
     try {
       const [keys, stats] = await Promise.all([
         apiKeyService.getUserApiKeys(),
@@ -37,7 +67,7 @@ export const ApiKeyManagement = () => {
   };
 
   const handleTestConnection = async () => {
-    if (!selectedProvider || !apiKey) {
+    if (!selectedProvider || !apiKey || !apiKeyService) {
       toast({
         title: "Missing Information",
         description: "Please select a provider and enter an API key",
@@ -48,7 +78,7 @@ export const ApiKeyManagement = () => {
 
     setIsTesting(true);
     try {
-      const isValid = await apiKeyService.testApiKey(selectedProvider, apiKey, customEndpoint);
+      const isValid = await apiKeyService.testApiKeyServerSide(selectedProvider, apiKey, customEndpoint);
       toast({
         title: isValid ? "Connection Successful" : "Connection Failed",
         description: isValid 
@@ -68,10 +98,21 @@ export const ApiKeyManagement = () => {
   };
 
   const handleSaveKey = async () => {
-    if (!selectedProvider || !apiKey) {
+    if (!selectedProvider || !apiKey || !apiKeyService || !securityManager) {
       toast({
         title: "Missing Information",
         description: "Please select a provider and enter an API key",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate the API key input
+    const validation = await securityManager.validateUserInput({ text: apiKey });
+    if (!validation.valid) {
+      toast({
+        title: "Invalid Input",
+        description: validation.errors.join(', '),
         variant: "destructive",
       });
       return;
@@ -82,7 +123,7 @@ export const ApiKeyManagement = () => {
       await apiKeyService.saveApiKey(selectedProvider, apiKey, customEndpoint);
       toast({
         title: "API Key Saved",
-        description: "Your API key has been securely saved and encrypted",
+        description: "Your API key has been securely encrypted and saved",
       });
       
       // Reset form
@@ -104,11 +145,13 @@ export const ApiKeyManagement = () => {
   };
 
   const handleRemoveKey = async (providerId: string) => {
+    if (!apiKeyService) return;
+    
     try {
       await apiKeyService.removeApiKey(providerId);
       toast({
         title: "API Key Removed",
-        description: "The API key has been removed from your account",
+        description: "The API key has been securely removed from your account",
       });
       await loadUserData();
     } catch (error) {
@@ -128,6 +171,51 @@ export const ApiKeyManagement = () => {
 
   return (
     <div className="space-y-6">
+      {/* Security Status Alert */}
+      {securityStatus.status === 'critical' && (
+        <Card className="border-red-500 bg-red-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-red-700">
+              <AlertTriangle className="w-5 h-5" />
+              Security Issues Detected
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="list-disc list-inside space-y-1 text-red-600">
+              {securityStatus.issues.map((issue, index) => (
+                <li key={index}>{issue}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Security Status Indicator */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="w-5 h-5" />
+            Security Status
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-2">
+            <Badge variant={
+              securityStatus.status === 'healthy' ? 'default' : 
+              securityStatus.status === 'warning' ? 'secondary' : 'destructive'
+            }>
+              {securityStatus.status === 'healthy' && '🟢 Secure'}
+              {securityStatus.status === 'warning' && '🟡 Warning'}
+              {securityStatus.status === 'critical' && '🔴 Critical'}
+              {securityStatus.status === 'checking' && '⏳ Checking...'}
+            </Badge>
+            <span className="text-sm text-gray-600">
+              All API keys are encrypted with your personal encryption key
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Usage Overview */}
       <Card>
         <CardHeader>
@@ -165,7 +253,7 @@ export const ApiKeyManagement = () => {
             Add AI Provider API Key
           </CardTitle>
           <CardDescription>
-            Add your own API keys to unlock premium AI optimization features
+            Add your own API keys to unlock premium AI optimization features. Keys are encrypted with your personal encryption key.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -234,13 +322,13 @@ export const ApiKeyManagement = () => {
               className="flex items-center gap-2"
             >
               <TestTube className="w-4 h-4" />
-              {isTesting ? 'Testing...' : 'Test Connection'}
+              {isTesting ? 'Testing Securely...' : 'Test Connection'}
             </Button>
             <Button
               onClick={handleSaveKey}
               disabled={!selectedProvider || !apiKey || isLoading}
             >
-              {isLoading ? 'Saving...' : 'Save API Key'}
+              {isLoading ? 'Encrypting & Saving...' : 'Save API Key'}
             </Button>
           </div>
         </CardContent>
@@ -251,7 +339,7 @@ export const ApiKeyManagement = () => {
         <CardHeader>
           <CardTitle>Your API Keys</CardTitle>
           <CardDescription>
-            Manage your saved API keys and their status
+            Manage your saved API keys and their status. Keys are displayed in masked format for security.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -259,14 +347,14 @@ export const ApiKeyManagement = () => {
             <p className="text-gray-500 text-center py-4">No API keys configured</p>
           ) : (
             <div className="space-y-3">
-              {userKeys.map(({ providerId, isValid, createdAt }) => {
+              {userKeys.map(({ providerId, isValid, createdAt, maskedKey }) => {
                 const provider = getProviderInfo(providerId);
                 return (
                   <div key={providerId} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
                       <p className="font-medium">{provider?.name || providerId}</p>
                       <p className="text-sm text-gray-600">
-                        Added {new Date(createdAt).toLocaleDateString()}
+                        Added {new Date(createdAt).toLocaleDateString()} • Key: {maskedKey}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
