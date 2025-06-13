@@ -15,9 +15,9 @@ const Hero = () => {
         <VideoBackground />
         <ParticleVignette />
         
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-8 lg:py-16">
           <HeroContent onSignInClick={() => setShowAuthModal(true)} />
-          <div className="drop-shadow-[0_8px_32px_rgba(0,0,0,0.3)] mt-8 lg:mt-12">
+          <div className="drop-shadow-[0_8px_32px_rgba(0,0,0,0.3)] mt-6 lg:mt-8 xl:mt-12 px-4">
             <HeroImage />
           </div>
         </div>

@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -133,6 +132,27 @@ export default {
 					'90%': { opacity: '0.1' },
 					'100%': { transform: 'translateX(400%) translateY(400%) rotate(45deg)', opacity: '0' }
 				},
+				'rare-glass-sheen-1': {
+					'0%': { transform: 'translateX(-120%) translateY(-120%) rotate(47deg)', opacity: '0' },
+					'8%': { opacity: '0.08' },
+					'45%': { opacity: '0.25' },
+					'92%': { opacity: '0.08' },
+					'100%': { transform: 'translateX(380%) translateY(380%) rotate(47deg)', opacity: '0' }
+				},
+				'rare-glass-sheen-2': {
+					'0%': { transform: 'translateX(-110%) translateY(-110%) rotate(43deg)', opacity: '0' },
+					'12%': { opacity: '0.06' },
+					'48%': { opacity: '0.22' },
+					'88%': { opacity: '0.06' },
+					'100%': { transform: 'translateX(420%) translateY(420%) rotate(43deg)', opacity: '0' }
+				},
+				'rare-glass-sheen-3': {
+					'0%': { transform: 'translateX(-130%) translateY(-130%) rotate(49deg)', opacity: '0' },
+					'15%': { opacity: '0.1' },
+					'52%': { opacity: '0.28' },
+					'85%': { opacity: '0.1' },
+					'100%': { transform: 'translateX(360%) translateY(360%) rotate(49deg)', opacity: '0' }
+				},
 				'sheen': {
 					'0%': { transform: 'translateX(-100%) translateY(-100%) rotate(45deg)' },
 					'100%': { transform: 'translateX(400%) translateY(400%) rotate(45deg)' }
@@ -189,6 +209,9 @@ export default {
 				'enhanced-metallic-sheen': 'enhanced-metallic-sheen 0.8s ease-out',
 				'idle-metallic-sheen': 'idle-metallic-sheen 2.5s ease-in-out infinite',
 				'navbar-glass-sheen': 'navbar-glass-sheen 0.8s ease-out infinite 8s',
+				'rare-glass-sheen-1': 'rare-glass-sheen-1 0.6s ease-out infinite 15s',
+				'rare-glass-sheen-2': 'rare-glass-sheen-2 0.65s ease-out infinite 23s',
+				'rare-glass-sheen-3': 'rare-glass-sheen-3 0.7s ease-out infinite 31s',
 				'sheen': 'sheen 1.2s ease-out',
 				'sheen-delay-1': 'sheen 1.2s ease-out 2s',
 				'sheen-delay-2': 'sheen 1.2s ease-out 4s',

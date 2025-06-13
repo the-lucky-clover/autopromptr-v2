@@ -47,12 +47,15 @@ const Header = () => {
           ? 'bg-gray-900/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]' 
           : 'bg-transparent'
       }`}>
-        {/* Intermittent navbar glass sheen overlay */}
+        {/* Enhanced intermittent navbar glass sheen overlays - multiple rare animations */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 animate-navbar-glass-sheen"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent w-1/4 h-full transform -translate-x-full rotate-47 animate-rare-glass-sheen-1"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/18 to-transparent w-1/3 h-full transform -translate-x-full rotate-43 animate-rare-glass-sheen-2"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/22 to-transparent w-1/5 h-full transform -translate-x-full rotate-49 animate-rare-glass-sheen-3"></div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-16">
             {/* Logo with enhanced drop shadow - matching hero headline font */}
             <div className="flex items-center space-x-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
@@ -65,26 +68,26 @@ const Header = () => {
               </span>
             </div>
             
-            {/* Desktop Navigation with enhanced center alignment and 2Advanced styling */}
-            <nav className="hidden md:flex items-center justify-center flex-1 px-8">
-              <div className="flex items-center space-x-12">
+            {/* Desktop Navigation with enhanced center alignment and responsive spacing */}
+            <nav className="hidden md:flex items-center justify-center flex-1 px-4 lg:px-8">
+              <div className="flex items-center space-x-8 lg:space-x-12">
                 <button 
                   onClick={() => scrollToSection('features')} 
-                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group"
+                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group text-sm lg:text-base"
                 >
                   <span className="relative z-10">Features</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
                 </button>
                 <button 
                   onClick={() => scrollToSection('templates')} 
-                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group"
+                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group text-sm lg:text-base"
                 >
                   <span className="relative z-10">Templates</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
                 </button>
                 <button 
                   onClick={() => scrollToSection('pricing')} 
-                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group"
+                  className="relative text-white hover:text-blue-400 transition-all duration-300 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] group text-sm lg:text-base"
                 >
                   <span className="relative z-10">Pricing</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/20 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
@@ -94,13 +97,10 @@ const Header = () => {
 
             <div className="flex items-center">
               <Button 
-                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)]"
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base shadow-[0_4px_16px_rgba(59,130,246,0.4)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] group transition-all duration-300 hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)]"
                 onClick={handleHeaderButtonClick}
               >
-                {/* Idle metallic sheen overlay - continuous animation */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></span>
-                
-                {/* Hover metallic sheen overlay */}
+                {/* Hover-only metallic sheen overlay - REMOVED idle animation */}
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
                 
                 {/* Lightning flash overlay */}
@@ -121,39 +121,36 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Enhanced Mobile Menu */}
+        {/* Enhanced Mobile Menu with better responsiveness */}
         {isMenuOpen && (
           <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
             <div className="px-4 py-4 space-y-4">
               <button 
                 onClick={() => scrollToSection('features')} 
-                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group"
+                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group text-base"
               >
                 <span className="relative z-10">Features</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <button 
                 onClick={() => scrollToSection('templates')} 
-                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group"
+                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group text-base"
               >
                 <span className="relative z-10">Templates</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')} 
-                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group"
+                className="block w-full text-left text-white hover:text-blue-400 transition-colors py-2 relative group text-base"
               >
                 <span className="relative z-10">Pricing</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               <Button 
-                className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group"
+                className="relative overflow-hidden w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full group py-3 text-base"
                 onClick={handleMobileButtonClick}
               >
-                {/* Idle metallic sheen overlay - continuous animation */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></span>
-                
-                {/* Hover metallic sheen overlay */}
+                {/* Hover-only metallic sheen overlay - REMOVED idle animation */}
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
                 
                 {/* Lightning flash overlay */}
