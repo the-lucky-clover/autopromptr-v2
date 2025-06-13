@@ -56,34 +56,37 @@ const VideoBackground = () => {
 
       // Handle seamless crossfade before video ends
       const handleSeamlessTransition = (currentVideo: HTMLVideoElement, nextVideo: HTMLVideoElement, videoNumber: 1 | 2) => {
-        // Start crossfade at 95% completion to avoid jump cuts
-        const transitionTime = currentVideo.duration * 0.95;
+        // Start crossfade at 90% completion for earlier transition to avoid jump cuts
+        const transitionTime = currentVideo.duration * 0.9;
         
         const checkTransitionTime = () => {
-          if (currentVideo.currentTime >= transitionTime) {
-            // Preload next video to the beginning
-            nextVideo.currentTime = 0;
-            nextVideo.play().catch(console.error);
-            
-            // Start smooth crossfade immediately
-            currentVideo.style.transition = 'opacity 1.5s ease-in-out';
-            nextVideo.style.transition = 'opacity 1.5s ease-in-out';
-            
-            currentVideo.style.opacity = '0';
-            nextVideo.style.opacity = '0.6';
-            
-            // Update active video state
-            setActiveVideo(videoNumber === 1 ? 2 : 1);
-            
-            // Reset for next cycle after transition
-            setTimeout(() => {
-              currentVideo.currentTime = 0;
-              currentVideo.style.transition = '';
-              nextVideo.style.transition = '';
-            }, 1500);
-            
-            // Stop monitoring this video
-            currentVideo.removeEventListener('timeupdate', checkTransitionTime);
+          if (currentVideo.currentTime >= transitionTime && currentVideo.readyState >= 2) {
+            // Ensure next video is fully loaded before starting transition
+            if (nextVideo.readyState >= 2) {
+              // Preload next video to the beginning
+              nextVideo.currentTime = 0;
+              nextVideo.play().catch(console.error);
+              
+              // Start smooth crossfade with longer duration for seamless transition
+              currentVideo.style.transition = 'opacity 2s ease-in-out';
+              nextVideo.style.transition = 'opacity 2s ease-in-out';
+              
+              currentVideo.style.opacity = '0';
+              nextVideo.style.opacity = '0.6';
+              
+              // Update active video state
+              setActiveVideo(videoNumber === 1 ? 2 : 1);
+              
+              // Reset for next cycle after transition
+              setTimeout(() => {
+                currentVideo.currentTime = 0;
+                currentVideo.style.transition = '';
+                nextVideo.style.transition = '';
+              }, 2000);
+              
+              // Stop monitoring this video
+              currentVideo.removeEventListener('timeupdate', checkTransitionTime);
+            }
           }
         };
 
@@ -94,21 +97,37 @@ const VideoBackground = () => {
       const monitorVideo1 = () => handleSeamlessTransition(video1, video2, 1);
       const monitorVideo2 = () => handleSeamlessTransition(video2, video1, 2);
 
-      // Start monitoring when video loads and plays
-      video1.addEventListener('loadeddata', () => {
-        if (video1.readyState >= 2) {
-          video1.addEventListener('timeupdate', monitorVideo1);
-        }
-      });
+      // Enhanced loading and ready state handling
+      const setupVideoMonitoring = (video: HTMLVideoElement, monitorFn: () => void) => {
+        const startMonitoring = () => {
+          if (video.readyState >= 2) {
+            video.addEventListener('timeupdate', monitorFn);
+          } else {
+            video.addEventListener('canplay', () => {
+              video.addEventListener('timeupdate', monitorFn);
+            }, { once: true });
+          }
+        };
 
-      video2.addEventListener('loadeddata', () => {
-        if (video2.readyState >= 2) {
-          video2.addEventListener('timeupdate', monitorVideo2);
+        if (video.readyState >= 2) {
+          startMonitoring();
+        } else {
+          video.addEventListener('loadeddata', startMonitoring, { once: true });
         }
-      });
+      };
 
-      // Start the first video
-      video1.play().catch(console.error);
+      // Set up monitoring for both videos
+      setupVideoMonitoring(video1, monitorVideo1);
+      setupVideoMonitoring(video2, monitorVideo2);
+
+      // Start the first video with error handling
+      video1.play().catch(error => {
+        console.error('Video play failed:', error);
+        // Retry after a short delay
+        setTimeout(() => {
+          video1.play().catch(console.error);
+        }, 1000);
+      });
 
       // Cleanup function
       return () => {
@@ -134,7 +153,7 @@ const VideoBackground = () => {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out"
         style={{
           opacity: activeVideo === 1 ? '0.6' : '0',
           filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'
@@ -148,7 +167,7 @@ const VideoBackground = () => {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out"
         style={{
           opacity: activeVideo === 2 ? '0.6' : '0',
           filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'

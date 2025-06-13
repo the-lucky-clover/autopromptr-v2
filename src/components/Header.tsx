@@ -57,21 +57,21 @@ const Header = () => {
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between h-16">
-            {/* Interactive Logo with AutoPromptr text on LEFT of Zap icon */}
+            {/* Interactive Logo with Zap icon on LEFT, AutoPromptr text on RIGHT */}
             <a 
               href="https://app.autopromptr.com" 
               className="flex items-center space-x-2 drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)] group cursor-pointer"
             >
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] font-sans relative overflow-hidden">
-                {/* Metallic sheen overlay for text - only on hover and mousedown */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></span>
-                <span className="relative z-10">AutoPromptr</span>
-              </span>
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_4px_16px_rgba(59,130,246,0.4)] relative overflow-hidden transition-all duration-300 group-hover:shadow-[0_6px_24px_rgba(59,130,246,0.6)] group-active:scale-95">
                 {/* Metallic sheen overlay - only on hover and mousedown */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></div>
                 <Zap className="w-5 h-5 text-white relative z-10" />
               </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] font-sans relative overflow-hidden">
+                {/* Metallic sheen overlay for text - only on hover and mousedown */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen group-active:animate-enhanced-metallic-sheen pointer-events-none"></span>
+                <span className="relative z-10">AutoPromptr</span>
+              </span>
             </a>
             
             {/* Desktop Navigation with enhanced center alignment and responsive spacing */}
