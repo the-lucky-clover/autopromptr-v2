@@ -26,14 +26,47 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Handle authentication tokens from URL hash (email verification)
+    const handleAuthFromUrl = async () => {
+      const hashFragment = window.location.hash;
+      if (hashFragment && hashFragment.includes('access_token')) {
+        try {
+          const { data, error } = await supabase.auth.getSessionFromUrl();
+          if (error) {
+            console.error('Error getting session from URL:', error);
+          } else if (data.session) {
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            // Session will be handled by onAuthStateChange
+          }
+        } catch (error) {
+          console.error('Error processing auth URL:', error);
+        }
+      }
+    };
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Handle successful sign in from email verification
+        if (event === 'SIGNED_IN' && session?.user) {
+          // Defer navigation to prevent issues
+          setTimeout(() => {
+            if (window.location.pathname === '/auth' || window.location.hash.includes('access_token')) {
+              window.location.href = '/';
+            }
+          }, 100);
+        }
       }
     );
+
+    // Handle auth from URL first
+    handleAuthFromUrl();
 
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
