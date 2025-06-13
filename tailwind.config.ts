@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -20,7 +21,6 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
-				serif: ['Playfair Display', 'serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -129,33 +129,33 @@ export default {
 				},
 				'psychedelic-shift': {
 					'0%': {
-						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.10), rgba(34, 197, 94, 0.12), rgba(147, 51, 234, 0.12))'
+						background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.25), rgba(34, 197, 94, 0.30), rgba(147, 51, 234, 0.25))'
 					},
 					'25%': {
-						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.12), rgba(251, 146, 60, 0.12), rgba(236, 72, 153, 0.10))'
+						background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.30), rgba(251, 146, 60, 0.25), rgba(236, 72, 153, 0.25))'
 					},
 					'50%': {
-						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.12), rgba(139, 92, 246, 0.12), rgba(34, 197, 94, 0.10))'
+						background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.25), rgba(139, 92, 246, 0.30), rgba(34, 197, 94, 0.25))'
 					},
 					'75%': {
-						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.12), rgba(251, 146, 60, 0.10))'
+						background: 'linear-gradient(180deg, rgba(139, 92, 246, 0.30), rgba(6, 182, 212, 0.25), rgba(251, 146, 60, 0.25))'
 					},
 					'100%': {
-						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.12), rgba(236, 72, 153, 0.12), rgba(139, 92, 246, 0.10))'
+						background: 'linear-gradient(225deg, rgba(6, 182, 212, 0.25), rgba(236, 72, 153, 0.30), rgba(139, 92, 246, 0.25))'
 					}
 				},
 				'color-cycle': {
 					'0%': {
-						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.08), rgba(139, 69, 19, 0.08), rgba(165, 243, 252, 0.08))'
+						background: 'linear-gradient(270deg, rgba(167, 243, 208, 0.20), rgba(139, 69, 19, 0.25), rgba(165, 243, 252, 0.20))'
 					},
 					'33%': {
-						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.08), rgba(217, 70, 239, 0.08), rgba(167, 243, 208, 0.08))'
+						background: 'linear-gradient(0deg, rgba(139, 69, 19, 0.25), rgba(217, 70, 239, 0.20), rgba(167, 243, 208, 0.20))'
 					},
 					'66%': {
-						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.08), rgba(165, 243, 252, 0.08), rgba(139, 69, 19, 0.08))'
+						background: 'linear-gradient(90deg, rgba(217, 70, 239, 0.20), rgba(165, 243, 252, 0.25), rgba(139, 69, 19, 0.20))'
 					},
 					'100%': {
-						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.08), rgba(167, 243, 208, 0.08), rgba(217, 70, 239, 0.08))'
+						background: 'linear-gradient(180deg, rgba(165, 243, 252, 0.25), rgba(167, 243, 208, 0.20), rgba(217, 70, 239, 0.20))'
 					}
 				},
 				'sheen': {
@@ -174,12 +174,12 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'scroll': 'scroll 20s linear infinite',
 				'slide-in-from-bottom': 'slide-in-from-bottom 0.3s ease-out',
-				'psychedelic-shift': 'psychedelic-shift 35s ease-in-out infinite alternate',
-				'color-cycle': 'color-cycle 40s ease-in-out infinite',
-				'sheen': 'sheen 2s ease-out',
-				'sheen-delay-1': 'sheen 2s ease-out 3s',
-				'sheen-delay-2': 'sheen 2s ease-out 6s',
-				'sheen-delay-3': 'sheen 2s ease-out 9s'
+				'psychedelic-shift': 'psychedelic-shift 40s ease-in-out infinite alternate',
+				'color-cycle': 'color-cycle 45s ease-in-out infinite',
+				'sheen': 'sheen 1s ease-out',
+				'sheen-delay-1': 'sheen 1s ease-out 2s',
+				'sheen-delay-2': 'sheen 1s ease-out 4s',
+				'sheen-delay-3': 'sheen 1s ease-out 6s'
 			}
 		}
 	},
