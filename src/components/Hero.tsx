@@ -28,7 +28,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 pt-6 px-4">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-6 px-4">
         {/* Video Background */}
         <div className="fixed inset-0 z-0">
           <video
@@ -37,9 +37,8 @@ const Hero = () => {
             muted
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: 'brightness(0.4)' }}
           >
-            <source src="http://localhost:3000/#access_token=eyJhbGciOiJIUzI1NiIsImtpZCI6IkpwSEJYT3o5dTFLZUhSeXMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3FveHV0dmtwdGt0bXRkaWt1YmZnLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJlMWQ5MTBmZC1kZTM4LTQ5OGYtOGJmNS1mYzI1MjM4ZGFjZjQiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQ5ODA1NzU1LCJpYXQiOjE3NDk4MDIxNTUsImVtYWlsIjoicG91bmRzMUBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoicG91bmRzMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZnVsbF9uYW1lIjoiU1AiLCJwaG9uZV92ZXJpZmllZCI6ZmFsc2UsInN1YiI6ImUxZDkxMGZkLWRlMzgtNDk4Zi04YmY1LWZjMjUyMzhkYWNmNCJ9LCJyb2xlIjoiYXV0aGVudGljYXRlZCIsImFhbCI6ImFhbDEiLCJhbXIiOlt7Im1ldGhvZCI6Im90cCIsInRpbWVzdGFtcCI6MTc0OTgwMjE1NX1dLCJzZXNzaW9uX2lkIjoiYzIxYmFlYmItNjM0Ny00MDQyLWFkNWMtNGQ4ZmYyODAzMDZjIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.MH0lDZz_sx-Ft7bd2Bu5CJnNAq6pZBdtYhWZYkBhEDU&expires_at=1749805755&expires_in=3600&refresh_token=c5vt6y4mx6lb&token_type=bearer&type=signup" type="video/mp4" />
+            <source src="https://videos.pexels.com/video-files/856171/856171-hd_1920_1080_30fps.mp4" type="video/mp4" />
           </video>
           
           {/* Video Attribution */}
@@ -48,10 +47,13 @@ const Hero = () => {
               Video by Micro
             </span>
           </div>
+          
+          {/* Gradient Overlay with Multiply Blend Mode */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 mix-blend-multiply opacity-80 z-1"></div>
         </div>
         
         {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden z-2">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
           <div className="absolute top-40 left-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
