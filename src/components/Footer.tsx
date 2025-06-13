@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Twitter, Github, Linkedin, MessageSquare, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Footer = ()=> {
+  const [isFooterCtaLightningActive, setIsFooterCtaLightningActive] = useState(false);
+
+  const handleFooterCtaClick = () => {
+    setIsFooterCtaLightningActive(true);
+    setTimeout(() => setIsFooterCtaLightningActive(false), 800);
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       {/* CTA Section */}
@@ -18,9 +26,24 @@ const Footer = ()=> {
             Join thousands of professionals who are already creating better AI outputs <br className="hidden sm:block" />
             with our premium prompt solutions.
           </p>
-          <Button size="lg" className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full group shadow-[0_8px_32px_rgba(59,130,246,0.3)]">
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 group-hover:animate-sheen pointer-events-none"></span>
-            Start Your Free Trial
+          <Button 
+            size="lg" 
+            className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-full group shadow-[0_8px_32px_rgba(59,130,246,0.3)] transition-all duration-300"
+            onClick={handleFooterCtaClick}
+          >
+            {/* Idle sheen layers */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent w-1/4 h-full transform -translate-x-full rotate-47 animate-rare-glass-sheen-1 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/18 to-transparent w-1/3 h-full transform -translate-x-full rotate-43 animate-rare-glass-sheen-2 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/22 to-transparent w-1/5 h-full transform -translate-x-full rotate-49 animate-rare-glass-sheen-3 pointer-events-none"></div>
+            
+            {/* Hover sheen overlay */}
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
+            
+            {/* Lightning flash overlay */}
+            <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isFooterCtaLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
+            
+            <span className="relative z-10">Start Your Free Trial</span>
           </Button>
         </div>
       </div>

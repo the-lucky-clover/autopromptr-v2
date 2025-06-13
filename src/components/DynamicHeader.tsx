@@ -16,6 +16,7 @@ const DynamicHeader = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isDynamicLightningActive, setIsDynamicLightningActive] = useState(false);
   const { user, signOut } = useAuth();
 
   useEffect(() => {
@@ -38,6 +39,12 @@ const DynamicHeader = () => {
     window.addEventListener('scroll', controlNavbar);
     return () => window.removeEventListener('scroll', controlNavbar);
   }, [lastScrollY]);
+
+  const handleDynamicButtonClick = () => {
+    setIsDynamicLightningActive(true);
+    setTimeout(() => setIsDynamicLightningActive(false), 800);
+    setShowAuthModal(true);
+  };
 
   return (
     <>
@@ -98,10 +105,22 @@ const DynamicHeader = () => {
                   </DropdownMenu>
                 ) : (
                   <Button 
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full px-6"
-                    onClick={() => setShowAuthModal(true)}
+                    className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full px-6 group transition-all duration-300"
+                    onClick={handleDynamicButtonClick}
                   >
-                    Get Started / Sign In
+                    {/* Idle sheen layers */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent w-1/3 h-full transform -translate-x-full rotate-45 animate-idle-metallic-sheen pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent w-1/4 h-full transform -translate-x-full rotate-45 animate-rare-glass-sheen-1 pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/18 to-transparent w-1/3 h-full transform -translate-x-full rotate-43 animate-rare-glass-sheen-2 pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/22 to-transparent w-1/5 h-full transform -translate-x-full rotate-49 animate-rare-glass-sheen-3 pointer-events-none"></div>
+                    
+                    {/* Hover sheen overlay */}
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent w-1/2 h-full transform translate-x-full -translate-y-full rotate-45 group-hover:animate-enhanced-metallic-sheen pointer-events-none"></span>
+                    
+                    {/* Lightning flash overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-r from-cyan-400/40 via-white/50 to-pink-400/40 pointer-events-none ${isDynamicLightningActive ? 'animate-lightning-flash' : 'opacity-0'}`}></div>
+                    
+                    <span className="relative z-10">Get Started / Sign In</span>
                   </Button>
                 )}
               </div>
