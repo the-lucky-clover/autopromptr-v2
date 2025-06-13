@@ -1,9 +1,8 @@
 
-import { Browser, Page } from 'puppeteer';
-
+// Browser-compatible session manager
 export interface PuppeteerSession {
-  browser: Browser;
-  page: Page;
+  browser: any;
+  page: any;
   createdAt: Date;
   lastActivity: Date;
 }
@@ -11,7 +10,7 @@ export interface PuppeteerSession {
 export class PuppeteerSessionManager {
   private sessions: Map<string, PuppeteerSession> = new Map();
 
-  addSession(sessionId: string, browser: Browser, page: Page): void {
+  addSession(sessionId: string, browser: any, page: any): void {
     const session: PuppeteerSession = {
       browser,
       page,
@@ -20,7 +19,7 @@ export class PuppeteerSessionManager {
     };
     
     this.sessions.set(sessionId, session);
-    console.log(`Puppeteer session ${sessionId} created`);
+    console.log(`Mock Puppeteer session ${sessionId} created`);
   }
 
   getSession(sessionId: string): PuppeteerSession | undefined {
@@ -36,17 +35,17 @@ export class PuppeteerSessionManager {
     if (!session) return;
 
     try {
-      if (session.page) {
+      if (session.page?.close) {
         await session.page.close();
       }
-      if (session.browser) {
+      if (session.browser?.close) {
         await session.browser.close();
       }
       
       this.sessions.delete(sessionId);
-      console.log(`Puppeteer session ${sessionId} closed`);
+      console.log(`Mock Puppeteer session ${sessionId} closed`);
     } catch (error) {
-      console.error(`Failed to close Puppeteer session ${sessionId}:`, error);
+      console.error(`Failed to close mock session ${sessionId}:`, error);
     }
   }
 
@@ -55,9 +54,9 @@ export class PuppeteerSessionManager {
     if (!session?.browser) return null;
 
     return {
-      version: await session.browser.version(),
-      connected: session.browser.isConnected(),
-      pages: (await session.browser.pages()).length
+      version: 'mock-version',
+      connected: true,
+      pages: 1
     };
   }
 

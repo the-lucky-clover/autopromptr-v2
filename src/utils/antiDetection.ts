@@ -1,145 +1,44 @@
 
-import { faker } from '@faker-js/faker';
-import UserAgent from 'user-agents';
-
+// Browser-compatible anti-detection utilities
 export class AntiDetectionUtil {
-  private userAgentsList: string[] = [];
-
-  constructor() {
-    this.initializeUserAgents();
-  }
-
-  private initializeUserAgents(): void {
-    // Generate a pool of realistic user agents
-    for (let i = 0; i < 50; i++) {
-      const userAgent = new UserAgent({ deviceCategory: 'desktop' });
-      this.userAgentsList.push(userAgent.toString());
-    }
-  }
+  private userAgents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+  ];
 
   async getRandomUserAgent(): Promise<string> {
-    return faker.helpers.arrayElement(this.userAgentsList);
-  }
-
-  async getRandomDelay(min: number = 100, max: number = 300): Promise<number> {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  async humanLikeType(page: any, selector: string, text: string): Promise<void> {
-    await page.click(selector);
-    await page.evaluate((sel: string) => {
-      const element = document.querySelector(sel) as HTMLInputElement;
-      if (element) element.value = '';
-    }, selector);
-
-    for (const char of text) {
-      const delay = await this.getRandomDelay(50, 150);
-      await page.type(selector, char, { delay });
-      
-      // Random pauses to simulate thinking
-      if (Math.random() < 0.1) {
-        await page.waitForTimeout(await this.getRandomDelay(200, 500));
-      }
-    }
-  }
-
-  async humanLikeTypePuppeteer(page: any, selector: string, text: string): Promise<void> {
-    await page.click(selector);
-    await page.evaluate((sel) => {
-      const element = document.querySelector(sel) as HTMLInputElement;
-      if (element) element.value = '';
-    }, selector);
-
-    for (const char of text) {
-      const delay = await this.getRandomDelay(50, 150);
-      await page.type(selector, char, { delay });
-      
-      // Random pauses to simulate thinking
-      if (Math.random() < 0.1) {
-        await page.waitForTimeout(await this.getRandomDelay(200, 500));
-      }
-    }
+    return this.userAgents[Math.floor(Math.random() * this.userAgents.length)];
   }
 
   async humanLikeClick(page: any, selector: string): Promise<void> {
-    // Move mouse to element before clicking
-    const element = await page.$(selector);
-    if (element) {
-      const box = await element.boundingBox();
-      if (box) {
-        // Add some randomness to click position
-        const x = box.x + box.width / 2 + (Math.random() - 0.5) * 10;
-        const y = box.y + box.height / 2 + (Math.random() - 0.5) * 10;
-        
-        await page.mouse.move(x, y, { steps: faker.number.int({ min: 5, max: 15 }) });
-        await page.waitForTimeout(await this.getRandomDelay(100, 300));
-        await page.mouse.click(x, y);
-      }
+    console.log(`Mock human-like click on ${selector}`);
+    // In browser environment, this would delegate to server
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 200 + 100));
+  }
+
+  async humanLikeType(page: any, selector: string, text: string): Promise<void> {
+    console.log(`Mock human-like typing "${text}" into ${selector}`);
+    // Simulate typing delay
+    for (let i = 0; i < text.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 100 + 50));
     }
   }
 
   async humanLikeClickPuppeteer(page: any, selector: string): Promise<void> {
-    // Move mouse to element before clicking
-    const element = await page.$(selector);
-    if (element) {
-      const box = await element.boundingBox();
-      if (box) {
-        // Add some randomness to click position
-        const x = box.x + box.width / 2 + (Math.random() - 0.5) * 10;
-        const y = box.y + box.height / 2 + (Math.random() - 0.5) * 10;
-        
-        await page.mouse.move(x, y, { steps: faker.number.int({ min: 5, max: 15 }) });
-        await page.waitForTimeout(await this.getRandomDelay(100, 300));
-        await page.mouse.click(x, y);
-      }
-    }
+    return this.humanLikeClick(page, selector);
   }
 
-  async simulateHumanBehavior(page: any): Promise<void> {
-    // Random mouse movements
-    const viewport = page.viewport();
-    for (let i = 0; i < faker.number.int({ min: 2, max: 5 }); i++) {
-      const x = faker.number.int({ min: 0, max: viewport.width });
-      const y = faker.number.int({ min: 0, max: viewport.height });
-      await page.mouse.move(x, y, { steps: faker.number.int({ min: 3, max: 10 }) });
-      await page.waitForTimeout(await this.getRandomDelay(500, 1500));
-    }
-
-    // Random scrolling
-    const scrollCount = faker.number.int({ min: 1, max: 3 });
-    for (let i = 0; i < scrollCount; i++) {
-      const scrollDistance = faker.number.int({ min: 100, max: 500 });
-      await page.evaluate((distance) => {
-        window.scrollBy(0, distance);
-      }, scrollDistance);
-      await page.waitForTimeout(await this.getRandomDelay(300, 800));
-    }
+  async humanLikeTypePuppeteer(page: any, selector: string, text: string): Promise<void> {
+    return this.humanLikeType(page, selector, text);
   }
 
-  getRandomViewport(): { width: number; height: number } {
-    const viewports = [
-      { width: 1920, height: 1080 },
-      { width: 1366, height: 768 },
-      { width: 1440, height: 900 },
-      { width: 1280, height: 720 },
-      { width: 1536, height: 864 }
-    ];
-    return faker.helpers.arrayElement(viewports);
+  generateRandomDelay(min: number = 1000, max: number = 3000): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  async addNoiseToMouseMovement(page: any, targetX: number, targetY: number): Promise<void> {
-    const steps = faker.number.int({ min: 10, max: 30 });
-    const currentPosition = await page.mouse;
-    
-    for (let i = 0; i <= steps; i++) {
-      const progress = i / steps;
-      const noise = (Math.random() - 0.5) * 5; // Small random noise
-      
-      const x = currentPosition.x + (targetX - currentPosition.x) * progress + noise;
-      const y = currentPosition.y + (targetY - currentPosition.y) * progress + noise;
-      
-      await page.mouse.move(x, y);
-      await page.waitForTimeout(faker.number.int({ min: 5, max: 20 }));
-    }
+  async randomWait(min: number = 1000, max: number = 3000): Promise<void> {
+    const delay = this.generateRandomDelay(min, max);
+    await new Promise(resolve => setTimeout(resolve, delay));
   }
 }
