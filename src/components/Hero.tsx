@@ -28,7 +28,7 @@ const Hero = () => {
             <span className="bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent block">
               Supercharge Your AI
             </span>
-            <span className="block mt-2">
+            <span className="block">
               Prompt Workflow
             </span>
           </h1>
