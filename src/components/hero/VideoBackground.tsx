@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 
 const VideoBackground = () => {
@@ -29,7 +30,7 @@ const VideoBackground = () => {
   }, []);
 
   useEffect(() => {
-    const setupDualVideoSystem = () => {
+    const setupSeamlessVideoLoop = () => {
       const video1 = videoRef1.current;
       const video2 = videoRef2.current;
       
@@ -43,7 +44,7 @@ const VideoBackground = () => {
       [video1, video2].forEach(video => {
         video.playbackRate = 0.75;
         video.muted = true;
-        video.loop = false; // We'll handle looping manually
+        video.loop = false;
         video.preload = 'auto';
       });
 
@@ -53,45 +54,70 @@ const VideoBackground = () => {
       video1.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
       video2.style.filter = 'brightness(0.7) saturate(2.0) contrast(1.5)';
 
-      // Handle seamless transitions
-      const handleVideoEnd = (endingVideo: HTMLVideoElement, nextVideo: HTMLVideoElement, videoNumber: 1 | 2) => {
-        // Preload next video to the beginning
-        nextVideo.currentTime = 0;
-        nextVideo.play().catch(console.error);
+      // Handle seamless crossfade before video ends
+      const handleSeamlessTransition = (currentVideo: HTMLVideoElement, nextVideo: HTMLVideoElement, videoNumber: 1 | 2) => {
+        // Start crossfade at 95% completion to avoid jump cuts
+        const transitionTime = currentVideo.duration * 0.95;
         
-        // Smooth crossfade
-        endingVideo.style.transition = 'opacity 1000ms ease-in-out';
-        nextVideo.style.transition = 'opacity 1000ms ease-in-out';
-        
-        endingVideo.style.opacity = '0';
-        nextVideo.style.opacity = '0.6';
-        
-        // Update active video state
-        setActiveVideo(videoNumber === 1 ? 2 : 1);
-        
-        // Reset ending video after fade
-        setTimeout(() => {
-          endingVideo.currentTime = 0;
-          endingVideo.style.transition = '';
-          nextVideo.style.transition = '';
-        }, 1000);
+        const checkTransitionTime = () => {
+          if (currentVideo.currentTime >= transitionTime) {
+            // Preload next video to the beginning
+            nextVideo.currentTime = 0;
+            nextVideo.play().catch(console.error);
+            
+            // Start smooth crossfade immediately
+            currentVideo.style.transition = 'opacity 1.5s ease-in-out';
+            nextVideo.style.transition = 'opacity 1.5s ease-in-out';
+            
+            currentVideo.style.opacity = '0';
+            nextVideo.style.opacity = '0.6';
+            
+            // Update active video state
+            setActiveVideo(videoNumber === 1 ? 2 : 1);
+            
+            // Reset for next cycle after transition
+            setTimeout(() => {
+              currentVideo.currentTime = 0;
+              currentVideo.style.transition = '';
+              nextVideo.style.transition = '';
+            }, 1500);
+            
+            // Stop monitoring this video
+            currentVideo.removeEventListener('timeupdate', checkTransitionTime);
+          }
+        };
+
+        currentVideo.addEventListener('timeupdate', checkTransitionTime);
       };
 
-      // Set up event listeners for seamless looping
-      video1.addEventListener('ended', () => handleVideoEnd(video1, video2, 1));
-      video2.addEventListener('ended', () => handleVideoEnd(video2, video1, 2));
+      // Set up seamless transition monitoring for both videos
+      const monitorVideo1 = () => handleSeamlessTransition(video1, video2, 1);
+      const monitorVideo2 = () => handleSeamlessTransition(video2, video1, 2);
+
+      // Start monitoring when video loads and plays
+      video1.addEventListener('loadeddata', () => {
+        if (video1.readyState >= 2) {
+          video1.addEventListener('timeupdate', monitorVideo1);
+        }
+      });
+
+      video2.addEventListener('loadeddata', () => {
+        if (video2.readyState >= 2) {
+          video2.addEventListener('timeupdate', monitorVideo2);
+        }
+      });
 
       // Start the first video
       video1.play().catch(console.error);
 
       // Cleanup function
       return () => {
-        video1.removeEventListener('ended', () => {});
-        video2.removeEventListener('ended', () => {});
+        video1.removeEventListener('timeupdate', monitorVideo1);
+        video2.removeEventListener('timeupdate', monitorVideo2);
       };
     };
 
-    const cleanup = setupDualVideoSystem();
+    const cleanup = setupSeamlessVideoLoop();
     return cleanup;
   }, [currentVideoSrc]);
 
@@ -108,7 +134,7 @@ const VideoBackground = () => {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out"
         style={{
           opacity: activeVideo === 1 ? '0.6' : '0',
           filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'
@@ -122,7 +148,7 @@ const VideoBackground = () => {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out"
         style={{
           opacity: activeVideo === 2 ? '0.6' : '0',
           filter: 'brightness(0.7) saturate(2.0) contrast(1.5)'

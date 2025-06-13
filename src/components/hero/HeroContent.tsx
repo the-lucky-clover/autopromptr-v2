@@ -12,15 +12,15 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
     <div className="space-y-8 text-center">
       <HeroBadge />
       
-      {/* Enhanced Hero Headline with selective gradient */}
+      {/* Enhanced Hero Headline with selective gradient - 5% smaller and two lines */}
       <div className="space-y-4">
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl font-bold leading-tight font-sans">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-bold leading-tight font-sans">
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
-            Supercharge
+            Supercharge Your
           </span>
         </h1>
-        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-9xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
-          Your AI Prompt Workflow
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-8xl font-bold leading-tight bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] font-sans">
+          AI Prompt Workflow
         </h1>
       </div>
 
@@ -41,7 +41,7 @@ const HeroContent = ({ onSignInClick }: HeroContentProps) => {
         <Button 
           size="lg" 
           variant="outline" 
-          className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-full text-lg font-semibold backdrop-blur-sm drop-shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-white/50"
+          className="border-2 border-white/30 text-white hover:text-white hover:bg-white/10 px-8 py-4 rounded-full text-lg font-semibold backdrop-blur-sm drop-shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-300 hover:border-white/50 bg-transparent"
         >
           Watch Demo
         </Button>
