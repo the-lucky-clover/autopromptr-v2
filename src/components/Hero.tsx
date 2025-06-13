@@ -20,14 +20,14 @@ const Hero = () => {
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-          Master the Art of
-          <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent block mt-2">
-            AI Prompting
-          </span>
+          <span className="bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent">
+            Supercharge
+          </span>{" "}
+          Your AI Prompt Workflow
         </h1>
         
         <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Unlock the full potential of AI with expertly crafted prompts. AutoPrompt.us provides premium templates, courses, and tools to elevate your AI interactions.
+          Intelligently batch process, enhance, and deploy prompts across all major AI coding platforms. Transform your development workflow with AutoPromptr's powerful automation tools.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

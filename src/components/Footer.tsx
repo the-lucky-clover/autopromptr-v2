@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Twitter, Github, Linkedin, MessageSquare } from "lucide-react";
+import { Mail, Twitter, Github, Linkedin, MessageSquare, Zap } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -26,9 +26,14 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              AutoPrompt.us
-            </h3>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-pink-500 rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-pink-500 bg-clip-text text-transparent">
+                AutoPromptr
+              </h3>
+            </div>
             <p className="text-gray-400 leading-relaxed">
               The premier platform for AI prompt engineering. Master the art of crafting effective prompts and unlock AI's full potential.
             </p>
@@ -90,7 +95,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-sm">
-            © 2024 AutoPrompt.us. All rights reserved.
+            © 2024 AutoPromptr. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-gray-400">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
@@ -98,7 +103,7 @@ const Footer = () => {
             <a href="#" className="hover:text-white transition-colors">Cookies</a>
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
-              <span>support@autoprompt.us</span>
+              <span>support@autopromptr.com</span>
             </div>
           </div>
         </div>
