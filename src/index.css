@@ -124,119 +124,270 @@
   }
 }
 
-/* Psychedelic Mobile Gradients - Subtle and Trippy */
-@keyframes psychedelic-icon-gradient {
+/* Ultra-Smooth Psychedelic Mobile Gradients - 16 Keyframe Stops */
+@keyframes ultra-smooth-psychedelic-icon-gradient {
   0% {
     background: linear-gradient(135deg, 
       rgba(147, 197, 253, 0.8),   /* soft blue */
+      rgba(167, 180, 252, 0.75),  /* blue-purple blend */
+      rgba(196, 181, 253, 0.7)    /* soft purple */
+    );
+  }
+  6.25% {
+    background: linear-gradient(140deg, 
+      rgba(167, 180, 252, 0.75),  /* blue-purple blend */
       rgba(196, 181, 253, 0.7),   /* soft purple */
+      rgba(224, 173, 248, 0.65)   /* purple-pink blend */
+    );
+  }
+  12.5% {
+    background: linear-gradient(145deg, 
+      rgba(196, 181, 253, 0.7),   /* soft purple */
+      rgba(224, 173, 248, 0.65),  /* purple-pink blend */
       rgba(252, 165, 165, 0.6)    /* soft pink */
     );
   }
-  16.66% {
-    background: linear-gradient(155deg, 
-      rgba(196, 181, 253, 0.7),   /* soft purple */
+  18.75% {
+    background: linear-gradient(150deg, 
+      rgba(224, 173, 248, 0.65),  /* purple-pink blend */
       rgba(252, 165, 165, 0.6),   /* soft pink */
+      rgba(253, 190, 167, 0.65)   /* pink-orange blend */
+    );
+  }
+  25% {
+    background: linear-gradient(155deg, 
+      rgba(252, 165, 165, 0.6),   /* soft pink */
+      rgba(253, 190, 167, 0.65),  /* pink-orange blend */
       rgba(254, 215, 170, 0.7)    /* soft orange */
     );
   }
-  33.33% {
-    background: linear-gradient(175deg, 
-      rgba(252, 165, 165, 0.6),   /* soft pink */
+  31.25% {
+    background: linear-gradient(160deg, 
+      rgba(253, 190, 167, 0.65),  /* pink-orange blend */
       rgba(254, 215, 170, 0.7),   /* soft orange */
+      rgba(220, 231, 189, 0.65)   /* orange-green blend */
+    );
+  }
+  37.5% {
+    background: linear-gradient(165deg, 
+      rgba(254, 215, 170, 0.7),   /* soft orange */
+      rgba(220, 231, 189, 0.65),  /* orange-green blend */
       rgba(187, 247, 208, 0.6)    /* soft green */
     );
   }
-  50% {
-    background: linear-gradient(195deg, 
-      rgba(254, 215, 170, 0.7),   /* soft orange */
+  43.75% {
+    background: linear-gradient(170deg, 
+      rgba(220, 231, 189, 0.65),  /* orange-green blend */
       rgba(187, 247, 208, 0.6),   /* soft green */
+      rgba(176, 245, 230, 0.65)   /* green-cyan blend */
+    );
+  }
+  50% {
+    background: linear-gradient(175deg, 
+      rgba(187, 247, 208, 0.6),   /* soft green */
+      rgba(176, 245, 230, 0.65),  /* green-cyan blend */
       rgba(165, 243, 252, 0.7)    /* soft cyan */
     );
   }
-  66.66% {
-    background: linear-gradient(215deg, 
-      rgba(187, 247, 208, 0.6),   /* soft green */
+  56.25% {
+    background: linear-gradient(180deg, 
+      rgba(176, 245, 230, 0.65),  /* green-cyan blend */
       rgba(165, 243, 252, 0.7),   /* soft cyan */
+      rgba(193, 228, 253, 0.65)   /* cyan-violet blend */
+    );
+  }
+  62.5% {
+    background: linear-gradient(185deg, 
+      rgba(165, 243, 252, 0.7),   /* soft cyan */
+      rgba(193, 228, 253, 0.65),  /* cyan-violet blend */
       rgba(221, 214, 254, 0.6)    /* soft violet */
     );
   }
-  83.33% {
-    background: linear-gradient(235deg, 
-      rgba(165, 243, 252, 0.7),   /* soft cyan */
+  68.75% {
+    background: linear-gradient(190deg, 
+      rgba(193, 228, 253, 0.65),  /* cyan-violet blend */
       rgba(221, 214, 254, 0.6),   /* soft violet */
+      rgba(184, 205, 254, 0.7)    /* violet-blue blend */
+    );
+  }
+  75% {
+    background: linear-gradient(195deg, 
+      rgba(221, 214, 254, 0.6),   /* soft violet */
+      rgba(184, 205, 254, 0.7),   /* violet-blue blend */
+      rgba(147, 197, 253, 0.8)    /* soft blue */
+    );
+  }
+  81.25% {
+    background: linear-gradient(200deg, 
+      rgba(184, 205, 254, 0.7),   /* violet-blue blend */
+      rgba(147, 197, 253, 0.8),   /* soft blue */
+      rgba(157, 189, 253, 0.75)   /* blue transition */
+    );
+  }
+  87.5% {
+    background: linear-gradient(205deg, 
+      rgba(147, 197, 253, 0.8),   /* soft blue */
+      rgba(157, 189, 253, 0.75),  /* blue transition */
+      rgba(167, 180, 252, 0.75)   /* blue-purple blend */
+    );
+  }
+  93.75% {
+    background: linear-gradient(210deg, 
+      rgba(157, 189, 253, 0.75),  /* blue transition */
+      rgba(167, 180, 252, 0.75),  /* blue-purple blend */
       rgba(147, 197, 253, 0.8)    /* soft blue */
     );
   }
   100% {
     background: linear-gradient(135deg, 
       rgba(147, 197, 253, 0.8),   /* soft blue */
-      rgba(196, 181, 253, 0.7),   /* soft purple */
-      rgba(252, 165, 165, 0.6)    /* soft pink */
+      rgba(167, 180, 252, 0.75),  /* blue-purple blend */
+      rgba(196, 181, 253, 0.7)    /* soft purple */
     );
   }
 }
 
-@keyframes psychedelic-text-gradient {
+@keyframes ultra-smooth-psychedelic-text-gradient {
   0% {
     background: linear-gradient(145deg, 
       rgba(167, 139, 250, 0.9),   /* soft purple */
+      rgba(131, 152, 250, 0.85),  /* purple-blue blend */
+      rgba(96, 165, 250, 0.8)     /* soft blue */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  6.25% {
+    background: linear-gradient(150deg, 
+      rgba(131, 152, 250, 0.85),  /* purple-blue blend */
       rgba(96, 165, 250, 0.8),    /* soft blue */
+      rgba(173, 140, 251, 0.75)   /* blue-rose blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  12.5% {
+    background: linear-gradient(155deg, 
+      rgba(96, 165, 250, 0.8),    /* soft blue */
+      rgba(173, 140, 251, 0.75),  /* blue-rose blend */
       rgba(251, 113, 133, 0.7)    /* soft rose */
     );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  14.28% {
+  18.75% {
     background: linear-gradient(160deg, 
-      rgba(96, 165, 250, 0.8),    /* soft blue */
+      rgba(173, 140, 251, 0.75),  /* blue-rose blend */
       rgba(251, 113, 133, 0.7),   /* soft rose */
+      rgba(251, 129, 96, 0.75)    /* rose-amber blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  25% {
+    background: linear-gradient(165deg, 
+      rgba(251, 113, 133, 0.7),   /* soft rose */
+      rgba(251, 129, 96, 0.75),   /* rose-amber blend */
       rgba(251, 146, 60, 0.8)     /* soft amber */
     );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  28.57% {
-    background: linear-gradient(175deg, 
-      rgba(251, 113, 133, 0.7),   /* soft rose */
+  31.25% {
+    background: linear-gradient(170deg, 
+      rgba(251, 129, 96, 0.75),   /* rose-amber blend */
       rgba(251, 146, 60, 0.8),    /* soft amber */
+      rgba(142, 215, 77, 0.75)    /* amber-emerald blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  37.5% {
+    background: linear-gradient(175deg, 
+      rgba(251, 146, 60, 0.8),    /* soft amber */
+      rgba(142, 215, 77, 0.75),   /* amber-emerald blend */
       rgba(34, 197, 94, 0.7)      /* soft emerald */
     );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  42.85% {
-    background: linear-gradient(190deg, 
-      rgba(251, 146, 60, 0.8),    /* soft amber */
+  43.75% {
+    background: linear-gradient(180deg, 
+      rgba(142, 215, 77, 0.75),   /* amber-emerald blend */
       rgba(34, 197, 94, 0.7),     /* soft emerald */
+      rgba(24, 181, 163, 0.75)    /* emerald-sky blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  50% {
+    background: linear-gradient(185deg, 
+      rgba(34, 197, 94, 0.7),     /* soft emerald */
+      rgba(24, 181, 163, 0.75),   /* emerald-sky blend */
       rgba(14, 165, 233, 0.8)     /* soft sky */
     );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  57.14% {
-    background: linear-gradient(205deg, 
-      rgba(34, 197, 94, 0.7),     /* soft emerald */
+  56.25% {
+    background: linear-gradient(190deg, 
+      rgba(24, 181, 163, 0.75),   /* emerald-sky blend */
       rgba(14, 165, 233, 0.8),    /* soft sky */
+      rgba(76, 152, 239, 0.75)    /* sky-violet blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  62.5% {
+    background: linear-gradient(195deg, 
+      rgba(14, 165, 233, 0.8),    /* soft sky */
+      rgba(76, 152, 239, 0.75),   /* sky-violet blend */
       rgba(139, 92, 246, 0.7)     /* soft violet */
     );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  71.42% {
-    background: linear-gradient(220deg, 
-      rgba(14, 165, 233, 0.8),    /* soft sky */
+  68.75% {
+    background: linear-gradient(200deg, 
+      rgba(76, 152, 239, 0.75),   /* sky-violet blend */
       rgba(139, 92, 246, 0.7),    /* soft violet */
+      rgba(187, 82, 199, 0.75)    /* violet-pink blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  75% {
+    background: linear-gradient(205deg, 
+      rgba(139, 92, 246, 0.7),    /* soft violet */
+      rgba(187, 82, 199, 0.75),   /* violet-pink blend */
       rgba(236, 72, 153, 0.8)     /* soft pink */
     );
     -webkit-background-clip: text;
     background-clip: text;
   }
-  85.71% {
-    background: linear-gradient(235deg, 
-      rgba(139, 92, 246, 0.7),    /* soft violet */
+  81.25% {
+    background: linear-gradient(210deg, 
+      rgba(187, 82, 199, 0.75),   /* violet-pink blend */
       rgba(236, 72, 153, 0.8),    /* soft pink */
+      rgba(201, 105, 201, 0.85)   /* pink-purple blend */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  87.5% {
+    background: linear-gradient(215deg, 
+      rgba(236, 72, 153, 0.8),    /* soft pink */
+      rgba(201, 105, 201, 0.85),  /* pink-purple blend */
       rgba(167, 139, 250, 0.9)    /* soft purple */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  93.75% {
+    background: linear-gradient(220deg, 
+      rgba(201, 105, 201, 0.85),  /* pink-purple blend */
+      rgba(167, 139, 250, 0.9),   /* soft purple */
+      rgba(149, 152, 250, 0.875)  /* purple transition */
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -244,8 +395,8 @@
   100% {
     background: linear-gradient(145deg, 
       rgba(167, 139, 250, 0.9),   /* soft purple */
-      rgba(96, 165, 250, 0.8),    /* soft blue */
-      rgba(251, 113, 133, 0.7)    /* soft rose */
+      rgba(131, 152, 250, 0.85),  /* purple-blue blend */
+      rgba(96, 165, 250, 0.8)     /* soft blue */
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -260,12 +411,12 @@
   animation: slide-down 0.5s ease-out;
 }
 
-.animate-psychedelic-icon {
-  animation: psychedelic-icon-gradient 10s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+.animate-ultra-smooth-psychedelic-icon {
+  animation: ultra-smooth-psychedelic-icon-gradient 12s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
 }
 
-.animate-psychedelic-text {
-  animation: psychedelic-text-gradient 12s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+.animate-ultra-smooth-psychedelic-text {
+  animation: ultra-smooth-psychedelic-text-gradient 14s cubic-bezier(0.23, 1, 0.32, 1) infinite;
 }
 
 /* Lightning animation for buttons */
